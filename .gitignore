@@ -64,4 +64,5 @@ target/
 .idea/
 config.local.json
 node_modules/
-.env
+.env/
+webpack-stats.json
