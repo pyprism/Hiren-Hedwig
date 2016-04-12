@@ -187,3 +187,5 @@ WEBPACK_LOADER = {
         'IGNORE': ['.+\.hot-update.js', '.+\.map']
     }
 }
+
+AUTH_USER_MODEL = 'mail.Account'
