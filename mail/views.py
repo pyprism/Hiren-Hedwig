@@ -51,8 +51,8 @@ def create_admin(request):
             admin = Account.objects.create(username=request.data['username'], password=request.data['password'])
             admin.is_admin = True
             admin.save()
-            return Response({"message": 'Admin Created'})
+            return Response({"message": 'Admin Created'}, status=status.HTTP_201_CREATED)
         else:
-            return Response({'error': 'something wrong'})
+            return Response({'error': 'something wrong'}, status=status.HTTP_206_PARTIAL_CONTENT)
     else:
-        return Response({'error': 'Permission denied'})
+        return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
