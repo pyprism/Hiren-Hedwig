@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.urls import path, re_path, include
 from django.conf import settings
-from django.contrib.auth.views import logout
+from base import urls as base
+
 
 urlpatterns = [
-    path('logout/', logout, {'next_page': '/'}, name='logout'),
+    path('', include(base)),
 ]
 
 if settings.DEBUG:
