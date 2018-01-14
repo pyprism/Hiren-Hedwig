@@ -16,10 +16,12 @@ Including another URLconf
 from django.urls import path, re_path, include
 from django.conf import settings
 from base import urls as base
+from mail import urls as mail
 
 
 urlpatterns = [
     path('', include(base)),
+    path('mail/', include(mail)),
 ]
 
 if settings.DEBUG:
