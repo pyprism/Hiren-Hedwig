@@ -1,0 +1,8 @@
+from django.urls import path, re_path, include
+from django.contrib.auth.views import logout
+from base import views
+
+urlpatterns = [
+    path('', views.login, name='login'),
+    path('logout/', logout, {'next_page': '/'}, name='logout'),
+]
