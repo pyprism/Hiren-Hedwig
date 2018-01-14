@@ -52,3 +52,10 @@ def signup(request):
         return render(request, 'base/signup.html')
 
 
+@login_required
+def settings(request):
+    if request.user.is_admin:
+        return render(request, 'base/settings.html')
+
+
+
