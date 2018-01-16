@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from django.contrib import messages
-from .models import Account
+from .models import Account, MailGun
+from .forms import MailGunForm
 from django.db.utils import IntegrityError
 
 
@@ -55,7 +56,22 @@ def signup(request):
 @login_required
 def settings(request):
     if request.user.is_admin:
-        return render(request, 'base/settings.html')
+        if request.method == 'POST':
+            mailgun_obj = MailGun.objects.filter(user=request.user).first()
+            if mailgun_obj:
+                mailgun_form = MailGunForm(request.POST, instance=mailgun_obj)
+            else:
+                mailgun_form = MailGunForm(request.POST)
+            if mailgun_form.is_valid():
+                mailgun = mailgun_form.save(commit=False)
+                mailgun.user = request.user
+                mailgun.save()
+                messages.success(request, "Info Updated.", extra_tags='mailgun')
+            else:
+                messages.error(request, mailgun_form.errors, extra_tags='mailgun')
+            return redirect('settings')
+        mailgun = MailGun.objects.filter(user=request.user).first()
+        return render(request, 'base/settings.html', {'mailgun': mailgun})
 
 
 
