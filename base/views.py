@@ -122,3 +122,24 @@ def delete_domain(request, pk):
     return redirect('settings')
 
 
+@login_required
+def create_user(request):
+    """
+    Create non-admin user
+    :param request:
+    :return:
+    """
+    if request.user.is_admin:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            acc = Account(username=username, password=make_password(password))
+            try:
+                acc.save()
+            except IntegrityError:
+                messages.error(request, "username is not available!")
+                return redirect('create_user')
+            messages.success(request, 'Account created successfully!')
+            return redirect('create_user')
+        return render(request, 'base/create_user.html')
+
