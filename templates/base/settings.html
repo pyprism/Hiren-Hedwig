@@ -14,62 +14,36 @@
                         <div class="body">
                             <form class="form-horizontal" method="post"> {% csrf_token %}
                                 {% if messages %}
-                                    <div class="alert alert-danger" role="alert">
-                                        <ul class="messages">
-                                            {% for message in messages %}
-                                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
+                                    {%for message in messages %}
+                                        {%if "mailgun" in message.tags %}
+                                            <div class="alert alert-danger" role="alert">
+                                                <ul class="messages">
+                                                    <li>{{ message }}</li>
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Name</label>
+                                        <label>Domain Name</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <select required name="name">
-                                                    {% for i in pn %}
-                                                        <option value="{{ i.name }}">{{ i.name }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                                <input type="text" required name="name" value="{{ mailgun.name }}" class="form-control" placeholder="example.com">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>URL</label>
+                                        <label>Private API Key</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="url" required name="url" class="form-control" placeholder="http://example.com">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Polling Interval</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="number" required name="poll" class="form-control" placeholder="Type polling interval in minute, ex: 5">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Slow Threshold</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="number" required name="slow" class="form-control" placeholder="Type slow threshold in second, ex: 500">
+                                                <input type="text" required name="key" class="form-control" value="{{ mailgun.key }}" placeholder="mailgun's private key">
                                             </div>
                                         </div>
                                     </div>
@@ -84,47 +58,47 @@
                     </div>
                 </div>
             </div>
-{#            <div class="row clearfix">#}
-{#                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">#}
-{#                    <div class="card">#}
-{#                        <div class="header">#}
-{#                            <h2>#}
-{#                                Add New Name#}
-{#                            </h2>#}
-{#                        </div>#}
-{#                        <div class="body">#}
-{#                            <form class="form-horizontal" method="post" action="{% url 'add_pn' %}"> {% csrf_token %}#}
-{#                                {% if messages %}#}
-{#                                    <div class="alert alert-danger" role="alert">#}
-{#                                        <ul class="messages">#}
-{#                                            {% for message in messages %}#}
-{#                                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
-{#                                            {% endfor %}#}
-{#                                        </ul>#}
-{#                                    </div>#}
-{#                                {% endif %}#}
-{#                                <div class="row clearfix">#}
-{#                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">#}
-{#                                        <label>Name</label>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">#}
-{#                                        <div class="form-group">#}
-{#                                            <div class="form-line">#}
-{#                                                <input type="text" name="name" required autofocus class="form-control" placeholder="Type a name here">#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="row clearfix">#}
-{#                                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">#}
-{#                                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </form>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
+            {#            <div class="row clearfix">#}
+            {#                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">#}
+            {#                    <div class="card">#}
+            {#                        <div class="header">#}
+            {#                            <h2>#}
+            {#                                Add New Name#}
+            {#                            </h2>#}
+            {#                        </div>#}
+            {#                        <div class="body">#}
+            {#                            <form class="form-horizontal" method="post" action="{% url 'add_pn' %}"> {% csrf_token %}#}
+            {#                                {% if messages %}#}
+            {#                                    <div class="alert alert-danger" role="alert">#}
+            {#                                        <ul class="messages">#}
+            {#                                            {% for message in messages %}#}
+            {#                                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+            {#                                            {% endfor %}#}
+            {#                                        </ul>#}
+            {#                                    </div>#}
+            {#                                {% endif %}#}
+            {#                                <div class="row clearfix">#}
+            {#                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">#}
+            {#                                        <label>Name</label>#}
+            {#                                    </div>#}
+            {#                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">#}
+            {#                                        <div class="form-group">#}
+            {#                                            <div class="form-line">#}
+            {#                                                <input type="text" name="name" required autofocus class="form-control" placeholder="Type a name here">#}
+            {#                                            </div>#}
+            {#                                        </div>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                                <div class="row clearfix">#}
+            {#                                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">#}
+            {#                                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                            </form>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
         </div>
     </section>
 {% endblock %}
