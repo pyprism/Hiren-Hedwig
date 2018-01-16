@@ -62,7 +62,8 @@ def signup(request):
 @login_required
 def settings(request):
     mailgun = MailGun.objects.filter(user=request.user)
-    return render(request, 'base/settings.html', {'mailgun': mailgun})
+    users = Account.objects.all()
+    return render(request, 'base/settings.html', {'mailgun': mailgun, 'users': users})
 
 
 @login_required
