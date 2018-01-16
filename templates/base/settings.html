@@ -11,6 +11,15 @@
                                 Domain List
                             </h2>
                         </div>
+                        {% if messages %}
+                            {%for message in messages %}
+                                <div class="alert alert-success" role="alert">
+                                    <ul class="messages">
+                                        <li>{{ message }}</li>
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         <div class="body table-responsive">
                             <table class="table table-bordered table-hover table-striped table-condensed">
                                 <thead>
