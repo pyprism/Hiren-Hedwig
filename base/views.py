@@ -7,7 +7,7 @@ from .models import Account, MailGun
 from .forms import MailGunForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404
-from django.conf import settings
+from django.contrib.auth.models import User
 from hiren.settings import SIGNUP
 
 
@@ -142,4 +142,22 @@ def create_user(request):
             messages.success(request, 'Account created successfully!')
             return redirect('create_user')
         return render(request, 'base/create_user.html')
+
+
+@login_required
+def update_user(request, username):
+    """
+    update password
+    :param request:
+    :param username:
+    :return:
+    """
+    if request.user.is_admin:
+        if request.method == 'POST':
+            user = get_object_or_404(Account, username=username)
+            user.set_password(request.POST.get('password'))
+            user.save()
+            messages.success(request, 'Password updated.')
+            return redirect('update_user', username=username)
+        return render(request, 'base/update_user.html')
 
