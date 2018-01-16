@@ -23,8 +23,8 @@
                                 <tbody>
                                 {% for i in mailgun %}
                                     <tr>
-                                        <th scope="row">{{ i.pk }}</th>
-                                        <th>{{ i.name }}</th>
+                                        <th scope="row"><a href="{% url 'update_domain' pk=i.pk %}">{{ i.pk }}</a></th>
+                                        <th><a href="{% url 'update_domain' pk=i.pk %}">{{ i.name }}</a></th>
                                         <th>{{ i.created_at }}</th>
                                     </tr>
                                 {% endfor %}
