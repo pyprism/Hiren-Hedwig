@@ -7,6 +7,8 @@ from .models import Account, MailGun
 from .forms import MailGunForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404
+from django.conf import settings
+from hiren.settings import SIGNUP
 
 
 def login(request):
@@ -35,20 +37,23 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('inbox')
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        count = Account.objects.count()
-        acc = Account(username=username, password=make_password(password))
-        if count == 0:
-            acc.is_admin = True
+        if SIGNUP == 'True':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            count = Account.objects.count()
+            acc = Account(username=username, password=make_password(password))
+            if count == 0:
+                acc.is_admin = True
+            else:
+                pass
+            try:
+                acc.save()
+            except IntegrityError:
+                messages.error(request, "username is not available!")
+                return redirect('signup')
+            messages.success(request, 'Account created successfully!')
         else:
-            pass
-        try:
-            acc.save()
-        except IntegrityError:
-            messages.error(request, "username is not available!")
-            return redirect('signup')
-        messages.success(request, 'Account created successfully!')
+            messages.error(request, 'Signup is disabled!')
         return redirect('signup')
     else:
         return render(request, 'base/signup.html')
