@@ -262,3 +262,5 @@ if not DEBUG:
 # custom user model
 AUTH_USER_MODEL = 'base.Account'
 
+# Enable/disable user signup
+SIGNUP = os.environ.get('SIGNUP', True)
