@@ -12,7 +12,7 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <form class="form-horizontal" method="post"> {% csrf_token %}
+                            <form class="form-horizontal" method="post" action="{% url 'update_domain' pk=mailgun.pk %}"> {% csrf_token %}
                                 {% if messages %}
                                     {%for message in messages %}
                                         {%if "mailgun" in message.tags %}
