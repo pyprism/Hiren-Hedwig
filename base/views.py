@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import Account, MailGun
 from .forms import MailGunForm
 from django.db.utils import IntegrityError
+from django.shortcuts import get_object_or_404
 
 
 def login(request):
@@ -76,7 +77,18 @@ def create_domain(request):
 
 @login_required
 def update_domain(request, pk):
-    mailgun_obj = MailGun.objects.filter(user=request.user, pk=pk).first()
+    mailgun_obj = get_object_or_404(MailGun, user=request.user, pk=pk)
+    if request.method == 'POST':
+        mailgun_form = MailGunForm(request.POST, instance=mailgun_obj)
+        if mailgun_form.is_valid():
+            mailgun = mailgun_form.save(commit=False)
+            mailgun.user = request.user
+            mailgun.save()
+            messages.success(request, "Information Updated", extra_tags='mailgun')
+        else:
+            messages.error(request, mailgun_form.errors, extra_tags='mailgun')
+        return redirect('update_domain', pk=pk)
+    return render(request, 'base/update_domain.html', {'mailgun': mailgun_obj})
 
 
 
