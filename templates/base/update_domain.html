@@ -50,8 +50,18 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">
+                                            <i class="material-icons">update</i>
+                                            <span>Update</span>
+                                        </button>
+                                        <a href="{% url 'delete_domain' pk=mailgun.pk %}">
+                                            <button type="button" class="btn btn-danger m-t-15 waves-effect">
+                                                <i class="material-icons">delete_forever</i>
+                                                <span>Delete</span>
+                                            </button>
+                                        </a>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
