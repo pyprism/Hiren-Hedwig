@@ -62,6 +62,11 @@ def settings(request):
 
 @login_required
 def create_domain(request):
+    """
+    Add Mailgun domain name, private api key
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         mailgun_form = MailGunForm(request.POST)
         if mailgun_form.is_valid():
@@ -77,6 +82,12 @@ def create_domain(request):
 
 @login_required
 def update_domain(request, pk):
+    """
+    Update domain info
+    :param request:
+    :param pk: database pk
+    :return:
+    """
     mailgun_obj = get_object_or_404(MailGun, user=request.user, pk=pk)
     if request.method == 'POST':
         mailgun_form = MailGunForm(request.POST, instance=mailgun_obj)
