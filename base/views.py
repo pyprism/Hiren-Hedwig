@@ -55,23 +55,28 @@ def signup(request):
 
 @login_required
 def settings(request):
-    if request.user.is_admin:
-        if request.method == 'POST':
-            mailgun_obj = MailGun.objects.filter(user=request.user).first()
-            if mailgun_obj:
-                mailgun_form = MailGunForm(request.POST, instance=mailgun_obj)
-            else:
-                mailgun_form = MailGunForm(request.POST)
-            if mailgun_form.is_valid():
-                mailgun = mailgun_form.save(commit=False)
-                mailgun.user = request.user
-                mailgun.save()
-                messages.success(request, "Info Updated.", extra_tags='mailgun')
-            else:
-                messages.error(request, mailgun_form.errors, extra_tags='mailgun')
-            return redirect('settings')
-        mailgun = MailGun.objects.filter(user=request.user).first()
-        return render(request, 'base/settings.html', {'mailgun': mailgun})
+    mailgun = MailGun.objects.filter(user=request.user)
+    return render(request, 'base/settings.html', {'mailgun': mailgun})
+
+
+@login_required
+def create_domain(request):
+    if request.method == 'POST':
+        mailgun_form = MailGunForm(request.POST)
+        if mailgun_form.is_valid():
+            mailgun = mailgun_form.save(commit=False)
+            mailgun.user = request.user
+            mailgun.save()
+            messages.success(request, "New Domain Added!", extra_tags='mailgun')
+        else:
+            messages.error(request, mailgun_form.errors, extra_tags='mailgun')
+        return redirect('create_domain')
+    return render(request, 'base/create_domain.html')
+
+
+@login_required
+def update_domain(request, pk):
+    mailgun_obj = MailGun.objects.filter(user=request.user, pk=pk).first()
 
 
 
