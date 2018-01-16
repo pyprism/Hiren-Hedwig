@@ -76,7 +76,7 @@ def create_domain(request):
             messages.success(request, "New Domain Added!", extra_tags='mailgun')
         else:
             messages.error(request, mailgun_form.errors, extra_tags='mailgun')
-        return redirect('create_domain')
+        return redirect('settings')
     return render(request, 'base/create_domain.html')
 
 
@@ -101,5 +101,18 @@ def update_domain(request, pk):
         return redirect('update_domain', pk=pk)
     return render(request, 'base/update_domain.html', {'mailgun': mailgun_obj})
 
+
+@login_required
+def delete_domain(request, pk):
+    """
+    Nuke domain  :D
+    :param request:
+    :param pk: db primary key
+    :return:
+    """
+    mailgun_obj = get_object_or_404(MailGun, user=request.user, pk=pk)
+    mailgun_obj.delete()
+    messages.success(request, 'Domain Deleted!')
+    return redirect('settings')
 
 
