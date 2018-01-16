@@ -53,6 +53,49 @@
                     </div>
                 </div>
             </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                User List
+                            </h2>
+                        </div>
+                        <div class="body table-responsive">
+                            <table class="table table-bordered table-hover table-striped table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Username</th>
+                                    <th>Admin</th>
+                                    <th>Created At</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in users %}
+                                    <tr>
+                                        <th scope="row"><a href="{% url 'update_domain' pk=i.pk %}">{{ i.pk }}</a></th>
+                                        <th><a href="{% url 'update_domain' pk=i.pk %}">{{ i.username }}</a></th>
+                                        <th>{{ i.is_admin|yesno }}</th>
+                                        <th>{{ i.created_at }}</th>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                         <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <a href="{% url 'create_domain' %}">
+                                            <button type="button" class="btn btn-primary waves-effect">
+                                                <i class="material-icons">create</i>
+                                                <span>Add new user</span>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}
