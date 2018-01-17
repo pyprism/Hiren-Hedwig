@@ -15,13 +15,11 @@
                             <form class="form-horizontal" method="post" enctype="multipart/form-data"> {% csrf_token %}
                                 {% if messages %}
                                     {%for message in messages %}
-                                        {%if "mailgun" in message.tags %}
                                             <div class="alert alert-danger" role="alert">
                                                 <ul class="messages">
                                                     <li>{{ message }}</li>
                                                 </ul>
                                             </div>
-                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                                 <div class="row clearfix">
@@ -67,7 +65,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" required name="bcc" class="form-control" placeholder="Optional BCC">
+                                                <input type="text" name="bcc" class="form-control" placeholder="Optional BCC">
                                             </div>
                                         </div>
                                     </div>
@@ -129,8 +127,9 @@
         </div>
     </section>
     <script>
+        var quill;
         window.onload = function () {
-            var quill = new Quill('#mailBody', {
+            quill = new Quill('#mailBody', {
                 modules: {
                     toolbar: [
                         [{ header: [1, 2, false] }],
@@ -140,6 +139,14 @@
                 },
                 theme: 'snow'
             });
+        };
+
+        var form = document.querySelector('form');
+        form.onsubmit = function() {
+            // Populate hidden form on submit
+            var body = document.querySelector('input[name=body]');
+            body.value = quill.root.innerHTML;
+            return true;
         };
     </script>
 {% endblock %}
