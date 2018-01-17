@@ -24,9 +24,14 @@ def compose(request):
                 compose_obj = compose.save(commit=False)
                 compose_obj.domain = mailgun
                 compose_obj.user = request.user
-                compose_obj.state = 'Q'
-                compose_obj.save()
-                messages.success(request, 'Mail has been sent.')
+                if request.POST.get('send'):  # detect which submit was clicked
+                    compose_obj.state = 'Q'
+                    compose_obj.save()
+                    messages.success(request, 'Mail has been sent.')
+                if request.POST.get('draft'):
+                    compose_obj.state = 'D'
+                    compose_obj.save()
+                    messages.success(request, 'Mail saved as draft.')
             else:
                 messages.warning(request, compose.errors)
         else:
