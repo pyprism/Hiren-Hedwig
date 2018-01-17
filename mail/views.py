@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .forms import MailForm
+from base.models import MailGun
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 
 @login_required
@@ -11,7 +15,18 @@ def inbox(request):
 def compose(request):
     if request.method == 'POST':
         files = request.FILES.getlist('attachment')
-        print(len(files))
+        if len(files) == 0:
+            compose = MailForm(request.POST)
+            if compose.is_valid():
+                domain_str = request.POST.get('mail_from')
+                domain = domain_str.split('@')[1]
+                mailgun = get_object_or_404(MailGun, name=domain, user=request.user)
+                compose_obj = compose.save(commit=False)
+                compose_obj.domain = mailgun
+                compose_obj.user = request.user
+                compose_obj.state = 'Q'
+                compose_obj.save()
+                messages.success(request, 'Mail has been sent.')
         redirect('compose')
     return render(request, 'mail/compose.html')
 
