@@ -15,11 +15,11 @@
                             <form class="form-horizontal" method="post" enctype="multipart/form-data"> {% csrf_token %}
                                 {% if messages %}
                                     {%for message in messages %}
-                                            <div class="alert alert-{{ message.tags }}" role="alert">
-                                                <ul class="messages">
-                                                    <li>{{ message }}</li>
-                                                </ul>
-                                            </div>
+                                        <div class="alert alert-{{ message.tags }}" role="alert">
+                                            <ul class="messages">
+                                                <li>{{ message }}</li>
+                                            </ul>
+                                        </div>
                                     {% endfor %}
                                 {% endif %}
                                 <div class="row clearfix">
@@ -107,16 +107,14 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                                        <button type="submit" class="btn btn-success m-t-15 waves-effect">
+                                        <button type="submit" name="send" value="bugs" class="btn btn-success m-t-15 waves-effect">
                                             <i class="material-icons">send</i>
                                             <span>Send</span>
                                         </button>
-                                        <a href="/">
-                                            <button type="button" class="btn btn-info m-t-15 waves-effect">
-                                                <i class="material-icons">drafts</i>
-                                                <span>Draft</span>
-                                            </button>
-                                        </a>
+                                        <button type="submit" name="draft" value="bunny" class="btn btn-info m-t-15 waves-effect">
+                                            <i class="material-icons">drafts</i>
+                                            <span>Draft</span>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
