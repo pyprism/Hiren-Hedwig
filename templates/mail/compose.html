@@ -12,7 +12,7 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <form class="form-horizontal" method="post"> {% csrf_token %}
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data"> {% csrf_token %}
                                 {% if messages %}
                                     {%for message in messages %}
                                         {%if "mailgun" in message.tags %}
@@ -31,7 +31,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" required name="from" class="form-control" placeholder="mail@yourdoamin.com">
+                                                <input type="text" required name="mail_from" class="form-control" placeholder="mail@yourdoamin.com">
                                             </div>
                                         </div>
                                     </div>
@@ -43,7 +43,31 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" required name="to" class="form-control" placeholder="Type recipients email">
+                                                <input type="text" required name="mail_to" class="form-control" placeholder="Type recipients email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>CC</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text"  name="cc" class="form-control" placeholder="Optional CC">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>BCC</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" required name="bcc" class="form-control" placeholder="Optional BCC">
                                             </div>
                                         </div>
                                     </div>
@@ -67,9 +91,19 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="hidden" name="html">
-                                                <div id="mailBody" > </div>
+                                                <input type="hidden" name="body">
+                                                <div id="mailBody"> </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Attachment</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <input type="file" name="attachment" class="form-control" multiple>
                                         </div>
                                     </div>
                                 </div>
