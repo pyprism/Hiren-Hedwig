@@ -28,9 +28,9 @@ def compose(request):
                 compose_obj.save()
                 messages.success(request, 'Mail has been sent.')
             else:
-                messages.error(request, compose.errors)
+                messages.warning(request, compose.errors)
         else:
-            messages.error(request, 'attachment!!')
+            messages.warning(request, 'attachment!!')
         redirect('compose')
     return render(request, 'mail/compose.html')
 
