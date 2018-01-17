@@ -9,6 +9,10 @@ def inbox(request):
 
 @login_required
 def compose(request):
+    if request.method == 'POST':
+        files = request.FILES.getlist('attachment')
+        print(len(files))
+        redirect('compose')
     return render(request, 'mail/compose.html')
 
 
