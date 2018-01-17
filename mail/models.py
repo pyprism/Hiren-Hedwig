@@ -20,6 +20,7 @@ class Contact(models.Model):
 
 
 class Mail(models.Model):
+    domain = models.ForeignKey(MailGun, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     mail_from = models.CharField(max_length=500)
     mail_to = models.CharField(max_length=2000)
