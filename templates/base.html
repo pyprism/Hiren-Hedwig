@@ -74,13 +74,13 @@
         <!-- Menu -->
         <div class="menu">
             <ul class="list">
-                <li class="header">MAIN NAVIGATION</li>
                 <li class="active">
                     <a href="{% url 'compose' %}">
                         <i class="material-icons">email</i>
                         <span>Compose</span>
                     </a>
                 </li>
+                <li class="header">MAIN NAVIGATION</li>
                 <li>
                      <a href="{% url 'inbox' %}">
                         <i class="material-icons">inbox</i>
@@ -89,21 +89,27 @@
                 </li>
 
                 <li >
-                    <a href="/report/">
-                        <i class="material-icons">graphic_eq</i>
-                        <span>Report</span>
+                    <a href="{% url 'sent' %}">
+                        <i class="material-icons">done</i>
+                        <span>Sent</span>
                     </a>
                 </li>
                 <li>
                     <a href="/add/">
-                        <i class="material-icons">domain</i>
-                        <span>Add Host</span>
+                        <i class="material-icons">drafts</i>
+                        <span>Drafts</span>
                     </a>
                 </li>
                 <li>
                     <a href="/list/">
-                        <i class="material-icons">view_list</i>
-                        <span>List</span>
+                        <i class="material-icons">queue</i>
+                        <span>Queue</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/list/">
+                        <i class="material-icons">delete</i>
+                        <span>Trash</span>
                     </a>
                 </li>
                 <li>
