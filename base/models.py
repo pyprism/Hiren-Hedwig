@@ -39,3 +39,19 @@ class MailGun(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+class Cron(models.Model):
+    """
+    Cron job tracker
+    """
+    task_types = (
+        ('S', 'Send Mail'),
+        ('C', 'Check Mail'),
+    )
+    task = models.CharField(choices=task_types, max_length=1)
+    lock = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
