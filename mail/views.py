@@ -30,28 +30,26 @@ def compose(request):
             compose_obj.domain = mailgun
             compose_obj.user = request.user
             if len(files) > 0:
-                compose_obj.attachment = True
+                compose_obj.emotional_attachment = True
             if request.POST.get('send'):  # detect which submit was clicked
                 compose_obj.state = 'Q'
-                hiren = compose_obj.save()
+                compose_obj.save()
                 messages.success(request, 'Mail has been sent.')
             if request.POST.get('draft'):
                 compose_obj.state = 'D'
-                hiren = compose_obj.save()
+                compose_obj.save()
                 messages.success(request, 'Mail saved as draft.')
             if len(files) > 0:
                 for file in files:
                     bunny = Attachment(
                         user=request.user,
-                        mail=hiren.id,
+                        mail=compose_obj,
                         file_name=file.name,
                         attachment=file
                     )
                     bunny.save()
         else:
             messages.warning(request, compose.errors)
-        # else:
-        #     messages.warning(request, 'attachment!!')
         redirect('compose')
     return render(request, 'mail/compose.html')
 
