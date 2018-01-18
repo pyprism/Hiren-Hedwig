@@ -114,8 +114,8 @@ else:
             'PORT': '',
             'CONN_MAX_AGE': 600,
             'ATOMIC_REQUESTS': True
-            }
-}
+        }
+    }
 
 
 # Password validation
@@ -191,6 +191,11 @@ LOGGING = {
         },
     },
     'handlers': {
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'tags': {'custom-tag': 'x'},
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
