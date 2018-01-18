@@ -27,6 +27,7 @@ class Mail(models.Model):
     cc = models.CharField(max_length=2000, blank=True, null=True)
     bcc = models.CharField(max_length=2000, blank=True, null=True)
     subject = models.CharField(max_length=1000, blank=True, null=True)
+    message_id = models.CharField(max_length=500, null=True)  # mailgun message-id
     body = models.TextField()
     mail_state = (
         ('Q', 'Queue'),
