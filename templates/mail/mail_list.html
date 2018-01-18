@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    {% if mails %}
+                        <div class="card">
+                            <div class="header">
+                                <h2>
+                                    {{ title }}
+                                </h2>
+                            </div>
+                            <div class="body table-responsive">
+                                <table class="table table-bordered table-hover table-striped table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Mail From</th>
+                                        <th>Mail To</th>
+                                        <th>Subject</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in mails %}
+                                        <tr>
+                                            <th scope="row"><a href="">{{ i.pk }}</a></th>
+                                            <th><a href="">{{ i.mail_from }}</a></th>
+                                            <th>{{ i.mail_to }}</th>
+                                            <th>{{ i.subject }}</th>
+                                            <th>{{ i.created_at }}</th>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            <ul class="pagination">
+                                {% if mails.has_previous %}
+                                    <li><a href="?page={{ mails.previous_page_number }}">previous</a></li>
+                                {% endif %}
+
+                                <span class="current">
+
+                                </span>
+
+                                {% if mails.has_next %}
+                                    <li><a href="?page={{ mails.next_page_number }}">next</a></li>
+                                {% endif %}
+                                <br>
+                                Page {{ mails.number }} of {{ mails.paginator.num_pages }}.
+                            </ul>
+                            </div>
+                        </div>
+                    {% else %}
+                        When you look at the dark side, careful you must be ... for the dark side looks back. - YODA
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
