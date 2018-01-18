@@ -262,5 +262,9 @@ if not DEBUG:
 # custom user model
 AUTH_USER_MODEL = 'base.Account'
 
+# media settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Enable/disable user signup
 SIGNUP = os.environ.get('SIGNUP', True)
