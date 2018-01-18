@@ -7,4 +7,5 @@ urlpatterns = [
     path('sent/', views.sent, name='sent'),
     path('draft/', views.draft, name='draft'),
     path('queue/', views.queue, name='queue'),
+    path('trash/', views.trash, name='trash'),
 ]
