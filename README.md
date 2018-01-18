@@ -1,2 +1,2 @@
 # Hiren-MailBox
-A simple webmail client based on Mailgun api.
+A simple webmail client based on Mailgun's api.
