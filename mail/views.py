@@ -30,7 +30,7 @@ def compose(request):
             try:
                 mailgun = MailGun.objects.get(name=domain, user=request.user)
             except ObjectDoesNotExist:
-                messages.warning(request, "Your mail's domain" + domain + "domain is not found in settings!")
+                messages.warning(request, "Your mail's domain " + domain + " is not found in settings!")
                 return redirect('compose')
             compose_obj = compose.save(commit=False)
             compose_obj.domain = mailgun
