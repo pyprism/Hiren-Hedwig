@@ -6,9 +6,10 @@ from django.contrib import messages
 from .models import Account, MailGun
 from .forms import MailGunForm
 from django.db.utils import IntegrityError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from hiren.settings import SIGNUP
+from utils.mailgun import send_mail
 
 
 def login(request):
@@ -160,4 +161,16 @@ def update_user(request, username):
             messages.success(request, 'Password updated.')
             return redirect('update_user', username=username)
         return render(request, 'base/update_user.html')
+
+
+def cron_send_mail(request):
+    """
+    Cron endpoint for sending queued mail
+    :param request:
+    :return:
+    """
+    send_mail()
+    return HttpResponse("Bugs Bunny!")
+
+
 
