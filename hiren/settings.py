@@ -113,7 +113,7 @@ else:
             'HOST': 'localhost',
             'PORT': '',
             'CONN_MAX_AGE': 600,
-            'atomic': True
+            'ATOMIC_REQUESTS': True
             }
 }
 
