@@ -39,12 +39,9 @@ def compose(request):
                 compose_obj.emotional_attachment = True
             if request.POST.get('send'):  # detect which submit was clicked
                 compose_obj.state = 'Q'
-                compose_obj.save()
-                messages.success(request, 'Mail has been sent.')
             if request.POST.get('draft'):
                 compose_obj.state = 'D'
-                compose_obj.save()
-                messages.success(request, 'Mail saved as draft.')
+            compose_obj.save()
             if len(files) > 0:
                 for file in files:
                     bunny = Attachment(
@@ -54,6 +51,10 @@ def compose(request):
                         file_obj=file
                     )
                     bunny.save()
+            if request.POST.get('send'):
+                messages.success(request, 'Mail has been sent.')
+            if request.POST.get('draft'):
+                messages.success(request, 'Mail saved as draft.')
         else:
             messages.warning(request, compose.errors)
         redirect('compose')
