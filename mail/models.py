@@ -64,7 +64,7 @@ class Attachment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     mail = models.ForeignKey(Mail, on_delete=models.CASCADE)
     file_name = models.CharField(max_length=100)
-    attachment = models.FileField(upload_to=upload_to)
+    file_obj = models.FileField(upload_to=upload_to)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
