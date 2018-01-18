@@ -74,45 +74,45 @@
         <!-- Menu -->
         <div class="menu">
             <ul class="list">
-                <li class="active">
+                <li {% if request.resolver_match.url_name == 'compose' %} class="active" {% endif %}>
                     <a href="{% url 'compose' %}">
                         <i class="material-icons">email</i>
                         <span>Compose</span>
                     </a>
                 </li>
                 <li class="header">MAIN NAVIGATION</li>
-                <li>
+                <li {% if request.resolver_match.url_name == 'inbox' %} class="active" {% endif %}>
                      <a href="{% url 'inbox' %}">
                         <i class="material-icons">inbox</i>
                         <span>Inbox</span>
                     </a>
                 </li>
 
-                <li >
+                <li {% if request.resolver_match.url_name == 'sent' %} class="active" {% endif %}>
                     <a href="{% url 'sent' %}">
                         <i class="material-icons">done</i>
                         <span>Sent</span>
                     </a>
                 </li>
-                <li>
+                <li {% if request.resolver_match.url_name == 'draft' %} class="active" {% endif %}>
                     <a href="{% url 'draft' %}">
                         <i class="material-icons">drafts</i>
                         <span>Drafts</span>
                     </a>
                 </li>
-                <li>
+                <li {% if request.resolver_match.url_name == 'queue' %} class="active" {% endif %}>
                     <a href="{% url 'queue' %}">
                         <i class="material-icons">queue</i>
                         <span>Queue</span>
                     </a>
                 </li>
-                <li>
+                <li {% if request.resolver_match.url_name == 'trash' %} class="active" {% endif %}>
                     <a href="{% url 'trash' %}">
                         <i class="material-icons">delete</i>
                         <span>Trash</span>
                     </a>
                 </li>
-                <li>
+                <li {% if request.resolver_match.url_name == 'settings' %} class="active" {% endif %}>
                     <a href="{% url 'settings' %}">
                         <i class="material-icons">settings</i>
                         <span>Settings</span>
