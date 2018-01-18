@@ -26,7 +26,10 @@ def compose(request):
         if compose.is_valid():
             domain_str = request.POST.get('mail_from')
             domain = domain_str.split('@')[1]  # extract domain name for mailgun api
-            mailgun = get_object_or_404(MailGun, name=domain, user=request.user)
+            mailgun = MailGun.objects.get(name=domain, user=request.user)
+            if mailgun.DoesNotExist:
+                messages.warning(request, 'Your mailgun registered domain is not found in settings!')
+                return redirect('compose')
             compose_obj = compose.save(commit=False)
             compose_obj.domain = mailgun
             compose_obj.user = request.user
