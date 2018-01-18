@@ -95,4 +95,24 @@ def draft(request):
     return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Draft Mail'})
 
 
+@login_required
+def queue(request):
+    """
+    List of queue mails
+    :param request:
+    :return:
+    """
+    mails = Mail.objects.filter(user=request.user, state='Q').order_by('-created_at')
+    paginator = Paginator(mails, 20)
+    page = request.GET.get('page')
+    try:
+        bunny = paginator.page(page)
+    except PageNotAnInteger:
+        # If bunny is not an integer, deliver first page.
+        bunny = paginator.page(1)
+    except EmptyPage:
+        bunny = paginator.page(paginator.num_pages)
+    return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Queue Mail'})
+
+
 
