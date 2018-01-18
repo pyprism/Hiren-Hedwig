@@ -115,4 +115,24 @@ def queue(request):
     return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Queue Mail'})
 
 
+@login_required
+def trash(request):
+    """
+    List of trash mails
+    :param request:
+    :return:
+    """
+    mails = Mail.objects.filter(user=request.user, state='T').order_by('-updated_at')
+    paginator = Paginator(mails, 20)
+    page = request.GET.get('page')
+    try:
+        bunny = paginator.page(page)
+    except PageNotAnInteger:
+        # If bunny is not an integer, deliver first page.
+        bunny = paginator.page(1)
+    except EmptyPage:
+        bunny = paginator.page(paginator.num_pages)
+    return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Trash Box'})
+
+
 
