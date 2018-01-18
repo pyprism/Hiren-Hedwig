@@ -16,7 +16,6 @@
                                 <table class="table table-bordered table-hover table-striped table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
                                         <th>Mail From</th>
                                         <th>Mail To</th>
                                         <th>Subject</th>
@@ -26,7 +25,6 @@
                                     <tbody>
                                     {% for i in mails %}
                                         <tr>
-                                            <th scope="row"><a href="">{{ i.pk }}</a></th>
                                             <th><a href="">{{ i.mail_from }}</a></th>
                                             <th>{{ i.mail_to }}</th>
                                             <th>{{ i.subject }}</th>
