@@ -4,7 +4,8 @@ from .forms import MailForm
 from base.models import MailGun
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
-from .models import Attachment
+from .models import Attachment, Mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 @login_required
@@ -52,6 +53,26 @@ def compose(request):
             messages.warning(request, compose.errors)
         redirect('compose')
     return render(request, 'mail/compose.html')
+
+
+@login_required
+def sent(request):
+    """
+    List of sent mails
+    :param request:
+    :return:
+    """
+    mails = Mail.objects.filter(user=request.user, state='S')
+    paginator = Paginator(mails, 20)
+    page = request.GET.get('page')
+    try:
+        bunny = paginator.page(page)
+    except PageNotAnInteger:
+        # If bunny is not an integer, deliver first page.
+        bunny = paginator.page(1)
+    except EmptyPage:
+        bunny = paginator.page(paginator.num_pages)
+    return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Sent Mail'})
 
 
 
