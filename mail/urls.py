@@ -6,4 +6,5 @@ urlpatterns = [
     path('compose/', views.compose, name='compose'),
     path('sent/', views.sent, name='sent'),
     path('draft/', views.draft, name='draft'),
+    path('queue/', views.queue, name='queue'),
 ]
