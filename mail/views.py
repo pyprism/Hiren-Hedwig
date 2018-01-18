@@ -51,7 +51,7 @@ def compose(request):
                         user=request.user,
                         mail=compose_obj,
                         file_name=file.name,
-                        attachment=file
+                        file_obj=file
                     )
                     bunny.save()
         else:
