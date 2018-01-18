@@ -62,7 +62,7 @@ def sent(request):
     :param request:
     :return:
     """
-    mails = Mail.objects.filter(user=request.user, state='S')
+    mails = Mail.objects.filter(user=request.user, state='S').order_by('-updated_at')
     paginator = Paginator(mails, 20)
     page = request.GET.get('page')
     try:
@@ -73,6 +73,26 @@ def sent(request):
     except EmptyPage:
         bunny = paginator.page(paginator.num_pages)
     return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Sent Mail'})
+
+
+@login_required
+def draft(request):
+    """
+    List of draft mails
+    :param request:
+    :return:
+    """
+    mails = Mail.objects.filter(user=request.user, state='D').order_by('-updated_at')
+    paginator = Paginator(mails, 20)
+    page = request.GET.get('page')
+    try:
+        bunny = paginator.page(page)
+    except PageNotAnInteger:
+        # If bunny is not an integer, deliver first page.
+        bunny = paginator.page(1)
+    except EmptyPage:
+        bunny = paginator.page(paginator.num_pages)
+    return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Draft Mail'})
 
 
 
