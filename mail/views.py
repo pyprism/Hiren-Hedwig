@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import MailForm
 from base.models import MailGun
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -26,8 +27,9 @@ def compose(request):
         if compose.is_valid():
             domain_str = request.POST.get('mail_from')
             domain = domain_str.split('@')[1]  # extract domain name for mailgun api
-            mailgun = MailGun.objects.get(name=domain, user=request.user)
-            if mailgun.DoesNotExist:
+            try:
+                mailgun = MailGun.objects.get(name=domain, user=request.user)
+            except ObjectDoesNotExist:
                 messages.warning(request, 'Your mailgun registered domain is not found in settings!')
                 return redirect('compose')
             compose_obj = compose.save(commit=False)
