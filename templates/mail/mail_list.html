@@ -12,6 +12,15 @@
                                     {{ title }}
                                 </h2>
                             </div>
+                            {% if messages %}
+                                {%for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}" role="alert">
+                                        <ul class="messages">
+                                            <li>{{ message }}</li>
+                                        </ul>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             <div class="body table-responsive">
                                 <table class="table table-bordered table-hover table-striped table-condensed">
                                     <thead>
@@ -33,21 +42,21 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                            <ul class="pagination">
-                                {% if mails.has_previous %}
-                                    <li><a href="?page={{ mails.previous_page_number }}">previous</a></li>
-                                {% endif %}
+                                <ul class="pagination">
+                                    {% if mails.has_previous %}
+                                        <li><a href="?page={{ mails.previous_page_number }}">previous</a></li>
+                                    {% endif %}
 
-                                <span class="current">
+                                    <span class="current">
 
                                 </span>
 
-                                {% if mails.has_next %}
-                                    <li><a href="?page={{ mails.next_page_number }}">next</a></li>
-                                {% endif %}
-                                <br>
-                                Page {{ mails.number }} of {{ mails.paginator.num_pages }}.
-                            </ul>
+                                    {% if mails.has_next %}
+                                        <li><a href="?page={{ mails.next_page_number }}">next</a></li>
+                                    {% endif %}
+                                    <br>
+                                    Page {{ mails.number }} of {{ mails.paginator.num_pages }}.
+                                </ul>
                             </div>
                         </div>
                     {% else %}
