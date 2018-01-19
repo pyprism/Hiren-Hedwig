@@ -153,8 +153,12 @@ def mail_by_id(request, pk):
     attachment = None
     if mail.emotional_attachment:
         attachment = get_list_or_404(Attachment, mail=mail, user=request.user)
+    context = {'mail': mail, 'attachment': attachment}
     if mail.state == 'D':
-        return render(request, 'mail/draft_edit.html', {'mail': mail, 'attachment': attachment})
+        return render(request, 'mail/draft_edit.html', context)
+    elif mail.state == 'Q':
+        return render(request, 'mail/queue_readonly.html', context)
+
 
 
 @login_required
