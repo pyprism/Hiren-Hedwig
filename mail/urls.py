@@ -8,4 +8,5 @@ urlpatterns = [
     path('draft/', views.draft, name='draft'),
     path('queue/', views.queue, name='queue'),
     path('trash/', views.trash, name='trash'),
+    path('<int:pk>/', views.mail_by_id, name='mail_by_id'),
 ]
