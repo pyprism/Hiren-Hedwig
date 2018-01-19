@@ -17,12 +17,13 @@ from django.urls import path, re_path, include
 from django.conf import settings
 from base import urls as base
 from mail import urls as mail
+from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('', include(base)),
     path('mail/', include(mail)),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
