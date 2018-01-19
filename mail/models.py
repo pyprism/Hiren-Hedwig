@@ -62,7 +62,7 @@ def upload_to(instance, filename):  # for avoiding file name attacks
 
 class Attachment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    mail = models.ForeignKey(Mail, on_delete=models.CASCADE)
+    mail = models.ForeignKey(Mail, on_delete=models.CASCADE, null=True)
     file_name = models.CharField(max_length=100)
     file_obj = models.FileField(upload_to=upload_to)
     created_at = models.DateTimeField(auto_now_add=True)
