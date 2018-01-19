@@ -9,4 +9,5 @@ urlpatterns = [
     path('queue/', views.queue, name='queue'),
     path('trash/', views.trash, name='trash'),
     path('<int:pk>/', views.mail_by_id, name='mail_by_id'),
+    path('draft/<int:pk>/edit/', views.draft_edit, name='draft_edit'),
 ]
