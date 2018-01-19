@@ -7,7 +7,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import F
 
 
 @login_required
@@ -170,17 +169,33 @@ def draft_edit(request, pk):
         files = request.FILES.getlist('new_attachment')
         instance = get_object_or_404(Mail, pk=pk, user=request.user)
         if request.POST.get('delete'):
-            if instance.emotional_attachment:
+            if instance.emotional_attachment:  # discard previous files
                 Attachment.objects.filter(mail=instance, user=request.user).update(mail=None)
             instance.delete()
             messages.success(request, 'Draft Discarded!')
-        elif request.POST.get('draft'):
-            pass
-        elif request.POST.get('send'):
-            pass
-        mail_form = MailForm(request.POST, instance=instance)
-        if mail_form.is_valid():
-            pass
+        elif request.POST.get('draft') or request.POST.get('send'):
+            mail_form = MailForm(request.POST, instance=instance)
+            if mail_form.is_valid():
+                mail = mail_form.save(commit=True)
+                if len(files) > 0:  # if user send new attachment
+                    if instance.emotional_attachment:
+                        Attachment.objects.filter(mail=instance, user=request.user).update(mail=None)
+                    for file in files:
+                        bunny = Attachment(
+                            user=request.user,
+                            mail=instance,
+                            file_name=file.name,
+                            file_obj=file
+                        )
+                        bunny.save()
+                    mail.emotional_attachment = True
+                if request.POST.get('send'):
+                    mail.state = 'Q'
+                    messages.success(request, "Mail queued for sending.")
+                else:
+                    messages.success(request, "Draft updated.")
+                mail.save()
+
     return redirect('draft')
 
 
