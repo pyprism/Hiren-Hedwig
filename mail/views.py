@@ -143,12 +143,42 @@ def trash(request):
 
 @login_required
 def mail_by_id(request, pk):
+    """
+    Get mail by id and return correct template based on mail type
+    :param request:
+    :param pk:
+    :return:
+    """
     mail = get_object_or_404(Mail, user=request.user, pk=pk)
     attachment = None
     if mail.emotional_attachment:
-        attachment = get_list_or_404(Attachment, mail=mail)
+        attachment = get_list_or_404(Attachment, mail=mail, user=request.user)
     if mail.state == 'D':
         return render(request, 'mail/draft_edit.html', {'mail': mail, 'attachment': attachment})
+
+
+@login_required
+def draft_edit(request, pk):
+    """
+    Handle draft edit form
+    :param request:
+    :param pk:
+    :return:
+    """
+    if request.method == 'POST':
+        files = request.FILES.getlist('new_attachment')
+        instance = get_object_or_404(Mail, pk=pk, user=request.user)
+        if request.POST.get('delete'):
+            instance.delete()
+            messages.success(request, 'Draft Discarded!')
+        elif request.POST.get('draft'):
+            pass
+        elif request.POST.get('send'):
+            pass
+        mail_form = MailForm(request.POST, instance=instance)
+        if mail_form.is_valid():
+            pass
+    return redirect('draft')
 
 
 
