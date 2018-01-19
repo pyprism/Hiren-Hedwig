@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import MailForm
 from base.models import MailGun
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail
@@ -139,6 +139,16 @@ def trash(request):
     except EmptyPage:
         bunny = paginator.page(paginator.num_pages)
     return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Trash Box'})
+
+
+@login_required
+def mail_by_id(request, pk):
+    mail = get_object_or_404(Mail, user=request.user, pk=pk)
+    attachment = None
+    if mail.emotional_attachment:
+        attachment = get_list_or_404(Attachment, mail=mail)
+    if mail.state == 'D':
+        return render(request, 'mail/draft_edit.html', {'mail': mail, 'attachment': attachment})
 
 
 
