@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %} Edit Draft {% endblock %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Edit Draft Mail
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                                {% if messages %}
+                                    {%for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" role="alert">
+                                            <ul class="messages">
+                                                <li>{{ message }}</li>
+                                            </ul>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>From</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" required name="mail_from" value="{{ mail.mail_from }}" class="form-control" placeholder="mail@yourmailgundomain.com">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>To</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" required name="mail_to" value="{{ mail.mail_to }}" class="form-control" placeholder="Type recipients email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>CC</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text"  name="cc" value="{{ mail.cc|default_if_none:"" }}" class="form-control" placeholder="Optional CC">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>BCC</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="bcc" value="{{ mail.bcc|default_if_none:"" }}" class="form-control" placeholder="Optional BCC">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Subject</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" required name="subject" value="{{ mail.subject }}" class="form-control" placeholder="Type subject">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Body</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="hidden" name="body">
+                                                <div id="mailBody"> {{ mail.body|safe }} </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if attachment %}
+                                    <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Attached File</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="body table-responsive">
+                                            <table class="table table-bordered table-hover table-striped table-condensed">
+                                                <thead>
+                                                <tr>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for i in attachment %}
+                                                    <tr>
+                                                        <th><a href="{{ i.file_obj.url }}" target="_blank">{{ i.file_name }}</a></th>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                            <label>Discard Previous Attachment, Upload New</label>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                            <div class="form-group">
+                                                <input type="file" name="new_attachment" class="form-control" multiple>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="row clearfix">
+                                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                            <label>Attachment</label>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                            <div class="form-group">
+                                                <input type="file" name="attachment" class="form-control" multiple>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="row clearfix">
+                                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                        <button type="submit" name="send" value="bugs" class="btn btn-success m-t-15 waves-effect">
+                                            <i class="material-icons">send</i>
+                                            <span>Send</span>
+                                        </button>
+                                        <button type="submit" name="draft" value="bunny" class="btn btn-info m-t-15 waves-effect">
+                                            <i class="material-icons">drafts</i>
+                                            <span>Draft</span>
+                                        </button>
+                                        <button type="submit" name="delete" value="hiren" class="btn btn-danger m-t-15 waves-effect">
+                                            <i class="material-icons">delete_forever</i>
+                                            <span>Discard</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var quill;
+        window.onload = function () {
+            quill = new Quill('#mailBody', {
+                modules: {
+                    toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline'],
+                        ['image', 'code-block']
+                    ]
+                },
+                theme: 'snow'
+            });
+        };
+
+        var form = document.querySelector('form');
+        form.onsubmit = function() {
+            // Populate hidden form on submit
+            var body = document.querySelector('input[name=body]');
+            body.value = quill.root.innerHTML;
+            return true;
+        };
+    </script>
+{% endblock %}
