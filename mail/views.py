@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import F
 
 
 @login_required
@@ -169,6 +170,8 @@ def draft_edit(request, pk):
         files = request.FILES.getlist('new_attachment')
         instance = get_object_or_404(Mail, pk=pk, user=request.user)
         if request.POST.get('delete'):
+            if instance.emotional_attachment:
+                Attachment.objects.filter(mail=instance, user=request.user).update(mail=None)
             instance.delete()
             messages.success(request, 'Draft Discarded!')
         elif request.POST.get('draft'):
