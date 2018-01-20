@@ -158,7 +158,8 @@ def mail_by_id(request, pk):
         return render(request, 'mail/draft_edit.html', context)
     elif mail.state == 'Q':
         return render(request, 'mail/queue_readonly.html', context)
-
+    elif mail.state == 'T':
+        return render(request, 'mail/trash_delete.html', context)
 
 
 @login_required
@@ -201,6 +202,21 @@ def draft_edit(request, pk):
                 mail.save()
 
     return redirect('draft')
+
+
+@login_required
+def trash_delete(request, pk):
+    """
+    Delete 'trash' mail by id
+    :param request:
+    :param pk:
+    :return:
+    """
+    if request.method == 'POST':
+        if request.POST.get('delete'):
+            get_object_or_404(Mail, pk=pk, user=request.user).delete()
+            messages.success(request, 'Mail Deleted!')
+        return redirect('trash')
 
 
 
