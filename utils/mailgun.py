@@ -69,4 +69,13 @@ def send_mail():
         cron.save()
 
 
+def get_mail():
+    headers = {"Accept": "message/rfc2822"}
+    bunny = requests.get('https://api.mailgun.net/v3/domains//messages/', auth=("api", ''), headers=headers)
+    print(bunny.json())
+
+
+get_mail()
+
+
 
