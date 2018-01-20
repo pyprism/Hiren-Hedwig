@@ -67,3 +67,4 @@ node_modules/
 .env/
 webpack-stats.json
 media/hiren/*
+static/CACHE/*
