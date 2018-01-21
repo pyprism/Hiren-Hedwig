@@ -5,6 +5,7 @@ import logging
 # import asyncio
 # loop = asyncio.get_event_loop()
 # loop.run_in_executor(None, 'task')
+# time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(1516544803.913727))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hiren.settings")
 django.setup()
@@ -71,9 +72,29 @@ def send_mail():
 
 def get_mail():
     headers = {"Accept": "message/rfc2822"}
-    bunny = requests.get('https://api.mailgun.net/v3/domains//messages/', auth=("api", ''), headers=headers)
-    print(bunny.json())
+    # bunny = requests.get('https://api.mailgun.net/v3//events',
+    #                      auth=("api", ''), params={"event": "stored"})
+    # bugs = bunny.json()
+    # # print(bugs)
+    # if bugs['items']:
+    #     for i in bugs['items']:
+    #         hiren = requests.get('https://api.mailgun.net/v3/domains//messages/',
+    #                              auth=("api", ''))
+    #         print(hiren.status_code)
+    #         # print(hiren.json())
+    #         print(hiren.text)
+    # else:
+    #     print("no")
 
+    domain = ""
+    key = ""
+    url = "https://api.mailgun.net/v3/domains/%s/messages/%s"
+    url = url % (domain, key)
+    hiren = requests.get(url, auth=("api", ''), headers=headers)
+    print(hiren.status_code)
+    # print(hiren.json())
+    print(hiren.text)
+    print(hiren.content)
 
 get_mail()
 
