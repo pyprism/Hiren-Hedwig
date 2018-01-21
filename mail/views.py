@@ -214,8 +214,11 @@ def trash_delete(request, pk):
     """
     if request.method == 'POST':
         if request.POST.get('delete'):
-            get_object_or_404(Mail, pk=pk, user=request.user).delete()
-            messages.success(request, 'Mail Deleted!')
+            bunny = get_object_or_404(Mail, pk=pk, user=request.user)
+            if bunny.emotional_attachment:
+                Attachment.objects.filter(user=request.user, mail=bunny).update(mail=None)
+            bunny.delete()
+            messages.success(request, 'Mail Deleted Permanently!')
         return redirect('trash')
 
 
