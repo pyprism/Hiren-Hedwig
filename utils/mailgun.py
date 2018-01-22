@@ -2,10 +2,16 @@ import requests
 import django
 import os
 import logging
+import bleach
 # import asyncio
 # loop = asyncio.get_event_loop()
 # loop.run_in_executor(None, 'task')
 # time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(1516544803.913727))
+# bleach.clean(form.cleaned_data['message'],
+#                        tags=ALLOWED_TAGS,
+#                        attributes=ALLOWED_ATTRIBUTES,
+#                        styles=ALLOWED_STYLES,
+#                        strip=False, strip_comments=True)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hiren.settings")
 django.setup()
@@ -70,31 +76,55 @@ def send_mail():
         cron.save()
 
 
+def items_process(items, mail):
+    for item in items:
+        if not Mail.objects.filter(message_id=item['message']['headers']['message-id']).exists():  # TODO regex domain name
+            hiren = requests.get(item['storage']['url'], auth=('api', mail.key))
+            if hiren.status_code == 200:
+                bunny = hiren.json()
+
+
 def get_mail():
-    headers = {"Accept": "message/rfc2822"}
-    # bunny = requests.get('https://api.mailgun.net/v3//events',
-    #                      auth=("api", ''), params={"event": "stored"})
-    # bugs = bunny.json()
-    # # print(bugs)
-    # if bugs['items']:
-    #     for i in bugs['items']:
-    #         hiren = requests.get('https://api.mailgun.net/v3/domains//messages/',
-    #                              auth=("api", ''))
-    #         print(hiren.status_code)
-    #         # print(hiren.json())
-    #         print(hiren.text)
+    cron, created = Cron.objects.get_or_create(task='C', lock=False)
+    if not cron.lock:
+        cron.lock = True
+        cron.save()
+        mails = MailGun.objects.all()
+        for mail in mails:
+            bunny = requests.get('https://api.mailgun.net/v3/%s/events' % mail.name,
+                                 auth=("api", mail.key), params={"event": "stored"})
+            if bunny.status_code == 200:
+                bugs = bunny.json()
+                if bugs['items']:
+                    items_process(bugs['items'], mail)
+                    while True:  # paging
+                        nisha = requests.get(bugs['paging']['next'], auth=('api', mail.key))
+                        if nisha.status_code == 200:
+                            hiren = nisha.json()
+                            if hiren['items']:
+                                items_process(hiren['items'], mail)
+                            else:
+                                break
+
+            #         for i in bugs['items']:
+            # hiren = requests.get('https://api.mailgun.net/v3/domains//messages/',
+            #                      auth=("api", ''))
+            # print(hiren.status_code)
+            # # print(hiren.json())
+            # print(hiren.text)
     # else:
     #     print("no")
 
-    domain = ""
-    key = ""
-    url = "https://api.mailgun.net/v3/domains/%s/messages/%s"
-    url = url % (domain, key)
-    hiren = requests.get(url, auth=("api", ''), headers=headers)
-    print(hiren.status_code)
-    # print(hiren.json())
-    print(hiren.text)
-    print(hiren.content)
+    # domain = ""
+    # key = ""
+    # url = "https://api.mailgun.net/v3/domains/%s/messages/%s"
+    # url = url % (domain, key)
+    # hiren = requests.get(url, auth=("api", ''), headers=headers)
+    # print(hiren.status_code)
+    # # print(hiren.json())
+    # print(hiren.text)
+    # print(hiren.content)
+
 
 get_mail()
 
