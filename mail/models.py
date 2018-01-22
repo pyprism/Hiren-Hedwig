@@ -29,6 +29,7 @@ class Mail(models.Model):
     subject = models.CharField(max_length=1000, blank=True, null=True)
     message_id = models.CharField(max_length=500, null=True)  # mailgun message-id
     body = models.TextField()
+    sane_body = models.TextField(null=True)  # sanitized body used for incoming mail
     mail_state = (
         ('Q', 'Queue'),
         ('S', 'Success'),
@@ -38,6 +39,8 @@ class Mail(models.Model):
     )
     state = models.CharField(choices=mail_state, max_length=1)
     emotional_attachment = models.BooleanField(default=False)   # lol :P emotional_attachment == mail attachment  :D
+    is_read = models.BooleanField(default=False)  # only used for received mail
+    received_datetime = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
