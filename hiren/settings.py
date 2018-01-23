@@ -271,5 +271,4 @@ AUTH_USER_MODEL = 'base.Account'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# Enable/disable user signup
-SIGNUP = os.environ.get('SIGNUP', True)
+
