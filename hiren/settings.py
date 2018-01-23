@@ -282,3 +282,19 @@ SESSION_REDIS = {
     'prefix': 'mailbox_session',
     'socket_timeout': 1
 }
+
+# django cacheops
+
+CACHEOPS_REDIS = {
+    'host': 'localhost',  # redis-server is on same machine
+    'port': 6379,         # default redis port
+    'db': 4,             # SELECT non-default redis database
+}
+
+CACHEOPS = {
+    'auth.*': {'ops': 'all', 'timeout': 60*60*24*30},
+    'setting.*': {'ops': 'all', 'timeout': 60*60*24*30},
+    'mailgun.*': {'ops': 'all', 'timeout': 60*60*24*30},
+    'account.*': {'ops': 'all', 'timeout': 60*60*24*30},
+    'contact.*': {'ops': 'all', 'timeout': 60*60*24*7},
+}
