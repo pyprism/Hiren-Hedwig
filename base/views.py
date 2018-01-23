@@ -3,11 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from django.contrib import messages
-from .models import Account, MailGun
+from .models import Account, MailGun, Setting
 from .forms import MailGunForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, HttpResponse
-from hiren.settings import SIGNUP
 from utils.mailgun import send_mail, get_mail
 
 
@@ -27,7 +26,7 @@ def login(request):
             auth.login(request, user)
             return redirect('inbox')
         else:
-            messages.error(request, 'Username/Password is not valid!')
+            messages.warning(request, 'Username/Password is not valid!')
             return redirect('login')
     else:
         return render(request, 'base/login.html')
@@ -37,7 +36,8 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('inbox')
     if request.method == "POST":
-        if SIGNUP == 'True':
+        sign_up, created = Setting.objects.get_or_create(task='S')
+        if sign_up.active:
             username = request.POST.get('username')
             password = request.POST.get('password')
             count = Account.objects.count()
@@ -49,11 +49,12 @@ def signup(request):
             try:
                 acc.save()
             except IntegrityError:
-                messages.error(request, "username is not available!")
+                messages.warning(request, "Username is not available!")
                 return redirect('signup')
             messages.success(request, 'Account created successfully!')
+            return redirect('login')
         else:
-            messages.error(request, 'Signup is disabled!')
+            messages.warning(request, 'Signup is disabled!')
         return redirect('signup')
     else:
         return render(request, 'base/signup.html')
