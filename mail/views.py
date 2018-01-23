@@ -9,9 +9,30 @@ from .models import Attachment, Mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
+def terminator(request, obj):
+    """
+    Hasta la vista, baby ....  reusable paginator
+    :param request:
+    :param obj:
+    :return:
+    """
+    paginator = Paginator(obj, 25)
+    page = request.GET.get('page')
+    try:
+        bunny = paginator.page(page)
+    except PageNotAnInteger:
+        # If bunny is not an integer, deliver first page.
+        bunny = paginator.page(1)
+    except EmptyPage:
+        bunny = paginator.page(paginator.num_pages)
+    return bunny
+
+
 @login_required
 def inbox(request):
-    return render(request, 'mail/inbox.html')
+    mails = Mail.objects.filter(user=request.user, state='R').order_by('-updated_at')
+    bunny = terminator(request, mails)
+    return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Trash Box'})
 
 
 @login_required
@@ -128,7 +149,7 @@ def trash(request):
     :param request:
     :return:
     """
-    mails = Mail.objects.filter(user=request.user, state='T').order_by('-updated_at')
+    mails = Mail.objects.filter(user=request.user, state='R').order_by('-created_at')
     paginator = Paginator(mails, 20)
     page = request.GET.get('page')
     try:
