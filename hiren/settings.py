@@ -271,4 +271,14 @@ AUTH_USER_MODEL = 'base.Account'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# django-redis-session
+SESSION_ENGINE = 'redis_sessions.session'
 
+SESSION_REDIS = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 4,
+    'password': '',
+    'prefix': 'mailbox_session',
+    'socket_timeout': 1
+}
