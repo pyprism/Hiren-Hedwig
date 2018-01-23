@@ -2,7 +2,11 @@
 Description=uWSGI instance to serve Hiren-MailBox
 
 [Service]
-ExecStart=/bin/bash -c 'su prism; cd /home/prism/prod/Hiren-MailBox; source .env/bin/activate; uwsgi --enable-threads --ini mailbox.ini'
+ExecStart=/bin/bash -c 'su prism; cd /home/prism/prod/Hiren-MailBox; source .env/bin/activate; uwsgi --enable-threads --enable-threads --ini mailbox.ini'
+
+ExecReload=/bin/bash -c 'su prism; cd /home/prism/prod/Hiren-MailBox; source .env/bin/activate; uwsgi --reload /run/mailbox.pid'
+
+ExecStop=/bin/bash -c 'su prism; cd /home/prism/prod/MailBox; source .env/bin/activate; uwsgi --stop /run/mailbox.pid'
 
 [Install]
 WantedBy=multi-user.target
