@@ -63,9 +63,22 @@ def signup(request):
 @login_required
 def settings(request):
     mailgun = MailGun.objects.filter(user=request.user)
+    sign_up, created = Setting.objects.get_or_create(task='S')
     users = Account.objects.all()
-    return render(request, 'base/settings.html', {'mailgun': mailgun, 'users': users})
+    return render(request, 'base/settings.html', {'mailgun': mailgun, 'users': users, 'signup': sign_up})
 
+
+@login_required
+def signup_settings(request):
+    if request.user.is_admin:
+        if request.method == 'POST':
+            sign_up = Setting.objects.get(task='S')
+            if request.POST.get('enable'):
+                sign_up.active = False
+            elif request.POST.get('disable'):
+                sign_up.active = True
+            sign_up.save()
+        return redirect('settings')
 
 @login_required
 def create_domain(request):
