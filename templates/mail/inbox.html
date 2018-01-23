@@ -44,7 +44,7 @@
                                     </thead>
                                     <tbody>
                                     {% for i in mails %}
-                                        <tr {% if i.is_read %} class="bg-brown" {% else %} class="active" {% endif %}>
+                                        <tr {% if i.is_read %} class="bg-amber" {% else %} class="active" {% endif %}>
                                             <th><a href="{% url 'mail_by_id' pk=i.pk %}">{{ i.mail_from }}</a></th>
                                             <th><a href="{% url 'mail_by_id' pk=i.pk %}">{{ i.subject }}</a></th>
                                             <th>{{ i.created_at|date }}</th>
