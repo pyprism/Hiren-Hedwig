@@ -7,9 +7,8 @@ from .models import Account, MailGun
 from .forms import MailGunForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, HttpResponse
-from django.contrib.auth.models import User
 from hiren.settings import SIGNUP
-from utils.mailgun import send_mail
+from utils.mailgun import send_mail, get_mail
 
 
 def login(request):
@@ -171,6 +170,16 @@ def cron_send_mail(request):
     """
     send_mail()
     return HttpResponse("Bugs Bunny!")
+
+
+def cron_check_mail(request):
+    """
+    Cron endpoint for checking new stored email
+    :param request:
+    :return:
+    """
+    get_mail()
+    return HttpResponse("Bunny")
 
 
 
