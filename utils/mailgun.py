@@ -3,15 +3,11 @@ import django
 import os
 import logging
 import bleach
+from datetime import datetime, timedelta
+from email.utils import parsedate_tz
 # import asyncio
 # loop = asyncio.get_event_loop()
 # loop.run_in_executor(None, 'task')
-# time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(1516544803.913727))
-# bleach.clean(form.cleaned_data['message'],
-#                        tags=ALLOWED_TAGS,
-#                        attributes=ALLOWED_ATTRIBUTES,
-#                        styles=ALLOWED_STYLES,
-#                        strip=False, strip_comments=True)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hiren.settings")
 django.setup()
@@ -20,6 +16,17 @@ from base.models import MailGun, Cron
 from mail.models import Mail, Attachment
 
 logger = logging.getLogger(__name__)
+
+
+def to_datetime(datestring):
+    """
+    convert rfc 2822 datetime format to django supported format
+    :param datestring:
+    :return:
+    """
+    time_tuple = parsedate_tz(datestring.strip())
+    dt = datetime(*time_tuple[:6])
+    return dt - timedelta(seconds=time_tuple[-1])
 
 
 def send_mail():
@@ -77,11 +84,22 @@ def send_mail():
 
 
 def items_process(items, mail):
+    """
+    Process and save incoming mail
+    :param items: API response
+    :param mail: db object
+    :return:
+    """
     for item in items:
         if not Mail.objects.filter(message_id=item['message']['headers']['message-id']).exists():  # TODO regex domain name
             hiren = requests.get(item['storage']['url'], auth=('api', mail.key))
             if hiren.status_code == 200:
                 bunny = hiren.json()
+                Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
+                                    mail_to=bunny['To'], subject=bunny['subject'],
+                                    message_id=item['message']['headers']['message-id'], body=bunny['body-html'],
+                                    sane_body=bleach.clean(bunny['body-html'], strip=True, strip_comments=True),
+                                    state='R', received_datetime=to_datetime(bunny['Date']))
 
 
 def get_mail():
@@ -89,7 +107,7 @@ def get_mail():
     if not cron.lock:
         cron.lock = True
         cron.save()
-        mails = MailGun.objects.all()
+        mails = MailGun.objects.all().select_related()
         for mail in mails:
             bunny = requests.get('https://api.mailgun.net/v3/%s/events' % mail.name,
                                  auth=("api", mail.key), params={"event": "stored"})
@@ -105,28 +123,8 @@ def get_mail():
                                 items_process(hiren['items'], mail)
                             else:
                                 break
-
-            #         for i in bugs['items']:
-            # hiren = requests.get('https://api.mailgun.net/v3/domains//messages/',
-            #                      auth=("api", ''))
-            # print(hiren.status_code)
-            # # print(hiren.json())
-            # print(hiren.text)
-    # else:
-    #     print("no")
-
-    # domain = ""
-    # key = ""
-    # url = "https://api.mailgun.net/v3/domains/%s/messages/%s"
-    # url = url % (domain, key)
-    # hiren = requests.get(url, auth=("api", ''), headers=headers)
-    # print(hiren.status_code)
-    # # print(hiren.json())
-    # print(hiren.text)
-    # print(hiren.content)
-
-
-get_mail()
+        cron.lock = False
+        cron.save()
 
 
 
