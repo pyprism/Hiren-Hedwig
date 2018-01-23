@@ -149,7 +149,7 @@ def trash(request):
     :param request:
     :return:
     """
-    mails = Mail.objects.filter(user=request.user, state='R').order_by('-created_at')
+    mails = Mail.objects.filter(user=request.user, state='T').order_by('-created_at')
     paginator = Paginator(mails, 20)
     page = request.GET.get('page')
     try:
