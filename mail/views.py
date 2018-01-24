@@ -226,7 +226,7 @@ def sent_delete(request, pk):
             bunny = get_object_or_404(Mail, pk=pk, user=request.user)
             bunny.state = 'T'
             bunny.save()
-            messages.success(request, 'Mail Move To Trash.')
+            messages.success(request, 'Mail Moved To Trash.')
         return redirect('sent')
 
 
