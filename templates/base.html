@@ -29,6 +29,8 @@
         <link href="{% static 'css/bootstrap-datepicker3.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/quill.snow.css' %}" rel="stylesheet">
     {% endcompress %}
+    {% load tz_detect %}
+    {% tz_detect %}
 </head>
 <body class="theme-deep-orange">
 <!-- Page Loader -->
