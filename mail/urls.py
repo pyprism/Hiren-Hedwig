@@ -9,6 +9,7 @@ urlpatterns = [
     path('queue/', views.queue, name='queue'),
     path('trash/', views.trash, name='trash'),
     path('trash/<int:pk>/delete/', views.trash_delete, name='trash_delete'),
+    path('sent/<int:pk>/delete/', views.sent_delete, name='sent_delete'),
     path('<int:pk>/', views.mail_by_id, name='mail_by_id'),
     path('draft/<int:pk>/edit/', views.draft_edit, name='draft_edit'),
 ]
