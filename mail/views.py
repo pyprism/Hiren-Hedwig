@@ -149,6 +149,8 @@ def mail_by_id(request, pk):
         return render(request, 'mail/queue_readonly.html', context)
     elif mail.state == 'T':
         return render(request, 'mail/trash_delete.html', context)
+    elif mail.state == 'S':
+        return render(request, 'mail/sent_mail_readonly.html', context)
 
 
 @login_required
@@ -209,6 +211,23 @@ def trash_delete(request, pk):
             bunny.delete()
             messages.success(request, 'Mail Deleted Permanently!')
         return redirect('trash')
+
+
+@login_required
+def sent_delete(request, pk):
+    """
+    move sent mail to trash
+    :param request:
+    :param pk:
+    :return:
+    """
+    if request.method == 'POST':
+        if request.POST.get('delete'):
+            bunny = get_object_or_404(Mail, pk=pk, user=request.user)
+            bunny.state = 'T'
+            bunny.save()
+            messages.success(request, 'Mail Move To Trash.')
+        return redirect('sent')
 
 
 
