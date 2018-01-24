@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'base',
     'mail',
     'debug_toolbar',
-    'compressor'
+    'compressor',
+    'tz_detect',
 ]
 
 if DEBUG is False:
@@ -66,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'tz_detect.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'hiren.urls'
@@ -146,9 +148,9 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = False
 
-USE_L10N = False
+USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
