@@ -30,9 +30,20 @@ def terminator(request, obj):
 
 @login_required
 def inbox(request):
-    mails = Mail.objects.filter(user=request.user, state='R').order_by('-updated_at')
+    mails = Mail.objects.filter(user=request.user, state='R').order_by('is_read', '-updated_at')
     bunny = terminator(request, mails)
-    return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Trash Box'})
+    return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
+
+
+@login_required
+def inbox_details(request, pk):
+    """
+    wip
+    :param request:
+    :return:
+    """
+    mail = get_object_or_404(Mail, pk=pk, user=request.user)
+    return render(request, 'mail/inbox_details.html', {'mail': mail})
 
 
 @login_required
@@ -151,6 +162,10 @@ def mail_by_id(request, pk):
         return render(request, 'mail/trash_delete.html', context)
     elif mail.state == 'S':
         return render(request, 'mail/sent_mail_readonly.html', context)
+    elif mail.state == 'R':
+        mail.is_read = True
+        mail.save()
+        return render(request, 'mail/inbox_details.html', context)
 
 
 @login_required
