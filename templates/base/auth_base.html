@@ -25,6 +25,8 @@
         <!-- Custom Css -->
         <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
     {% endcompress %}
+    {% load tz_detect %}
+    {% tz_detect %}
 </head>
 
 <body class="login-page">
