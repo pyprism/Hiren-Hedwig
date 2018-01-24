@@ -196,7 +196,7 @@ LOGGING = {
         'sentry': {
             'level': 'ERROR',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
+            'tags': {'custom-tag': 'request'},
         },
         'mail_admins': {
             'level': 'ERROR',
