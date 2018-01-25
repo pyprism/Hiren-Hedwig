@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 if DEBUG is False:
     INSTALLED_APPS += [
         'raven.contrib.django.raven_compat',
+        'cacheops',
     ]
 
 MIDDLEWARE = [
