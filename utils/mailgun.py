@@ -100,6 +100,10 @@ def items_process(items, mail):
                                     message_id=item['message']['headers']['message-id'], body=bunny['body-html'],
                                     sane_body=bleach.clean(bunny['body-html'], strip=True, strip_comments=True),
                                     state='R', received_datetime=to_datetime(bunny['Date']))
+            else:
+                logger.error('item processor failed', exc_info=True, extra={
+                    'request': hiren.json(),
+                })
 
 
 def get_mail():
@@ -123,6 +127,10 @@ def get_mail():
                                 items_process(hiren['items'], mail)
                             else:
                                 break
+            else:
+                logger.error('get mail failed!', exc_info=True, extra={
+                    'request': bunny.json(),
+                })
         cron.lock = False
         cron.save()
 
