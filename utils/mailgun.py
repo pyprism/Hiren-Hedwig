@@ -98,7 +98,7 @@ def items_process(items, mail):
                 Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
                                     mail_to=bunny['To'], subject=bunny['subject'],
                                     message_id=item['message']['headers']['message-id'], body=bunny['body-html'],
-                                    sane_body=bleach.clean(bunny['body-html'], strip=True, strip_comments=True),
+                                    sane_body=bleach.clean(bunny['body-html'], strip=False, strip_comments=True),
                                     state='R', received_datetime=to_datetime(bunny['Date']))
             else:
                 logger.error('item processor failed', exc_info=True, extra={
