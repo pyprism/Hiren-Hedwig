@@ -84,7 +84,8 @@ def send_mail():
 
 
 BLEACH_VALID_TAGS = ['p', 'b', 'i', 'strike', 'ul', 'li', 'ol', 'br',
-                     'span', 'blockquote', 'hr', 'a', 'img']
+                     'span', 'blockquote', 'hr', 'a', 'img', 'table', 'tbody',
+                     'thead', 'tr', 'th']
 BLEACH_VALID_ATTRS = {
     'span': ['style', ],
     'p': ['align', ],
