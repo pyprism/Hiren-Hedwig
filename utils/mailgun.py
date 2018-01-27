@@ -85,14 +85,19 @@ def send_mail():
 
 BLEACH_VALID_TAGS = ['p', 'b', 'i', 'strike', 'ul', 'li', 'ol', 'br',
                      'span', 'blockquote', 'hr', 'a', 'img', 'table', 'tbody',
-                     'thead', 'tr', 'th']
+                     'thead', 'tr', 'th', 'abbr', 'acronym', 'address', 'area', 'bdo',
+                     'big', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del',
+                     'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'font', 'form', 'h1', 'h2', 'h3', 'h4',
+                     'h5', 'h6', 'hr', 'i', 'input', 'ins', 'kbd', 'label', 'legend', 'map', 'menu', 'optgroup',
+                     'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike', 'strong', 'sub',
+                     'sup', 'th', 'textarea', 'tfoot', 'tt', 'u', 'var']
 BLEACH_VALID_ATTRS = {
     'span': ['style', ],
     'p': ['align', ],
     'a': ['href', 'rel'],
     'img': ['src', 'alt', 'style'],
 }
-BLEACH_VALID_STYLES = ['color', 'cursor', 'float', 'margin']
+# BLEACH_VALID_STYLES = ['color', 'cursor', 'float', 'margin']
 
 
 def items_process(items, mail):
@@ -110,7 +115,7 @@ def items_process(items, mail):
                 Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
                                     mail_to=bunny['To'], subject=bunny['subject'],
                                     message_id=item['message']['headers']['message-id'], body=bunny['body-html'],
-                                    sane_body=bleach.clean(bunny['body-html'], BLEACH_VALID_TAGS, BLEACH_VALID_ATTRS, BLEACH_VALID_STYLES, strip=True),
+                                    sane_body=bleach.clean(bunny['body-html'], BLEACH_VALID_TAGS, BLEACH_VALID_ATTRS, strip=True),
                                     state='R', received_datetime=to_datetime(bunny['Date']))
             else:
                 logger.error('item processor failed', exc_info=True, extra={
