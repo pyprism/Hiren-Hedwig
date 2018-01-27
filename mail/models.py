@@ -39,7 +39,6 @@ class Mail(models.Model):
     )
     state = models.CharField(choices=mail_state, max_length=1)
     emotional_attachment = models.BooleanField(default=False)   # lol :P emotional_attachment == mail attachment  :D
-    is_read = models.BooleanField(default=False)  # only used for received mail
     received_datetime = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -68,6 +67,14 @@ class Attachment(models.Model):
     mail = models.ForeignKey(Mail, on_delete=models.CASCADE, null=True)
     file_name = models.CharField(max_length=100)
     file_obj = models.FileField(upload_to=upload_to)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Thread(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    mails = models.ManyToManyField(Mail)
+    read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
