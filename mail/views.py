@@ -183,7 +183,7 @@ def draft_edit(request, pk):
             if instance.emotional_attachment:  # discard previous files
                 Attachment.objects.filter(mail=instance, user=request.user).update(mail=None)
             instance.delete()
-            messages.success(request, 'Draft Discarded!')
+            messages.success(request, 'Draft has been discarded!')
         elif request.POST.get('draft') or request.POST.get('send'):
             mail_form = MailForm(request.POST, instance=instance)
             if mail_form.is_valid():
