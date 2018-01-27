@@ -25,8 +25,6 @@
         <!-- Custom Css -->
         <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
     {% endcompress %}
-    {% load tz_detect %}
-    {% tz_detect %}
 </head>
 
 <body class="login-page">
@@ -68,6 +66,8 @@
     <script src="{% static 'js/admin.js' %}"></script>
     <script src="{% static 'js/sign-in.js' %}"></script>
 {% endcompress %}
+    {% load tz_detect %}
+    {% tz_detect %}
 </body>
 
 </html>

@@ -29,8 +29,6 @@
         <link href="{% static 'css/bootstrap-datepicker3.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/quill.snow.css' %}" rel="stylesheet">
     {% endcompress %}
-    {% load tz_detect %}
-    {% tz_detect %}
 </head>
 <body class="theme-deep-orange">
 <!-- Page Loader -->
@@ -156,6 +154,8 @@
     <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
     <script src="{% static 'js/quill.min.js' %}"></script>
 {% endcompress %}
+    {% load tz_detect %}
+    {% tz_detect %}
 </body>
 
 </html>
