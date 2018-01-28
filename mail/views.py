@@ -30,7 +30,7 @@ def terminator(request, obj):
 
 @login_required
 def inbox(request):
-    mails = Mail.objects.filter(user=request.user, state='R').order_by('is_read', '-updated_at')
+    mails = Mail.objects.filter(user=request.user, state='R').order_by('-updated_at')
     bunny = terminator(request, mails)
     return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
 
