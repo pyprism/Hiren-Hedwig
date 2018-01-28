@@ -145,7 +145,7 @@ def items_process(items, mail):
                                     mail_to=bunny['To'], subject=bunny['subject'],
                                     message_id=item['message']['headers']['message-id'], body=bunny['body-html'],
                                     sane_body=bleach.clean(bunny['body-html'], BLEACH_VALID_TAGS, BLEACH_VALID_ATTRS,
-                                                           BLEACH_VALID_STYLES, strip=True),
+                                                           BLEACH_VALID_STYLES, strip=True, strip_comments=True),
                                     state='R', received_datetime=to_datetime(bunny['Date']))
             else:
                 logger.error('item processor failed', exc_info=True, extra={
