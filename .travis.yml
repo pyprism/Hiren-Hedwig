@@ -11,6 +11,9 @@ addons:
 env:
   - DEBUG=True
 
+services:
+  - redis-server
+
 install:
   - pip install -r requirements.txt --quiet
   - pip install coveralls
