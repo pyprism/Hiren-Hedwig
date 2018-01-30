@@ -81,7 +81,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <input type="hidden" name="body">
-                                                <input readonly class="form-control"> {{ mail.sane_body|safe }} </input>
+                                                <input type="hidden" id="body" value="{{ mail.body|safe }}">
+                                                <input readonly class="form-control" id="hiren"/>
                                             </div>
                                         </div>
                                     </div>
@@ -117,4 +118,10 @@
             </div>
         </div>
     </section>
+    <script>
+    window.onload = function () {
+        const clean = DOMPurify.sanitize($("#body").val(), {SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true});
+        $("#hiren").html(clean);
+    }
+    </script>
 {% endblock %}
