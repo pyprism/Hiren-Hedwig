@@ -13,7 +13,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hiren.settings")
 django.setup()
 
 from base.models import MailGun, Cron
-from mail.models import Mail, Attachment
+from mail.models import Mail, Attachment, Thread
 
 logger = logging.getLogger(__name__)
 
@@ -83,50 +83,52 @@ def send_mail():
         cron.save()
 
 
-BLEACH_VALID_TAGS = ['p', 'b', 'i', 'strike', 'ul', 'li', 'ol', 'br',
-                     'span', 'blockquote', 'hr', 'a', 'img', 'table', 'tbody',
-                     'thead', 'tr', 'th', 'abbr', 'acronym', 'address', 'area', 'bdo',
-                     'big', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del',
-                     'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'font', 'form', 'h1', 'h2', 'h3', 'h4',
-                     'h5', 'h6', 'hr', 'i', 'input', 'ins', 'kbd', 'label', 'legend', 'map', 'menu', 'optgroup',
-                     'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike', 'strong', 'sub',
-                     'sup', 'th', 'textarea', 'tfoot', 'tt', 'u', 'var']
-BLEACH_VALID_ATTRS = {
-    'span': ['style', ],
-    'p': ['align', ],
-    'a': ['href', 'rel'],
-    'img': ['src', 'alt', 'style'],
-}
-
-# source https://developers.google.com/gmail/design/reference/supported_css
-BLEACH_VALID_STYLES = ['azimuth', 'background', 'background-blend-mode', 'background-blend-mode', 'background-color', 'background-image',
-                       'background-origin', 'background-position', 'background-repeat', 'background-size', 'border',
-                       'border-bottom', 'border-bottom-color', 'border-bottom-left-radius', 'border-bottom-right-radius',
-                       'border-bottom-style', 'border-bottom-width', 'border-collapse', 'border-color', 'border-left',
-                       'border-left-color', 'border-left-style', 'border-left-width', 'border-radius', 'border-right',
-                       'border-right-color', 'border-right-color', 'border-right-width', 'border-spacing',
-                       'border-style', 'border-top', 'border-top-color', 'border-top-left-radius', 'border-top-right-radius',
-                       'border-top-style', 'border-top-width', 'border-width', 'box-sizing', 'break-after',
-                       'break-before', 'break-inside', 'caption-side', 'clear', 'color', 'column-count',
-                       'column-fill', 'column-gap', 'column-rule', 'column-rule-color', 'column-rule-style',
-                       'column-rule-width', 'column-span', 'column-span', 'columns', 'direction', 'display',
-                       'elevation', 'empty-cells', 'float', 'font', 'font-family', 'font-feature-settings',
-                       'font-kerning', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-synthesis',
-                       'font-variant', 'font-variant-alternates', 'font-variant-caps', 'font-variant-caps', 'font-variant-ligatures',
-                       'font-variant-numeric', 'font-weight', 'height', 'image-orientation', 'image-resolution', 'isolation',
-                       'letter-spacing', 'line-height', 'list-style', 'list-style-position', 'list-style-type', 'margin',
-                       'margin-bottom', 'margin-left', 'margin-right', 'margin-right', 'margin-right', 'max-width', 'min-height',
-                       'min-width', 'mix-blend-mode', 'object-fit', 'object-position', 'opacity', 'outline', 'outline-color',
-                       'outline-style', 'outline-width', 'overflow', 'padding', 'padding-bottom', 'padding-left',
-                       'padding-right', 'padding-top', 'pause', 'pause-after', 'pause-before', 'pitch', 'pitch-range',
-                       'quotes', 'richness', 'speak', 'speak-header', 'speak-numeral', 'speak-punctuation', 'speech-rate',
-                       'stress', 'table-layout', 'text-align', 'text-combine-upwrite', 'text-decoration',
-                       'text-decoration-color', 'text-decoration-line', 'text-decoration-skip', 'text-decoration-style',
-                       'text-emphasis', 'text-emphasis-color', 'text-emphasis-style', 'text-indent', 'text-orientation',
-                       'text-overflow', 'text-overflow', 'text-underline-position', 'unicode-bidi', 'vertical-align',
-                       'voice-family', 'width', 'word-spacing', 'writing-mode', 'all', 'screen', 'min-width',
-                       'max-width', 'min-device-width', 'min-device-width', 'orientation', 'min-resolution',
-                       'max-resolution', 'and', 'only']
+# BLEACH_VALID_TAGS = ['p', 'b', 'i', 'strike', 'ul', 'li', 'ol', 'br',
+#                      'span', 'blockquote', 'hr', 'a', 'img', 'table', 'tbody',
+#                      'thead', 'tr', 'th', 'abbr', 'acronym', 'address', 'area', 'bdo',
+#                      'big', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del',
+#                      'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'font', 'form', 'h1', 'h2', 'h3', 'h4',
+#                      'h5', 'h6', 'hr', 'i', 'input', 'ins', 'kbd', 'label', 'legend', 'map', 'menu', 'optgroup',
+#                      'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike', 'strong', 'sub',
+#                      'sup', 'th', 'textarea', 'tfoot', 'tt', 'u', 'var']
+# BLEACH_VALID_ATTRS = {
+#     'span': ['style', ],
+#     'p': ['align', ],
+#     'a': ['href', 'rel'],
+#     'img': ['src', 'alt', 'style'],
+# }
+#
+# # source https://developers.google.com/gmail/design/reference/supported_css
+# BLEACH_VALID_STYLES = ['azimuth', 'background', 'background-blend-mode', 'background-blend-mode', 'background-color', 'background-image',
+#                        'background-origin', 'background-position', 'background-repeat', 'background-size', 'border',
+#                        'border-bottom', 'border-bottom-color', 'border-bottom-left-radius', 'border-bottom-right-radius',
+#                        'border-bottom-style', 'border-bottom-width', 'border-collapse', 'border-color', 'border-left',
+#                        'border-left-color', 'border-left-style', 'border-left-width', 'border-radius', 'border-right',
+#                        'border-right-color', 'border-right-color', 'border-right-width', 'border-spacing',
+#                        'border-style', 'border-top', 'border-top-color', 'border-top-left-radius', 'border-top-right-radius',
+#                        'border-top-style', 'border-top-width', 'border-width', 'box-sizing', 'break-after',
+#                        'break-before', 'break-inside', 'caption-side', 'clear', 'color', 'column-count',
+#                        'column-fill', 'column-gap', 'column-rule', 'column-rule-color', 'column-rule-style',
+#                        'column-rule-width', 'column-span', 'column-span', 'columns', 'direction', 'display',
+#                        'elevation', 'empty-cells', 'float', 'font', 'font-family', 'font-feature-settings',
+#                        'font-kerning', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-synthesis',
+#                        'font-variant', 'font-variant-alternates', 'font-variant-caps', 'font-variant-caps', 'font-variant-ligatures',
+#                        'font-variant-numeric', 'font-weight', 'height', 'image-orientation', 'image-resolution', 'isolation',
+#                        'letter-spacing', 'line-height', 'list-style', 'list-style-position', 'list-style-type', 'margin',
+#                        'margin-bottom', 'margin-left', 'margin-right', 'margin-right', 'margin-right', 'max-width', 'min-height',
+#                        'min-width', 'mix-blend-mode', 'object-fit', 'object-position', 'opacity', 'outline', 'outline-color',
+#                        'outline-style', 'outline-width', 'overflow', 'padding', 'padding-bottom', 'padding-left',
+#                        'padding-right', 'padding-top', 'pause', 'pause-after', 'pause-before', 'pitch', 'pitch-range',
+#                        'quotes', 'richness', 'speak', 'speak-header', 'speak-numeral', 'speak-punctuation', 'speech-rate',
+#                        'stress', 'table-layout', 'text-align', 'text-combine-upwrite', 'text-decoration',
+#                        'text-decoration-color', 'text-decoration-line', 'text-decoration-skip', 'text-decoration-style',
+#                        'text-emphasis', 'text-emphasis-color', 'text-emphasis-style', 'text-indent', 'text-orientation',
+#                        'text-overflow', 'text-overflow', 'text-underline-position', 'unicode-bidi', 'vertical-align',
+#                        'voice-family', 'width', 'word-spacing', 'writing-mode', 'all', 'screen', 'min-width',
+#                        'max-width', 'min-device-width', 'min-device-width', 'orientation', 'min-resolution',
+#                        'max-resolution', 'and', 'only']
+# =bleach.clean(bunny['body-html'], BLEACH_VALID_TAGS, BLEACH_VALID_ATTRS,
+#                                                           BLEACH_VALID_STYLES, strip=True, strip_comments=True),
 
 
 def items_process(items, mail):
@@ -141,12 +143,16 @@ def items_process(items, mail):
             hiren = requests.get(item['storage']['url'], auth=('api', mail.key))
             if hiren.status_code == 200:
                 bunny = hiren.json()
-                Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
-                                    mail_to=bunny['To'], subject=bunny['subject'],
-                                    message_id=item['message']['headers']['message-id'], body=bunny['body-html'],
-                                    sane_body=bleach.clean(bunny['body-html'], BLEACH_VALID_TAGS, BLEACH_VALID_ATTRS,
-                                                           BLEACH_VALID_STYLES, strip=True, strip_comments=True),
-                                    state='R', received_datetime=to_datetime(bunny['Date']))
+                mail_obj = Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
+                                               mail_to=bunny['To'], subject=bunny['subject'],
+                                               message_id=item['message']['headers']['message-id'],
+                                               body=bunny['body-html'], state='R',
+                                               received_datetime=to_datetime(bunny['Date']))
+                if bunny['attachments']:
+                    for meow in bunny['attachments']:
+                        pass
+                    mail_obj.emotional_attachment = True
+                    mail_obj.save()
             else:
                 logger.error('item processor failed', exc_info=True, extra={
                     'request': hiren.json(),
@@ -166,7 +172,7 @@ def get_mail():
                 bugs = bunny.json()
                 if bugs['items']:
                     items_process(bugs['items'], mail)
-                    while True:  # paging
+                    while True:  # pagination
                         nisha = requests.get(bugs['paging']['next'], auth=('api', mail.key))
                         if nisha.status_code == 200:
                             hiren = nisha.json()
