@@ -26,6 +26,10 @@ class LoginViewTest(TestCase):
         response = self.c.get(reverse('inbox'))
         self.assertRedirects(response, '/?next=' + reverse('inbox'))
 
+    def test_redirect_works_for_bad_auth(self):
+        respond = self.c.post(reverse('inbox'), {'username': 'hiren', 'password': 'bad pass'})
+        self.assertRedirects(respond, '/?next=' + reverse('inbox'))
+
 
 
 
