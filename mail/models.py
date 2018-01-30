@@ -29,7 +29,6 @@ class Mail(models.Model):
     subject = models.CharField(max_length=1000, blank=True, null=True)
     message_id = models.CharField(max_length=500, null=True)  # mailgun message-id
     body = models.TextField()
-    sane_body = models.TextField(null=True)  # sanitized body used for incoming mail
     mail_state = (
         ('Q', 'Queue'),
         ('S', 'Success'),
