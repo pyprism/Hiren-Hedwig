@@ -4,6 +4,7 @@ import os
 import logging
 from datetime import datetime, timedelta
 from email.utils import parsedate_tz
+import tempfile
 # import asyncio
 # loop = asyncio.get_event_loop()
 # loop.run_in_executor(None, 'task')
@@ -13,6 +14,7 @@ django.setup()
 
 from base.models import MailGun, Cron
 from mail.models import Mail, Attachment, Thread
+from django.core import files
 
 logger = logging.getLogger(__name__)
 
@@ -147,9 +149,18 @@ def items_process(items, mail):
                                                message_id=item['message']['headers']['message-id'],
                                                body=bunny['body-html'], state='R',
                                                received_datetime=to_datetime(bunny['Date']))
-                if bunny['attachments']:
+                if bunny['attachments']:  # handle attachment
                     for meow in bunny['attachments']:
-                        pass
+                        request = requests.get(meow['url'], stream=True)
+                        if request.status_code == requests.codes.ok:
+                            tmp = tempfile.NamedTemporaryFile()
+                            for block in request.iter_content(1024 * 8):
+                                if not block:
+                                    break
+                                tmp.write(block)
+                            Attachment.objects.create(user=mail.user, mail=mail_obj, file_name=meow['name'],
+                                                      file_obj=tmp)    # file.Files(tmp)
+                            tmp.close()
                     mail_obj.emotional_attachment = True
                     mail_obj.save()
             else:
