@@ -140,13 +140,14 @@ def items_process(items, mail):
     :return:
     """
     for item in items:
-        if not Mail.objects.filter(message_id=item['message']['headers']['message-id']).exists():  # TODO regex domain name
+        message_id = item['message']['headers']['message-id']
+        if not Mail.objects.filter(user=mail.user, message_id=message_id).exists():  # TODO regex domain name
             hiren = requests.get(item['storage']['url'], auth=('api', mail.key))
             if hiren.status_code == 200:
                 bunny = hiren.json()
                 mail_obj = Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
                                                mail_to=bunny['To'], subject=bunny['subject'],
-                                               message_id=item['message']['headers']['message-id'],
+                                               message_id=message_id,
                                                body=bunny['body-html'], state='R',
                                                received_datetime=to_datetime(bunny['Date']))
                 if bunny['attachments']:  # handle attachment
@@ -163,6 +164,22 @@ def items_process(items, mail):
                             tmp.close()
                     mail_obj.emotional_attachment = True
                     mail_obj.save()
+
+                try:  # mail thread.
+                    if bunny['In-Reply-To']:  # replied mail
+                        reply_id = bunny['In-Reply-To']
+                        reply_message_id = reply_id[1:-1]  # stripping <>
+                        thread = Thread.objects.filter(user=mail.user, mails__message_id=reply_message_id)
+                        if thread.exists():
+                            thread.mails.add(mail_obj)
+                            thread.read = False
+                            thread.save()
+                    else:
+                        uhlala = Thread.objects.create(user=mail.user)
+                        uhlala.mails.add(mail_obj)
+                except KeyError:
+                    uhlala = Thread.objects.create(user=mail.user)
+                    uhlala.mails.add(mail_obj)
             else:
                 logger.error('item processor failed', exc_info=True, extra={
                     'request': hiren.json(),
