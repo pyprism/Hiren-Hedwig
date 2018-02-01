@@ -4,6 +4,7 @@ import os
 from django.db import models
 from base.models import Account, MailGun
 from django.utils import timezone
+from sortedm2m.fields import SortedManyToManyField
 
 
 class Contact(models.Model):
@@ -72,7 +73,7 @@ class Attachment(models.Model):
 
 class Thread(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    mails = models.ManyToManyField(Mail)
+    mails = SortedManyToManyField(Mail)
     read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
