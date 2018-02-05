@@ -10,7 +10,7 @@
                             <h2>
                                 Inbox
                             </h2>
-                             <ul class="header-dropdown m-r--5">
+                            <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
@@ -44,7 +44,7 @@
                                     </thead>
                                     <tbody>
                                     {% for i in mails %}
-                                        <tr {% if i.is_read %} class="active" {% else %} class="bg-amber" {% endif %}>
+                                        <tr {% if i.read %} class="active" {% else %} class="bg-amber" {% endif %}>
                                             <th><a href="{% url 'mail_by_id' pk=i.pk %}">{{ i.mail_from }}</a></th>
                                             <th><a href="{% url 'mail_by_id' pk=i.pk %}">{{ i.subject }}</a></th>
                                             <th>{{ i.created_at|date }}</th>
