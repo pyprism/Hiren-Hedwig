@@ -5,7 +5,7 @@ from base.models import MailGun
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from .models import Attachment, Mail
+from .models import Attachment, Mail, Thread
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -30,7 +30,8 @@ def terminator(request, obj):
 
 @login_required
 def inbox(request):
-    mails = Mail.objects.filter(user=request.user, state='R').order_by('-updated_at')
+    mailsx = Mail.objects.filter(user=request.user, state='R').order_by('-updated_at')
+    mails = Thread.objects.filter(user=request.user).prefetch_related().order_by('read', '-updated_at')
     bunny = terminator(request, mails)
     return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
 
