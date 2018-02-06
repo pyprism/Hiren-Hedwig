@@ -30,8 +30,7 @@ def terminator(request, obj):
 
 @login_required
 def inbox(request):
-    mailsx = Mail.objects.filter(user=request.user, state='R').order_by('-updated_at')
-    mails = Thread.objects.filter(user=request.user).prefetch_related().order_by('read', '-updated_at')
+    mails = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')
     bunny = terminator(request, mails)
     return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
 
