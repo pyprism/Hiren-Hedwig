@@ -9,14 +9,15 @@ from .models import Attachment, Mail, Thread
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def terminator(request, obj):
+def terminator(request, obj, item=25):
     """
     Hasta la vista, baby ....  reusable paginator
     :param request:
-    :param obj:
+    :param obj: db object
+    :param item: optional number of item per page
     :return:
     """
-    paginator = Paginator(obj, 25)
+    paginator = Paginator(obj, item)
     page = request.GET.get('page')
     try:
         bunny = paginator.page(page)
@@ -30,8 +31,13 @@ def terminator(request, obj):
 
 @login_required
 def inbox(request):
+    """
+    Get user inbox
+    :param request:
+    :return:
+    """
     mails = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')
-    bunny = terminator(request, mails)
+    bunny = terminator(request, mails, 15)
     return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
 
 
