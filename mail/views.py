@@ -48,11 +48,11 @@ def inbox_details(request, pk):
     :param request:
     :return:
     """
-    mail = get_object_or_404(Thread.objects.prefetch_related('mails'), pk=pk, user=request.user)
-    if not mail.read:
-        mail.read = True
-        mail.save()
-    return render(request, 'mail/inbox_details.html', {'mail': mail})
+    thread = get_object_or_404(Thread.objects.prefetch_related('mails'), pk=pk, user=request.user)
+    if not thread.read:
+        thread.read = True
+        thread.save()
+    return render(request, 'mail/mail_thread.html', {'thread': thread})
 
 
 @login_required
