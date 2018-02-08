@@ -28,7 +28,14 @@
                                                     </h4>
                                                 </div>
                                                 <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
-                                                    <div class="font-12">To: {{ mail.mail_to }}</div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">To: {{ mail.mail_to }}</div>
+                                                        <div class="col-md-6">
+                                                            <div class="pull-right">
+                                                                To: {{ mail.mail_to }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="panel-body">
                                                         {{ mail.body|safe }}
                                                     </div>
