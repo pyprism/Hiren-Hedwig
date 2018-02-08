@@ -3,6 +3,7 @@ from mail import views
 
 urlpatterns = [
     path('inbox/', views.inbox, name='inbox'),
+    path('thread/<int:pk>/', views.inbox_details, name='thread'),
     path('compose/', views.compose, name='compose'),
     path('sent/', views.sent, name='sent'),
     path('draft/', views.draft, name='draft'),
