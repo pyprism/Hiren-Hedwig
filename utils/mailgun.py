@@ -179,7 +179,12 @@ def items_process(items, mail):
                             thread.mails.add(mail_obj)
                             thread.read = False
                             thread.save()
-                    else:
+                        else:  # check if their is a sent mail reply
+                            sent_mail = Mail.objects.filter(user=mail.user, message_id=reply_message_id)
+                            if sent_mail.exists():
+                                meow = Thread.objects.create(user=mail.user)
+                                meow.mails.add(sent_mail, mail_obj)
+                    else:  # else create brand new thread
                         uhlala = Thread.objects.create(user=mail.user)
                         uhlala.mails.add(mail_obj)
                 except KeyError:
