@@ -145,8 +145,13 @@ def items_process(items, mail):
             hiren = requests.get(item['storage']['url'], auth=('api', mail.key))
             if hiren.status_code == 200:
                 bunny = hiren.json()
+                to = bunny['To']
+                if str(to).startswith('<'):
+                    cleaned_to = to[1:-1]  # strip <>
+                else:
+                    cleaned_to = str(to)  # example Someone <exam@xoxo.xyz>
                 mail_obj = Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
-                                               mail_to=bunny['To'], subject=bunny['subject'],
+                                               mail_to=cleaned_to, subject=bunny['subject'],
                                                message_id=message_id,
                                                body=bunny['body-html'], state='R',
                                                received_datetime=to_datetime(bunny['Date']))
