@@ -56,6 +56,11 @@ def inbox_details(request, pk):
 
 
 @login_required
+def thread_delete(request, thread_id, mail_id):
+    pass
+
+
+@login_required
 def compose(request):
     """
     Add new email to system
