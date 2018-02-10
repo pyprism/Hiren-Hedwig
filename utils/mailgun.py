@@ -219,7 +219,7 @@ def get_mail():
                                 break
             else:
                 logger.error('get mail failed!', exc_info=True, extra={
-                    'request': bunny.json(),
+                    'request': bunny.text,
                 })
         cron.lock = False
         cron.save()
