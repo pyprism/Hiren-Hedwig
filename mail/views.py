@@ -80,6 +80,11 @@ def thread_delete(request, thread_id, mail_id):
 
 
 @login_required
+def thread_reply(request, thread_id, mail_id):
+    return render(request, 'mail/thread_reply.html')
+
+
+@login_required
 def compose(request):
     """
     Add new email to system
