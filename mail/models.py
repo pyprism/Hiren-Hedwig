@@ -38,6 +38,7 @@ class Mail(models.Model):
         ('T', 'Trash'),
     )
     state = models.CharField(choices=mail_state, max_length=1)
+    in_reply_to = models.CharField(max_length=500, null=True)  # only used for mail reply
     emotional_attachment = models.BooleanField(default=False)   # lol :P emotional_attachment == mail attachment  :D
     received_datetime = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
