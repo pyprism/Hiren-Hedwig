@@ -5,5 +5,5 @@ from .models import Mail
 class MailForm(ModelForm):
     class Meta:
         model = Mail
-        exclude = ('user', 'state', 'domain', 'message_id', 'received_datetime')
+        exclude = ('user', 'state', 'domain', 'message_id', 'received_datetime', 'in_reply_to')
 
