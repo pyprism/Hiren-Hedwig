@@ -42,17 +42,17 @@
                                                         <div class="col-md-6">
                                                             <div class="pull-right">
                                                                 <a href="#">
-                                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float waves-light">
+                                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Reply">
                                                                         <i class="material-icons">reply</i>
                                                                     </button>
                                                                 </a>
                                                                 <a href="#">
-                                                                    <button type="button" class="btn bg-light-blue btn-circle waves-effect waves-circle waves-float waves-light">
+                                                                    <button type="button" class="btn bg-light-blue btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Forward">
                                                                         <i class="material-icons">forward</i>
                                                                     </button>
                                                                 </a>
                                                                 <a href="{% url 'thread_delete' thread_id=thread.pk mail_id=mail.id %}">
-                                                                    <button type="button" class="btn bg-red btn-circle waves-effect waves-circle waves-float waves-light">
+                                                                    <button type="button" class="btn bg-red btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Delete">
                                                                         <i class="material-icons">delete_forever</i>
                                                                     </button>
                                                                 </a>
