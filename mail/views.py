@@ -57,7 +57,26 @@ def inbox_details(request, pk):
 
 @login_required
 def thread_delete(request, thread_id, mail_id):
-    pass
+    """
+    Handle mail/thread deletion
+    :param request:
+    :param thread_id:
+    :param mail_id:
+    :return:
+    """
+    mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
+    thread = get_object_or_404(Thread, user=request.user, pk=thread_id)
+    thread.mails.remove(mail)
+    if mail.emotional_attachment:
+        Attachment.objects.filter(user=request.user, mail=mail).update(mail=None)
+    mail.delete()
+    if thread.mails.count() == 0:
+        thread.delete()
+        messages.success(request, 'Thread has been deleted.')
+        return redirect('inbox')
+    else:
+        messages.success(request, 'Mail has been deleted.')
+        return redirect('thread', pk=thread_id)
 
 
 @login_required
@@ -238,7 +257,7 @@ def trash_delete(request, pk):
             if bunny.emotional_attachment:
                 Attachment.objects.filter(user=request.user, mail=bunny).update(mail=None)
             bunny.delete()
-            messages.success(request, 'Mail Deleted Permanently!')
+            messages.success(request, 'Mail has been deleted.')
         return redirect('trash')
 
 
