@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail, Thread
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from utils.mailgun import get_mail
 
 
 def terminator(request, obj, item=25):
@@ -36,6 +37,8 @@ def inbox(request):
     :param request:
     :return:
     """
+    if request.GET.get('new'):  # check for new mail
+        get_mail()
     mails = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')
     bunny = terminator(request, mails, 15)
     return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
