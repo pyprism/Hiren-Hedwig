@@ -69,13 +69,14 @@ def thread_delete(request, thread_id, mail_id):
     thread.mails.remove(mail)
     if mail.emotional_attachment:
         Attachment.objects.filter(user=request.user, mail=mail).update(mail=None)
-    mail.delete()
+    mail.state = 'T'
+    mail.save()
     if thread.mails.count() == 0:
         thread.delete()
         messages.success(request, 'Thread has been deleted.')
         return redirect('inbox')
     else:
-        messages.success(request, 'Mail has been deleted.')
+        messages.success(request, 'Mail has been moved to trash.')
         return redirect('thread', pk=thread_id)
 
 
