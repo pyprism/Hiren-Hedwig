@@ -14,5 +14,6 @@ urlpatterns = [
     path('user/', views.create_user, name='create_user'),
     path('cron/send/', views.cron_send_mail),
     path('cron/receive/', views.cron_check_mail),
+    path('cron/trash/', views.cron_delete_trash),
     path('logout/', logout, {'next_page': '/'}, name='logout'),
 ]
