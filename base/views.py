@@ -8,6 +8,8 @@ from .forms import MailGunForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, HttpResponse
 from utils.mailgun import send_mail, get_mail
+from mail.models import Mail
+from datetime import datetime, timedelta
 
 
 def login(request):
@@ -194,6 +196,18 @@ def cron_check_mail(request):
     """
     get_mail()
     return HttpResponse("Bunny")
+
+
+def cron_delete_trash(request):
+    """
+    Cron endpoint for deleting 30 days old trash mails
+    :param request:
+    :return:
+    """
+    month = datetime.today() - timedelta(days=30)
+    mails = Mail.objects.filter(state='T', updated_at__lte=month)
+    mails.delete()
+    return HttpResponse("Nuked")
 
 
 
