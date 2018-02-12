@@ -85,7 +85,8 @@ def thread_delete(request, thread_id, mail_id):
 
 @login_required
 def thread_reply(request, thread_id, mail_id):
-    return render(request, 'mail/thread_reply.html')
+    mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
+    return render(request, 'mail/thread_reply.html', {'mail': mail})
 
 
 @login_required
