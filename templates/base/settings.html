@@ -33,7 +33,7 @@
                                     <tbody>
                                     {% for i in mailgun %}
                                         <tr>
-                                            <th scope="row"><a href="{% url 'update_domain' pk=i.pk %}">{{ i.pk }}</a></th>
+                                            <th scope="row"><a href="{% url 'update_domain' pk=i.pk %}">{{ forloop.counter }}</a></th>
                                             <th><a href="{% url 'update_domain' pk=i.pk %}">{{ i.name }}</a></th>
                                             <th>{{ i.created_at }}</th>
                                         </tr>
@@ -77,7 +77,7 @@
                                     <tbody>
                                     {% for i in users %}
                                         <tr>
-                                            <th scope="row"><a href="{% url 'update_user' username=i.username %}">{{ i.pk }}</a></th>
+                                            <th scope="row"><a href="{% url 'update_user' username=i.username %}">{{ forloop.counter }}</a></th>
                                             <th><a href="{% url 'update_user' username=i.username %}">{{ i.username }}</a></th>
                                             <th>{{ i.is_admin|yesno }}</th>
                                             <th>{{ i.created_at }}</th>
