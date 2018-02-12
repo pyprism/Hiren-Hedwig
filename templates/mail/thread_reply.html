@@ -8,7 +8,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Compose New Email
+                                Reply Mail
                             </h2>
                         </div>
                         <div class="body">
@@ -29,59 +29,15 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" required name="mail_from" class="form-control" placeholder="mail@yourmailgundomain.com">
+                                                <input type="text" required name="mail_from" value="{{ mail.mail_to }}" class="form-control" placeholder="mail@yourmailgundomain.com">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>To</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" required name="mail_to" class="form-control" placeholder="Type recipients email">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>CC</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text"  name="cc" class="form-control" placeholder="Optional CC">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>BCC</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="bcc" class="form-control" placeholder="Optional BCC">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Subject</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" required name="subject" class="form-control" placeholder="Type subject">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+                                <input type="hidden" name="mail_to" value="{{ mail.mail_from }}">
+                                <input type="hidden" name="subject" value="{{ mail.subject }}">
+
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label>Body</label>
