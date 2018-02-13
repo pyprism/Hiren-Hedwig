@@ -28,7 +28,7 @@
                                             {% for mail in thread.mails.all %}
                                                 <div class="panel-heading" role="tab" id="headingOne_1">
                                                     <h4 class="panel-title">
-                                                        <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                        <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_{{ mail.pk }}" aria-expanded="true" aria-controls="collapseOne_{{ mail.pk }}">
                                                             <div class="row">
                                                                 <div class="col-md-6">{{ mail.mail_from }}</div>
                                                                 <div class="col-md-6"><div class="pull-right">{{ mail.received_datetime }}</div></div>
@@ -36,7 +36,7 @@
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                                <div id="collapseOne_{{ mail.pk }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
                                                     <div class="row">
                                                         <div class="col-md-6">To: {{ mail.mail_to }}</div>
                                                         <div class="col-md-6">
