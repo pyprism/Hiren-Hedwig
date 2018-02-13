@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import MailForm
+from .forms import MailForm, MailReplyForward
 from base.models import MailGun
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
@@ -85,6 +85,16 @@ def thread_delete(request, thread_id, mail_id):
 
 @login_required
 def thread_reply(request, thread_id, mail_id):
+    if request.method == 'POST':
+        files = request.FILES.getlist('attachment')
+        form = MailReplyForward(request.POST)
+        if form.is_valid():
+            domain_str = request.POST.get('mail_form')
+            domain = domain_str.split('@')[1]
+            print(domain_str)
+            print(domain)
+        else:
+            print(form.errors)
     mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
     return render(request, 'mail/thread_reply.html', {'mail': mail})
 
