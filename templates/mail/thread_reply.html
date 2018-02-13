@@ -35,8 +35,9 @@
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="mail_from" value="{{ mail.mail_from }}">
+                                <input type="hidden" name="mail_to" value="{{ mail.mail_from }}">
                                 <input type="hidden" name="subject" value="{{ mail.subject }}">
+                                <input type="hidden" name="in_reply_to" value="{{ mail.message_id }}">
 
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
