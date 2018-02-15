@@ -47,6 +47,7 @@ def send_mail():
                           "cc": [mail.cc],
                           "bcc": [mail.bcc],
                           "subject": mail.subject,
+                          "h:In-Reply-To": mail.in_reply_to,
                           "html": mail.body})
                 if hiren.status_code == 200:  # catch and report failed mail
                     bunny = hiren.json()
