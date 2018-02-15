@@ -42,12 +42,12 @@
                                                         <div class="col-md-6">
                                                             <div class="pull-right">
                                                                 <a href="{% url 'thread_reply' thread_id=thread.pk mail_id=mail.pk %}">
-                                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Reply">
+                                                                    <button type="button" name="reply" value="bugs" class="btn bg-green btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Reply">
                                                                         <i class="material-icons">reply</i>
                                                                     </button>
                                                                 </a>
-                                                                <a href="#">
-                                                                    <button type="button" class="btn bg-light-blue btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Forward">
+                                                                <a href="{% url 'thread_reply' thread_id=thread.pk mail_id=mail.pk %}">
+                                                                    <button type="button" name="forward" value="bunny" class="btn bg-light-blue btn-circle waves-effect waves-circle waves-float waves-light" data-toggle="tooltip" data-placement="top" title="Forward">
                                                                         <i class="material-icons">forward</i>
                                                                     </button>
                                                                 </a>
