@@ -186,7 +186,8 @@ def items_process(items, mail):
                                 new_thread = Thread.objects.create(user=mail.user)
                                 new_thread.mails.add(sent_mail, mail_obj)
                             except ObjectDoesNotExist:
-                                pass
+                                uhlala = Thread.objects.create(user=mail.user)
+                                uhlala.mails.add(mail_obj)
                     else:  # else create brand new thread
                         uhlala = Thread.objects.create(user=mail.user)
                         uhlala.mails.add(mail_obj)
