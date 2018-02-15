@@ -83,48 +83,60 @@ def thread_delete(request, thread_id, mail_id):
         return redirect('thread', pk=thread_id)
 
 
+def reply_forward(request, thread_id, mail_id):
+    files = request.FILES.getlist('attachment')
+    form = MailReplyForward(request.POST)
+    if form.is_valid():
+        domain_str = request.POST.get('mail_from')
+        domain = domain_str.split('@')[1]
+        try:
+            mailgun = MailGun.objects.get(name=domain, user=request.user)
+        except ObjectDoesNotExist:
+            messages.warning(request, "Your mail's domain " + domain + " is not found in settings!")
+            return redirect('thread_reply', thread_id=thread_id, mail_id=mail_id)
+        reply_obj = form.save(commit=False)
+        reply_obj.domain = mailgun
+        reply_obj.user = request.user
+        if len(files) > 0:
+            reply_obj.emotional_attachment = True
+        if request.POST.get('send'):
+            reply_obj.state = 'Q'
+        elif request.POST.get('draft'):
+            reply_obj.state = 'D'
+        reply_obj.save()
+        if len(files) > 0:
+            for file in files:
+                bunny = Attachment(
+                    user=request.user,
+                    mail=reply_obj,
+                    file_name=file.name,
+                    file_obj=file
+                )
+                bunny.save()
+            if request.POST.get('send'):
+                messages.success(request, 'Mail queued for sending.')
+            if request.POST.get('draft'):
+                messages.success(request, 'Mail saved as draft.')
+        return redirect('thread_reply', thread_id=thread_id, mail_id=mail_id)
+    else:
+        messages.warning(request, form.errors)
+        return redirect('thread_reply', thread_id=thread_id, mail_id=mail_id)
+
+
 @login_required
 def thread_reply(request, thread_id, mail_id):
     if request.method == 'POST':
-        files = request.FILES.getlist('attachment')
-        form = MailReplyForward(request.POST)
-        if form.is_valid():
-            domain_str = request.POST.get('mail_from')
-            domain = domain_str.split('@')[1]
-            try:
-                mailgun = MailGun.objects.get(name=domain, user=request.user)
-            except ObjectDoesNotExist:
-                messages.warning(request, "Your mail's domain " + domain + " is not found in settings!")
-                return redirect('thread_reply', thread_id=thread_id, mail_id=mail_id)
-            reply_obj = form.save(commit=False)
-            reply_obj.domain = mailgun
-            reply_obj.user = request.user
-            if len(files) > 0:
-                reply_obj.emotional_attachment = True
-            if request.POST.get('send'):
-                reply_obj.state = 'Q'
-            elif request.POST.get('draft'):
-                reply_obj.state = 'D'
-            reply_obj.save()
-            if len(files) > 0:
-                for file in files:
-                    bunny = Attachment(
-                        user=request.user,
-                        mail=reply_obj,
-                        file_name=file.name,
-                        file_obj=file
-                    )
-                    bunny.save()
-                if request.POST.get('send'):
-                    messages.success(request, 'Mail queued for sending.')
-                if request.POST.get('draft'):
-                    messages.success(request, 'Mail saved as draft.')
-            return redirect('thread_reply', thread_id=thread_id, mail_id=mail_id)
-        else:
-            messages.warning(request, form.errors)
-            return redirect('thread_reply', thread_id=thread_id, mail_id=mail_id)
+        reply_forward(request, thread_id, mail_id)
     mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
     return render(request, 'mail/thread_reply.html', {'mail': mail})
+
+
+@login_required
+def thread_forward(request, thread_id, mail_id):
+    if request.method == 'POST':
+        reply_forward(request, thread_id, mail_id)
+    mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
+    return render(request, 'mail/thread_forward.html', {'mail': mail})
 
 
 @login_required
