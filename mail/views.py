@@ -47,7 +47,7 @@ def inbox(request):
 @login_required
 def inbox_details(request, pk):
     """
-    wip
+    Render thread details view
     :param request:
     :return:
     """
@@ -84,6 +84,13 @@ def thread_delete(request, thread_id, mail_id):
 
 
 def reply_forward(request, thread_id, mail_id):
+    """
+    Reusable function for thread reply/forward
+    :param request:
+    :param thread_id:
+    :param mail_id:
+    :return:
+    """
     files = request.FILES.getlist('attachment')
     form = MailReplyForward(request.POST)
     if form.is_valid():
@@ -125,6 +132,13 @@ def reply_forward(request, thread_id, mail_id):
 
 @login_required
 def thread_reply(request, thread_id, mail_id):
+    """
+    Handle thread reply
+    :param request:
+    :param thread_id:
+    :param mail_id:
+    :return:
+    """
     if request.method == 'POST':
         reply_forward(request, thread_id, mail_id)
     mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
@@ -133,6 +147,13 @@ def thread_reply(request, thread_id, mail_id):
 
 @login_required
 def thread_forward(request, thread_id, mail_id):
+    """
+    Handle thread forward
+    :param request:
+    :param thread_id:
+    :param mail_id:
+    :return:
+    """
     if request.method == 'POST':
         reply_forward(request, thread_id, mail_id)
     mail = get_object_or_404(Mail, user=request.user, pk=mail_id)
