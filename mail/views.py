@@ -5,7 +5,7 @@ from base.models import MailGun
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from .models import Attachment, Mail, Thread
+from .models import Attachment, Mail, Thread, Contact
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.mailgun import get_mail
 
@@ -163,7 +163,7 @@ def thread_forward(request, thread_id, mail_id):
 @login_required
 def compose(request):
     """
-    Add new email to system
+    Add new email to queue for sending
     :param request:
     :return:
     """
@@ -178,6 +178,9 @@ def compose(request):
             except ObjectDoesNotExist:
                 messages.warning(request, "Your mail's domain " + domain + " is not found in settings!")
                 return redirect('compose')
+
+            Contact.objects.get_or_create(user=request.user, email=domain_str, m_type='F')  # save "From" email
+
             compose_obj = compose.save(commit=False)
             compose_obj.domain = mailgun
             compose_obj.user = request.user
