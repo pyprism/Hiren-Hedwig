@@ -125,6 +125,9 @@
         </div>
     </section>
     <script>
+        /**
+         * Form body editor
+         */
         var quill;
         window.onload = function () {
             quill = new Quill('#mailBody', {
@@ -138,6 +141,10 @@
                 theme: 'snow'
             });
         };
+        /**
+         * Contact list generator
+         */
+
 
         var form = document.querySelector('form');
         form.onsubmit = function() {
