@@ -3,13 +3,33 @@ import ReactDOM from "react-dom";
 
 class Inbox extends Component {
 
-  render() {
-    return (
-     <div>
-         Hellos
-     </div>
-    );
-  }
+    constructor(props){
+        super(props);
+        this.loadData();
+        this.state = {
+            thread: []
+        }
+    }
+
+    loadData() {
+        $.ajax('/mail/inbox/', {
+            contentType: 'application/json',
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(data) {
+                console.error(data);
+            }
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                Hellos
+            </div>
+        );
+    }
 }
 
 ReactDOM.render(<Inbox />, document.getElementById('inbox'));
