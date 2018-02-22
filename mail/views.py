@@ -8,6 +8,9 @@ from django.contrib import messages
 from .models import Attachment, Mail, Thread, Contact
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.mailgun import get_mail
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
+import json
 
 
 def terminator(request, obj, item=25):
@@ -30,18 +33,33 @@ def terminator(request, obj, item=25):
     return bunny
 
 
+# @login_required
+# def inbox(request):
+#     """
+#     Get user inbox
+#     :param request:
+#     :return:
+#     """
+#     if request.GET.get('new'):  # check for new mail
+#         get_mail()
+#     mails = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')
+#     bunny = terminator(request, mails, 15)
+#     return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
+
+
 @login_required
 def inbox(request):
-    """
-    Get user inbox
-    :param request:
-    :return:
-    """
-    if request.GET.get('new'):  # check for new mail
-        get_mail()
-    mails = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')
-    bunny = terminator(request, mails, 15)
-    return render(request, 'mail/inbox.html', {'mails': bunny, 'title': 'Inbox'})
+    if request.META.get('HTTP_ACCEPT').startswith("text/html"):
+        return render(request, 'mail/inbox.html', {'title': 'Inbox'})
+    elif request.content_type == 'application/json':
+        total = 10
+        offset = request.GET.get('get', 0)
+        end = offset + total
+        threads = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')[offset:end]
+        print(threads)
+        # data = json.dumps(threads)
+        data = serializers.serialize('json', threads)
+        return HttpResponse(data, content_type='application/json')
 
 
 @login_required
