@@ -13,7 +13,7 @@ funcy==1.10
 html5lib==1.0.1
 idna==2.6
 psycopg2==2.7.3.2
-python-dateutil==2.6.1
+python-dateutil==2.7.2
 pytz==2018.3
 raven==6.5.0
 rcssmin==1.0.6
