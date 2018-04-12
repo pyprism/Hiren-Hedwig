@@ -26,7 +26,10 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user:
             auth.login(request, user)
-            return redirect('inbox')
+            if not user.initialized:
+                return redirect('generate_key')
+            else:
+                return redirect('inbox')
         else:
             messages.warning(request, 'Username/Password is not valid!')
             return redirect('login')
@@ -60,6 +63,13 @@ def signup(request):
         return redirect('signup')
     else:
         return render(request, 'base/signup.html')
+
+
+@login_required
+def generate_key(request):
+    if request.user.initialized:
+        return redirect('inbox')
+    return render(request, 'base/generate_key.html')
 
 
 @login_required
