@@ -22,10 +22,8 @@ before_script:
   - psql -c "CREATE DATABASE travisci;" -U postgres
 
 script:
-  - python manage.py migrate
   - python manage.py test
-  - coverage run --source=base manage.py test
-  - coverage run --source=mail manage.py test
+  - coverage run manage.py test
 
 after_success:
 - coveralls
