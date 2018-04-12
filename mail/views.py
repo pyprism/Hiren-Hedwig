@@ -49,9 +49,7 @@ def terminator(request, obj, item=25):
 
 @login_required
 def inbox(request):
-    if request.META.get('HTTP_ACCEPT').startswith("text/html"):
-        return render(request, 'mail/inbox.html', {'title': 'Inbox'})
-    elif request.content_type == 'application/json':
+    if request.content_type == 'application/json':
         total = 10
         offset = request.GET.get('get', 0)
         end = offset + total
@@ -60,6 +58,7 @@ def inbox(request):
         # data = json.dumps(threads)
         data = serializers.serialize('json', threads)
         return HttpResponse(data, content_type='application/json')
+    return render(request, 'mail/inbox.html', {'title': 'Inbox'})
 
 
 @login_required
