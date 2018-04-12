@@ -8,7 +8,7 @@ django-debug-toolbar==1.9.1
 django-redis-sessions==0.6.1
 django-sortedm2m==1.5.0
 django-tz-detect==0.2.9
-freezegun==0.3.9
+freezegun==0.3.10
 funcy==1.10
 html5lib==1.0.1
 idna==2.6
