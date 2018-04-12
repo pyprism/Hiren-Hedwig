@@ -40,6 +40,11 @@ class MailGun(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class Pgpkey(models.Model):
+    user = models.ForeignKey('Account', on_delete=models.CASCADE)
+    public_key = models.TextField()
+
+
 class Cron(models.Model):
     """
     Cron job tracker
