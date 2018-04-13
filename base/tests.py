@@ -11,7 +11,7 @@ from django.utils import timezone
 class LoginViewTest(TestCase):
 
     def setUp(self):
-        Account.objects.create_user(username='hiren', password="xyz")
+        self.user = Account.objects.create_user(username='hiren', password="xyz")
         self.c = Client()
 
     def test_login_url_resolves_to_login_view(self):
@@ -33,6 +33,18 @@ class LoginViewTest(TestCase):
     def test_redirect_works_for_bad_auth(self):
         respond = self.c.post(reverse('inbox'), {'username': 'hiren', 'password': 'bad pass'})
         self.assertRedirects(respond, '/?next=' + reverse('inbox'))
+
+    def test_redirect_for_logged_in_user(self):
+        self.c.force_login(self.user)
+        response = self.c.get(reverse('login'))
+        self.assertRedirects(response, reverse('inbox'))
+
+    def test_initialized_user_redirect(self):
+        user = Account.objects.get(username='hiren')
+        user.initialized = True
+        user.save()
+        response = self.c.post(reverse('login'), {'username': 'hiren', 'password': 'xyz'})
+        self.assertRedirects(response, reverse('inbox'))
 
 
 class SignupViewTest(TestCase):
