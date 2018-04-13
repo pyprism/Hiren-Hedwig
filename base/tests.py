@@ -60,6 +60,17 @@ class SignupViewTest(TestCase):
 
         self.assertRedirects(response, reverse('login'))
 
+    def test_first_user_is_admin(self):
+        self.c.post(reverse('signup'), {'username': 'hiren', 'password': 'xyz'})
+        user = Account.objects.get(username='hiren')
+        self.assertEqual(user.is_admin, True)
+
+    def test_second_user_is_not_admin(self):
+        self.c.post(reverse('signup'), {'username': 'hiren', 'password': 'xyz'})
+        self.c.post(reverse('signup'), {'username': 'hiren2', 'password': 'xyz'})
+        user = Account.objects.get(username='hiren2')
+        self.assertEqual(user.is_admin, False)
+
 
 
 
