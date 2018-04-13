@@ -18,6 +18,10 @@ class LoginViewTest(TestCase):
         found = resolve(reverse('login'))
         self.assertEqual(found.func, views.login)
 
+    def test_view_returns_correct_template(self):
+        response = self.c.get(reverse('login'))
+        self.assertTemplateUsed(response, 'base/login.html')
+
     def test_auth(self):
         respond = self.c.post(reverse('login'), {'username': 'hiren', 'password': 'xyz'})
         self.assertRedirects(respond, reverse('generate_key'))
