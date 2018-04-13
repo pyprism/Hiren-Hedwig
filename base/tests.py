@@ -58,6 +58,8 @@ class SignupViewTest(TestCase):
         self.assertEqual(message.message, 'Account created successfully!')
         self.assertEqual(message.tags, 'success')
 
+        self.assertRedirects(response, reverse('login'))
+
 
 
 
