@@ -7,14 +7,14 @@
         </div>
         <div class="card">
             <div class="body">
-                <form id="sign_in" method="post">
+                <form id="sign_in" method="post" action="{% url 'signup' %}"> {% csrf_token %}
                     <div class="msg">Create new encryption key</div>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">lock</i>
                         </span>
                         <div class="form-line">
-                            <input type="password" autofocus class="form-control" name="password" placeholder="Type encryption key" required>
+                            <input type="password" autofocus class="form-control" name="password" placeholder="Encryption key" required>
                         </div>
                     </div>
                     <div class="input-group">
@@ -22,14 +22,14 @@
                             <i class="material-icons">lock</i>
                         </span>
                         <div class="form-line">
-                            <input type="password" class="form-control" name="repeat_password" placeholder="Retype encryption key" required>
+                            <input type="password" class="form-control" name="repeat_password" placeholder="Repeat encryption key" required>
                         </div>
                         <div id="wrong" style="color: red"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="center-block">
-                                <button class="btn btn-block bg-green waves-effect" type="submit">Continue</button>
+                                <button class="btn btn-block bg-green waves-effect" type="submit">Generate</button>
                             </div>
                         </div>
                     </div>
@@ -48,6 +48,7 @@
                     hiren.innerHTML = 'Password didn\'t match';
                     return false;
                 } else {
+                    openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
                     sessionStorage.setItem("key", password.value);
                     //window.location.replace("/inbox/");
                     return true;
