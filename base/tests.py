@@ -20,7 +20,7 @@ class LoginViewTest(TestCase):
 
     def test_auth(self):
         respond = self.c.post(reverse('login'), {'username': 'hiren', 'password': 'xyz'})
-        self.assertRedirects(respond, reverse('inbox'))
+        self.assertRedirects(respond, reverse('generate_key'))
 
     def test_redirect_for_unauthenticated_user_works(self):
         response = self.c.get(reverse('inbox'))
