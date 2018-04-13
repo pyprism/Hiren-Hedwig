@@ -6,54 +6,12 @@
             <a href="javascript:void(0);">Hiren<b>MailBox</b></a>
         </div>
         <div class="card">
-            <div class="body">
-                <form id="sign_in" method="post" action="{% url 'signup' %}"> {% csrf_token %}
-                    <div class="msg">Create new encryption key</div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="password" autofocus class="form-control" name="password" placeholder="Encryption key" required>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="password" class="form-control" name="repeat_password" placeholder="Repeat encryption key" required>
-                        </div>
-                        <div id="wrong" style="color: red"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="center-block">
-                                <button class="btn btn-block bg-green waves-effect" type="submit">Generate</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            <div class="body" id="generate_key">
             </div>
         </div>
     </div>
-    <script>
-        window.onload = function () {
-            let form = document.querySelector('form');
-            form.onsubmit = function () {
-                let password = document.querySelector('input[name=password]');
-                let repeat_password = document.querySelector('input[name=repeat_password]');
-                if ( password.value !== repeat_password.value) {
-                    let hiren = document.getElementById('wrong');
-                    hiren.innerHTML = 'Password didn\'t match';
-                    return false;
-                } else {
-                    openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
-                    sessionStorage.setItem("key", password.value);
-                    //window.location.replace("/inbox/");
-                    return true;
-                }
-            }
-        };
-    </script>
+{% endblock %}
+{% block script %} {% load staticfiles %}
+    <script src="{% static 'js/bundles/vendor.js' %}"></script>
+    <script src="{% static 'js/bundles/GenerateKey.js' %}"></script>
 {% endblock %}
