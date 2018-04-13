@@ -31,6 +31,18 @@ class LoginViewTest(TestCase):
         self.assertRedirects(respond, '/?next=' + reverse('inbox'))
 
 
+class SignupViewTest(TestCase):
+
+    def setUp(self):
+        self.c = Client()
+
+    def test_signup_url_resolves_to_signup_view(self):
+        found = resolve(reverse('signup'))
+        self.assertEqual(found.func, views.signup)
+
+    def test_view_returns_correct_template(self):
+        response = self.c.get(reverse('signup'))
+        self.assertTemplateUsed(response, 'base/signup.html')
 
 
 
