@@ -71,6 +71,12 @@ class SignupViewTest(TestCase):
         user = Account.objects.get(username='hiren2')
         self.assertEqual(user.is_admin, False)
 
+    def test_duplicated_username_failed(self):
+        Account.objects.create_user(username='hiren', password="xyz")
+        response = self.c.post(reverse('signup'), {'username': 'hiren', 'password': 'xyz'}, follow=True)
+        message = list(response.context.get('messages'))[0]
+        self.assertEqual(message.message, 'Username is not available!')
+        self.assertEqual(message.tags, 'warning')
 
 
 
