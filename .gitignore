@@ -69,4 +69,4 @@ webpack-stats.json
 media/hiren/*
 static/CACHE/*
 logs/*.log*
-static/js/main.js
+static/js/bundles/*.js
