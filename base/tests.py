@@ -97,5 +97,10 @@ class SignupViewTest(TestCase):
         self.assertEqual(message.message, 'Username is not available!')
         self.assertEqual(message.tags, 'warning')
 
+    def test_redirect_for_logged_in_user(self):
+        self.c.force_login(Account.objects.create_user(username='hiren', password="xyz"))
+        response = self.c.get(reverse('signup'))
+        self.assertRedirects(response, reverse('inbox'))
+
 
 
