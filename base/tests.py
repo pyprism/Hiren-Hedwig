@@ -48,6 +48,16 @@ class SignupViewTest(TestCase):
         response = self.c.get(reverse('signup'))
         self.assertTemplateUsed(response, 'base/signup.html')
 
+    def test_new_account_creation(self):
+        self.c.post(reverse('signup'), {'username': 'hiren', 'password': 'xyz'})
+        self.assertEqual(Account.objects.count(), 1)
+
+    def test_response_after_account_creation(self):
+        response = self.c.post(reverse('signup'), {'username': 'hiren', 'password': 'xyz'}, follow=True)
+        message = list(response.context.get('messages'))[0]
+        self.assertEqual(message.message, 'Account created successfully!')
+        self.assertEqual(message.tags, 'success')
+
 
 
 
