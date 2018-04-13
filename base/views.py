@@ -4,12 +4,13 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from django.contrib import messages
 from .models import Account, MailGun, Setting
-from .forms import MailGunForm
+from .forms import MailGunForm, PgpKeyForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, HttpResponse
 from utils.mailgun import send_mail, get_mail
 from mail.models import Mail
 from datetime import datetime, timedelta
+from django.http import HttpResponse
 
 
 def login(request):
@@ -67,8 +68,26 @@ def signup(request):
 
 @login_required
 def generate_key(request):
+    """
+    Handle and save pgp public key
+    :param request:
+    :return:
+    """
     if request.user.initialized:
         return redirect('inbox')
+    if request.method == 'POST':
+        pgp_form = PgpKeyForm(request.POST)
+        if pgp_form.is_valid():
+            pgp = pgp_form.save(commit=False)
+            pgp.user = request.user
+            pgp.save()
+            user = Account.objects.get(username=request.user.username)
+            user.initialized = True
+            user.save()
+            return HttpResponse("success")
+        else:
+            return HttpResponse(pgp_form.errors, content_type='application/json')
+
     return render(request, 'base/generate_key.html')
 
 
