@@ -78,7 +78,8 @@ class GenerateKey extends React.Component {
                     success: function (data) {
                         if(data === "success"){
                             this.setState({key: "", repeat_key: "", button: "Done"});
-                            sessionStorage.setItem("key", privkey);
+                            sessionStorage.setItem("private_key", privkey);
+                            sessionStorage.setItem("public_key", pubkey);
                             swal("Success", "Key generated and saved.", "success").then(() => {
                                 window.location.replace("/mail/inbox/");
                             });
