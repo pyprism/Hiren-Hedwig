@@ -43,7 +43,7 @@ class GenerateKey extends React.Component {
             openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
             let options = {
                 userIds: [{ name:"", email:"" }],
-                numBits: 4096,
+                numBits: 2048,
                 passphrase: this.state.key
             };
 
