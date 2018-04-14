@@ -44,7 +44,7 @@ class LoginViewTest(TestCase):
         user.initialized = True
         user.save()
         response = self.c.post(reverse('login'), {'username': 'hiren', 'password': 'xyz'})
-        self.assertRedirects(response, reverse('inbox'))
+        self.assertRedirects(response, reverse('unlock'))
 
     def test_login_failed(self):
         response = self.c.post(reverse('login'), {'username': 'bad_bunny', 'password': 'xyz'}, follow=True)
