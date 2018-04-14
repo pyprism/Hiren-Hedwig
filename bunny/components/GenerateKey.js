@@ -25,6 +25,9 @@ class GenerateKey extends React.Component {
 
     handleSubmit(event){
         event.preventDefault();
+        if((this.state.key).length <=0 || (this.state.repeat_key).length <= 0) {
+            return;
+        }
         let csrfcookie = function() {
             let cookieValue = null,
                 name = "csrftoken";
