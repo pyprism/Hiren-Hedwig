@@ -1,8 +1,9 @@
 const path = require("path");
 module.exports = {
     entry: {
-        "GenerateKey": "./bunny/GenerateKey.js",
-        "Unlock": "./bunny/Unlock.js"
+        "GenerateKey": "./bunny/components/GenerateKey.js",
+        "Unlock": "./bunny/components/Unlock.js",
+        "Check": "./bunny/utils/Check.js"
     },
     output: {
         path: path.resolve(__dirname, "static"),
