@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import swal from "sweetalert2";
+import "regenerator-runtime/runtime";
 
 
 class GenerateKey extends React.Component {
@@ -49,9 +50,16 @@ class GenerateKey extends React.Component {
 
             this.setState({"button": "Generating"});
 
-            openpgp.generateKey(options).then(function(key) {
+            openpgp.generateKey(options).then(async function(key) {
                 const privkey = key.privateKeyArmored;
                 const pubkey = key.publicKeyArmored;
+                let privkey_options = {
+                    data: privkey,
+                    passwords: this.state.key,
+                    armor: true,
+                };
+
+                let private_key = await openpgp.encrypt(privkey_options);
                 $.ajax({
                     type: "POST",
                     beforeSend: function(request, settings) {
@@ -61,7 +69,8 @@ class GenerateKey extends React.Component {
                     },
                     url: window.location.pathname,
                     data: {
-                        "public_key": pubkey
+                        "public_key": pubkey,
+                        "private_key": private_key["data"]
                     },
                     success: function (data) {
                         if(data === "success"){
@@ -71,6 +80,7 @@ class GenerateKey extends React.Component {
                                 window.location.replace("/mail/inbox/");
                             });
                         } else {
+                            this.setState({key: "", repeat_key: "", button: "Failed"});
                             console.error(data);
                             swal("Oops...", "Something went wrong!", "error");
                         }
