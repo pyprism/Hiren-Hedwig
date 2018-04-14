@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import Account, MailGun, Setting, Pgpkey
 from .forms import MailGunForm, PgpKeyForm
 from django.db.utils import IntegrityError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from utils.mailgun import send_mail, get_mail
 from mail.models import Mail
 from datetime import datetime, timedelta
@@ -100,7 +100,7 @@ def unlock(request):
     :return:
     """
     if request.content_type == 'application/json':
-        pgp = get_object_or_404(Pgpkey, user=request.user)
+        pgp = get_list_or_404(Pgpkey, user=request.user)
         data = serializers.serialize('json', pgp)
         return HttpResponse(data, content_type='application/json')
     return render(request, 'base/unlock.html')
