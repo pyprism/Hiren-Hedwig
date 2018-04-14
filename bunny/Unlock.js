@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import swal from "sweetalert2";
+import "regenerator-runtime/runtime";
 
 class Unlock extends React.Component {
     constructor() {
@@ -17,19 +18,18 @@ class Unlock extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
-        let options = {
-            userIds: [{ name:"", email:"" }],
-            numBits: 2048,
-            passphrase: this.state.key
-        };
-
         this.setState({"button": "Verifying"});
-        openpgp.generateKey(options).then(function(key) {
-            const privkey = key.privateKeyArmored;
-            const pubkey = key.publicKeyArmored;
-            console.log(pubkey);
-        }.bind(this));
+
+        openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
+        $.ajax(window.location.pathname, {
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+
+
     }
 
     render() {
