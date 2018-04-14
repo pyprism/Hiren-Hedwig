@@ -31,7 +31,7 @@ def login(request):
             if not user.initialized:
                 return redirect('generate_key')
             else:
-                return redirect('inbox')
+                return redirect('unlock')
         else:
             messages.warning(request, 'Username/Password is not valid!')
             return redirect('login')
