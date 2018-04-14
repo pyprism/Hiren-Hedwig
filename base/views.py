@@ -3,14 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from django.contrib import messages
-from .models import Account, MailGun, Setting
+from .models import Account, MailGun, Setting, Pgpkey
 from .forms import MailGunForm, PgpKeyForm
 from django.db.utils import IntegrityError
-from django.shortcuts import get_object_or_404, HttpResponse
+from django.shortcuts import get_object_or_404
 from utils.mailgun import send_mail, get_mail
 from mail.models import Mail
 from datetime import datetime, timedelta
 from django.http import HttpResponse
+from django.core import serializers
 
 
 def login(request):
@@ -89,6 +90,20 @@ def generate_key(request):
             return HttpResponse(pgp_form.errors, content_type='application/json')
 
     return render(request, 'base/generate_key.html')
+
+
+@login_required
+def unlock(request):
+    """
+    Unlock mailbox
+    :param request:
+    :return:
+    """
+    if request.content_type == 'application/json':
+        pgp = get_object_or_404(Pgpkey, user=request.user)
+        data = serializers.serialize('json', pgp)
+        return HttpResponse(data, content_type='application/json')
+    return render(request, 'base/unlock.html')
 
 
 @login_required
