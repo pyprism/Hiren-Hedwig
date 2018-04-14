@@ -1,0 +1,17 @@
+{% extends "base/auth_base.html" %}
+{% block title %} Unlock Mailbox {% endblock %}
+{% block content %}
+    <div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);">Hiren<b>MailBox</b></a>
+        </div>
+        <div class="card">
+            <div class="body" id="unlock">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %} {% load staticfiles %}
+    <script src="{% static 'js/bundles/vendor.js' %}"></script>
+    <script src="{% static 'js/bundles/Unlock.js' %}"></script>
+{% endblock %}
