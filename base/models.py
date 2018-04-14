@@ -43,6 +43,7 @@ class MailGun(models.Model):
 class Pgpkey(models.Model):
     user = models.ForeignKey('Account', on_delete=models.CASCADE)
     public_key = models.TextField()
+    private_key = models.TextField()
 
 
 class Cron(models.Model):
