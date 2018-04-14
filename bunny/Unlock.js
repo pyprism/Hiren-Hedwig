@@ -18,14 +18,34 @@ class Unlock extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        if((this.state.key).length <= 0){
+            return;
+        }
         this.setState({"button": "Verifying"});
 
         openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
         $.ajax(window.location.pathname, {
             contentType: "application/json",
-            success: function (data) {
-                console.log(data);
-            }
+            success: async function (data) {
+                let private_key;
+                let options = {
+                    message: openpgp.message.readArmored(data[0]["fields"]["private_key"]),
+                    passwords: this.state.key,
+                    format: "utf8"
+                };
+                try {
+                    private_key = await openpgp.decrypt(options);
+                } catch(e) {
+                    swal("Oops...", "Key is not valid! Try again", "error");
+                    this.setState({key:"", button: "Unlock"});
+                    return;
+                }
+
+                sessionStorage.setItem("private_key", private_key["data"]);
+                sessionStorage.setItem("public_key", data[0]["fields"]["public_key"]);
+                this.setState({key:"", button: "Verified"});
+                window.location.href = "/mail/inbox/";
+            }.bind(this)
         });
 
 
