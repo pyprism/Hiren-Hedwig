@@ -49,7 +49,7 @@ def terminator(request, obj, item=25):
 
 @login_required
 def inbox(request):
-    if request.content_type == 'application/json':
+    if request.is_ajax():
         total = 10
         offset = request.GET.get('get', 0)
         end = offset + total
