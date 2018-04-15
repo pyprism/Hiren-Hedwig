@@ -23,6 +23,24 @@ class GenerateKey extends React.Component {
         this.setState({repeat_key: event.target.value});
     }
 
+    randomString(length)  // source: https://stackoverflow.com/a/18121681
+    {
+        let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let i;
+        let result = "";
+        if(window.crypto && window.crypto.getRandomValues)
+        {
+            let values = new Uint32Array(length);
+            window.crypto.getRandomValues(values);
+            for(i=0; i<length; i++)
+            {
+                result += charset[values[i] % charset.length];
+            }
+            return result;
+        }
+        swal("Error", "Your browser sucks and can't generate secure random numbers", "error");
+    }
+
     handleSubmit(event){
         event.preventDefault();
         if((this.state.key).length <=0 || (this.state.repeat_key).length <= 0) {
@@ -48,7 +66,7 @@ class GenerateKey extends React.Component {
             let options = {
                 userIds: [{ name:"", email:"" }],
                 numBits: 2048,
-                passphrase: this.state.key
+                passphrase: this.randomString(50)
             };
 
             this.setState({"button": "Generating"});
