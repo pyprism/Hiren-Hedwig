@@ -11,147 +11,45 @@
                                 Compose New Email
                             </h2>
                         </div>
-                        <div class="body">
-                            <form class="form-horizontal" method="post" enctype="multipart/form-data"> {% csrf_token %}
-                                {% if messages %}
-                                    {%for message in messages %}
-                                        <div class="alert alert-{{ message.tags }}" role="alert">
-                                            <ul class="messages">
-                                                <li>{{ message }}</li>
-                                            </ul>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>From</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" required name="mail_from" class="form-control" placeholder="mail@yourmailgundomain.com">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>To</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" required name="mail_to" class="form-control" placeholder="Type recipients email">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>CC</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text"  name="cc" class="form-control" placeholder="Optional CC">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>BCC</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="bcc" class="form-control" placeholder="Optional BCC">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Subject</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" required name="subject" class="form-control" placeholder="Type subject">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Body</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="hidden" name="body">
-                                                <div id="mailBody"> </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Attachment</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <input type="file" name="attachment" class="form-control" multiple>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                                        <button type="submit" name="send" value="bugs" class="btn btn-success m-t-15 waves-effect">
-                                            <i class="material-icons">send</i>
-                                            <span>Send</span>
-                                        </button>
-                                        <button type="submit" name="draft" value="bunny" class="btn btn-info m-t-15 waves-effect">
-                                            <i class="material-icons">drafts</i>
-                                            <span>Draft</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="body" id="compose">
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <script>
-        /**
-         * Form body editor
-         */
-        var quill;
-        window.onload = function () {
-            quill = new Quill('#mailBody', {
-                modules: {
-                    toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline'],
-                        ['image', 'code-block']
-                    ]
-                },
-                theme: 'snow'
-            });
-        };
-        /**
-         * Contact list generator
-         */
-
-
-        var form = document.querySelector('form');
-        form.onsubmit = function() {
-            // Populate hidden form on submit
-            var body = document.querySelector('input[name=body]');
-            body.value = quill.root.innerHTML;
-            return true;
-        };
-    </script>
+{#    <script>#}
+{#        /**#}
+{#         * Form body editor#}
+{#         */#}
+{#        var quill;#}
+{#        window.onload = function () {#}
+{#            quill = new Quill('#mailBody', {#}
+{#                modules: {#}
+{#                    toolbar: [#}
+{#                        [{ header: [1, 2, false] }],#}
+{#                        ['bold', 'italic', 'underline'],#}
+{#                        ['image', 'code-block']#}
+{#                    ]#}
+{#                },#}
+{#                theme: 'snow'#}
+{#            });#}
+{#        };#}
+{#        /**#}
+{#         * Contact list generator#}
+{#         */#}
+{##}
+{##}
+{#        var form = document.querySelector('form');#}
+{#        form.onsubmit = function() {#}
+{#            // Populate hidden form on submit#}
+{#            var body = document.querySelector('input[name=body]');#}
+{#            body.value = quill.root.innerHTML;#}
+{#            return true;#}
+{#        };#}
+{#    </script>#}
+{% endblock %}
+{% block script %} {% load staticfiles %}
+    <script src="{% static 'js/bundles/Compose.js' %}"></script>
 {% endblock %}
