@@ -1,5 +1,6 @@
 const path = require("path");
 module.exports = {
+    devtool: "source-map",
     entry: {
         "GenerateKey": "./bunny/components/GenerateKey.js",
         "Unlock": "./bunny/components/Unlock.js",
