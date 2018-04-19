@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import swal from "sweetalert2";
 import "regenerator-runtime/runtime";
+import ReactQuill from 'react-quill';
 
 
 class Compose extends React.Component {
@@ -14,7 +15,7 @@ class Compose extends React.Component {
             bcc: [],
             subject: "",
             body: "",
-            attachment: null
+            attachment: ""
         }
     }
 
@@ -38,8 +39,8 @@ class Compose extends React.Component {
         this.setState({subject: event.target.value});
     }
 
-    handleBodyChange(event) {
-        this.setState({body: event.target.value});
+    handleBodyChange(bunny) {
+        this.setState({body: bunny});
     }
 
     handleAttachmentChange(event) {
@@ -127,8 +128,8 @@ class Compose extends React.Component {
                     <div className="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                         <div className="form-group">
                             <div className="form-line">
-                                <input type="hidden" name="body"/>
-                                <div id="mailBody"> </div>
+                                <ReactQuill value={body}
+                                            onChange={this.handleBodyChange.bind(this)} />
                             </div>
                         </div>
                     </div>
