@@ -32,6 +32,7 @@
     "react-bootstrap-table-next": "^0.1.7",
     "react-bootstrap-table2-paginator": "^0.1.1",
     "react-dom": "^16.3.1",
+    "react-quill": "^1.2.7",
     "react-select": "^1.2.1",
     "sweetalert2": "^7.18.0"
   }
