@@ -1,3 +1,6 @@
+amqp==2.2.2
+billiard==3.5.0.3
+celery==4.1.0
 certifi==2018.1.18
 chardet==3.0.4
 Django==2.0.4
@@ -12,6 +15,8 @@ freezegun==0.3.10
 funcy==1.10.1
 html5lib==1.0.1
 idna==2.6
+kombu==4.1.0
+psycopg2==2.7.3.2
 psycopg2-binary==2.7.4
 python-dateutil==2.7.2
 pytz==2018.4
@@ -24,4 +29,5 @@ six==1.11.0
 sqlparse==0.2.4
 urllib3==1.22
 uWSGI==2.0.17
+vine==1.1.4
 webencodings==0.5.1
