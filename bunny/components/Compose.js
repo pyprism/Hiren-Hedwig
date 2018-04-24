@@ -19,6 +19,7 @@ class Compose extends React.Component {
         }
     }
 
+
     handleFromChange(event) {
         this.setState({from: event.target.value});
     }
@@ -128,8 +129,13 @@ class Compose extends React.Component {
                     <div className="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                         <div className="form-group">
                             <div className="form-line">
-                                <ReactQuill value={body}
-                                            onChange={this.handleBodyChange.bind(this)} />
+                                <ReactQuill
+                                    value={body}
+                                    onChange={this.handleBodyChange.bind(this)}
+                                    modules={ReactQuill.modules}
+                                    formats={ReactQuill.formats}
+                                    placeholder={"Type mail body..."}
+                                />
                             </div>
                         </div>
                     </div>
@@ -160,6 +166,31 @@ class Compose extends React.Component {
         )
     }
 }
+
+
+ReactQuill.modules = {
+  toolbar: [
+    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+    [{size: []}],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{'list': 'ordered'}, {'list': 'bullet'},
+     {'indent': '-1'}, {'indent': '+1'}],
+    ['link', 'image', 'video'],
+    ['clean']
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false,
+  }
+}
+
+ReactQuill.formats = [
+  'header', 'font', 'size',
+  'bold', 'italic', 'underline', 'strike', 'blockquote',
+  'list', 'bullet', 'indent',
+  'link', 'image', 'video',
+]
+
 
 ReactDOM.render(<Compose />, document.getElementById("compose"));
 
