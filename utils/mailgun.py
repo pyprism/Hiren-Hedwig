@@ -5,9 +5,6 @@ import logging
 from datetime import datetime, timedelta
 from email.utils import parsedate_tz
 import tempfile
-# import asyncio
-# loop = asyncio.get_event_loop()
-# loop.run_in_executor(None, 'task')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hiren.settings")
 django.setup()
@@ -16,6 +13,7 @@ from base.models import MailGun, Cron
 from mail.models import Mail, Attachment, Thread
 from django.core import files
 from django.core.exceptions import ObjectDoesNotExist
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +29,7 @@ def to_datetime(datestring):
     return dt - timedelta(seconds=time_tuple[-1])
 
 
+@shared_task
 def send_mail():
     cron, created = Cron.objects.get_or_create(task='S', lock=False)
     if not cron.lock:
@@ -201,6 +200,7 @@ def items_process(items, mail):
                 })
 
 
+@shared_task
 def get_mail():
     cron, created = Cron.objects.get_or_create(task='C', lock=False)
     if not cron.lock:
