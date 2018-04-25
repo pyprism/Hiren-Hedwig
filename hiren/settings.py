@@ -301,3 +301,7 @@ CACHEOPS = {
     'account.*': {'ops': 'all', 'timeout': 60*60*24*30},
     'contact.*': {'ops': 'all', 'timeout': 60*60*24*7},
 }
+
+# Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/4'
+
