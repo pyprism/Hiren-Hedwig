@@ -71,3 +71,4 @@ static/CACHE/*
 logs/*.log*
 static/js/bundles/*.js
 static/js/bundles/*.js.map
+keys/*
