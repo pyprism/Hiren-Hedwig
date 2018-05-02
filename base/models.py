@@ -44,6 +44,9 @@ class Pgpkey(models.Model):
     user = models.ForeignKey('Account', on_delete=models.CASCADE)
     public_key = models.TextField()
     private_key = models.TextField()
+    finger_print = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Cron(models.Model):
