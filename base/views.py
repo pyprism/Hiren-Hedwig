@@ -12,6 +12,7 @@ from mail.models import Mail
 from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.core import serializers
+from utils.tasks import gen_fingerprint
 
 
 def login(request):
@@ -85,6 +86,7 @@ def generate_key(request):
             user = Account.objects.get(username=request.user.username)
             user.initialized = True
             user.save()
+            gen_fingerprint.delay(request.user.username, request.POST.get("public_key"))
             return HttpResponse("success")
         else:
             return HttpResponse(pgp_form.errors, content_type='application/json')
