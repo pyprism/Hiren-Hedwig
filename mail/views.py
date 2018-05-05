@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail, Thread, Contact
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from utils.mailgun import get_mail
+from utils.tasks import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 import json
@@ -221,6 +221,7 @@ def compose(request):
                 messages.success(request, 'Mail queued for sending.')
             if request.POST.get('draft'):
                 messages.success(request, 'Mail saved as draft.')
+            send_mail.delay()
         else:
             messages.warning(request, compose.errors)
         redirect('compose')
