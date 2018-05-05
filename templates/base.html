@@ -106,6 +106,12 @@
                         <span>Queue</span>
                     </a>
                 </li>
+                <li {% if request.resolver_match.url_name == 'queue' %} class="active" {% endif %}>
+                    <a href="{% url 'queue' %}">
+                        <i class="material-icons">sms_failed</i>
+                        <span>Failed</span>
+                    </a>
+                </li>
                 <li {% if request.resolver_match.url_name == 'trash' %} class="active" {% endif %}>
                     <a href="{% url 'trash' %}">
                         <i class="material-icons">delete</i>
