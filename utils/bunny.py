@@ -28,7 +28,18 @@ def to_datetime(datestring):
 
 
 def encrypt_mail(pk):
-    mail = Mail.objects.get(pk=pk)
+    """
+    Encrypt mail content after sending
+    :param pk:
+    :return:
+    """
+    mail = Mail.objects.select_related('user').get(pk=pk)
     gpg = gnupg.GPG(binary='/usr/bin/gpg', homedir='./keys')
+    key = Pgpkey.objects.get(user=mail.user)
+    subject = gpg.encrypt(mail.subject, key.finger_print)
+    body = gpg.encrypt(mail.body, key.finger_print)
+    mail.subject = subject
+    mail.body = body
+    mail.save()
 
 
