@@ -19,12 +19,17 @@ from celery import shared_task
 
 @shared_task
 def gen_fingerprint(username, pubkey):
+    """
+    Import public gpg key and generate and save fingerprint
+    :param username:
+    :param pubkey:
+    :return:
+    """
     gpg = gnupg.GPG(binary='/usr/bin/gpg', homedir='./keys')
     result = gpg.import_keys(pubkey)
     account = Account.objects.get(username=username)
     pgp = Pgpkey.objects.get(user=account)
     pgp.finger_print = result.fingerprints[0]
     pgp.save()
-    print("Done")
 
 
