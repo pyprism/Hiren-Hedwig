@@ -36,6 +36,7 @@ class Mail(models.Model):
         ('D', 'Draft'),
         ('R', 'Received'),
         ('T', 'Trash'),
+        ('F', 'Failed'),
     )
     state = models.CharField(choices=mail_state, max_length=1)
     in_reply_to = models.CharField(max_length=500, null=True)  # only used for mail reply
