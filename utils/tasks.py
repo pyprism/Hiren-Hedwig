@@ -15,12 +15,13 @@ from mail.models import Mail, Attachment, Thread
 from django.core import files
 from django.core.exceptions import ObjectDoesNotExist
 from celery import shared_task
+from .bunny import encrypt_mail
 
 
 @shared_task
 def gen_fingerprint(username, pubkey):
     """
-    Import public gpg key and generate and save fingerprint
+    Import public gpg key, generate and save gpg fingerprint
     :param username:
     :param pubkey:
     :return:
@@ -56,21 +57,22 @@ def send_mail():
             for attachment in Attachment.objects.filter(mail=mail):
                 attachments.append((("attachment", (attachment.file_name,
                                                     open(attachment.file_obj.path, "rb").read()))))
-                hiren = requests.post(
-                    "https://api.mailgun.net/v3/" + mail.domain.name + "/messages",
-                    auth=("api", mail.domain.key),
-                    files=attachments,
-                    data={"from": mail.mail_from,
-                          "to": [mail.mail_to],
-                          "cc": [mail.cc],
-                          "bcc": [mail.bcc],
-                          "subject": mail.subject,
-                          "html": mail.body})
+            hiren = requests.post(
+                "https://api.mailgun.net/v3/" + mail.domain.name + "/messages",
+                auth=("api", mail.domain.key),
+                files=attachments,
+                data={"from": mail.mail_from,
+                      "to": [mail.mail_to],
+                      "cc": [mail.cc],
+                      "bcc": [mail.bcc],
+                      "subject": mail.subject,
+                      "html": mail.body})
         if hiren.status_code == 200:  # catch and report failed mail
             bunny = hiren.json()
             mail.message_id = bunny['id']
             mail.state = 'S'
             mail.save()
+            encrypt_mail(mail.pk)
         else:
             mail.state = 'F'
             mail.save()
