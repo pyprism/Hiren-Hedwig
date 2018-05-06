@@ -4,7 +4,8 @@ module.exports = {
     entry: {
         "GenerateKey": "./bunny/components/GenerateKey.js",
         "Unlock": "./bunny/components/Unlock.js",
-        "Check": "./bunny/utils/Check.js"
+        "Check": "./bunny/utils/Check.js",
+        "Sent": "./bunny/utils/Sent.js",
     },
     output: {
         path: path.resolve(__dirname, "static"),
