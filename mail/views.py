@@ -30,6 +30,8 @@ def terminator(request, obj, item=25):
         bunny = paginator.page(1)
     except EmptyPage:
         bunny = paginator.page(paginator.num_pages)
+    hiren = {"obj": bunny, "totalSize": paginator.count, "sizePerPage": 25,
+             "pageStartIndex": bunny.start_index(), "page": page}  # fix page variable
     return bunny
 
 
