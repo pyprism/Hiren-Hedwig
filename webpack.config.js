@@ -5,7 +5,7 @@ module.exports = {
         "GenerateKey": "./bunny/components/GenerateKey.js",
         "Unlock": "./bunny/components/Unlock.js",
         "Check": "./bunny/utils/Check.js",
-        "Sent": "./bunny/utils/Sent.js",
+        "Sent": "./bunny/components/Sent.js",
     },
     output: {
         path: path.resolve(__dirname, "static"),
@@ -19,8 +19,12 @@ module.exports = {
                 use: {
                     loader: "babel-loader?cacheDirectory=/tmp/"
                 }
+            },
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
             }
-            ]
+        ]
     },
     optimization: {
         splitChunks: {
