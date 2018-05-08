@@ -237,9 +237,11 @@ def sent(request):
     :param request:
     :return:
     """
-    mails = Mail.objects.filter(user=request.user, state='S').order_by('-updated_at')
-    bunny = terminator(request, mails)
-    return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Sent Mail'})
+    if request.is_ajax():
+        mails = Mail.objects.filter(user=request.user, state='S').order_by('-updated_at')
+        bunny = terminator(request, mails)
+        return HttpResponse(bunny, content_type='application/json')
+    return render(request, 'mail/sent.html')
 
 
 @login_required
