@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from django.contrib import messages
 from .models import Account, MailGun, Setting, Pgpkey
-from .forms import MailGunForm, PgpKeyForm
+from .forms import MailGunForm, PgpKeyForm, ContactForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, get_list_or_404
 from utils.mailgun import send_mail, get_mail
@@ -244,6 +244,23 @@ def contact(request):
     except EmptyPage:
         bunny = paginator.page(paginator.num_pages)
     return render(request, 'base/contact.html', {'bunny': bunny})
+
+
+@login_required
+def contact_add(request):
+    if request.method == 'POST':
+        contact = ContactForm(request.POST)
+        if contact.is_valid():
+            contact_obj = contact.save(commit=False)
+            contact_obj.user = request.user
+            contact_obj.m_type = "T"
+            contact_obj.save()
+            messages.success(request, "Contact saved")
+        else:
+            messages.warning(request, contact.errors)
+        return redirect('contact')
+    return render(request, 'base/contact_add.html')
+
 
 def cron_send_mail(request):
     """
