@@ -8,10 +8,11 @@ from .forms import MailGunForm, PgpKeyForm
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, get_list_or_404
 from utils.mailgun import send_mail, get_mail
-from mail.models import Mail
+from mail.models import Mail, Contact
 from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.tasks import gen_fingerprint
 
 
@@ -128,6 +129,7 @@ def signup_settings(request):
             sign_up.save()
         return redirect('settings')
 
+
 @login_required
 def create_domain(request):
     """
@@ -223,6 +225,25 @@ def update_user(request, username):
             return redirect('update_user', username=username)
         return render(request, 'base/update_user.html')
 
+
+@login_required
+def contact(request):
+    """
+    Create/return contact list
+    :param request:
+    :return:
+    """
+    contacts = Contact.objects.filter(m_type='T').order_by("updated_at")
+    paginator = Paginator(contacts, 20)
+    page = request.GET.get('page')
+    try:
+        bunny = paginator.page(page)
+    except PageNotAnInteger:
+        # If bunny is not an integer, deliver first page.
+        bunny = paginator.page(1)
+    except EmptyPage:
+        bunny = paginator.page(paginator.num_pages)
+    return render(request, 'base/contact.html', {'bunny': bunny})
 
 def cron_send_mail(request):
     """
