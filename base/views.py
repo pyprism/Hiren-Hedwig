@@ -248,6 +248,11 @@ def contact(request):
 
 @login_required
 def contact_add(request):
+    """
+    Handle contact form
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         contact = ContactForm(request.POST)
         if contact.is_valid():
