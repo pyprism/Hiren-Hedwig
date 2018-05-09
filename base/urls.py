@@ -14,6 +14,7 @@ urlpatterns = [
     path('domain/', views.create_domain, name='create_domain'),
     path('user/<str:username>/', views.update_user, name='update_user'),
     path('user/', views.create_user, name='create_user'),
+    path('contact/add/', views.contact_add, name='contact_add'),
     path('contact/', views.contact, name='contact'),
     path('cron/send/', views.cron_send_mail),
     path('cron/receive/', views.cron_check_mail),
