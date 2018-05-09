@@ -256,9 +256,10 @@ def contact_add(request):
             contact_obj.m_type = "T"
             contact_obj.save()
             messages.success(request, "Contact saved")
+            return redirect('contact')
         else:
             messages.warning(request, contact.errors)
-        return redirect('contact')
+            return redirect('contact_add')
     return render(request, 'base/contact_add.html')
 
 
