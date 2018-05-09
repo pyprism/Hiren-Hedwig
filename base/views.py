@@ -268,6 +268,13 @@ def contact_add(request):
     return render(request, 'base/contact_add.html')
 
 
+@login_required
+def contact_edit(request):
+    if request.method == 'POST':
+        pass
+    return render(request)
+
+
 def cron_send_mail(request):
     """
     Cron endpoint for sending queued mail
