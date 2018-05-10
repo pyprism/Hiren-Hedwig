@@ -119,4 +119,9 @@ class GenerateKeyViewTest(TestCase):
         found = resolve(reverse('generate_key'))
         self.assertEqual(found.func, views.generate_key)
 
+    def test_redirect_for_unauthenticated_user_works(self):
+        response = self.c.get(reverse('generate_key'))
+        self.assertRedirects(response, '/?next=' + reverse('generate_key'))
+
+
 
