@@ -114,4 +114,9 @@ class GenerateKeyViewTest(TestCase):
         response = self.c.get(reverse('generate_key'))
         self.assertTemplateUsed(response, 'base/generate_key.html')
 
+    def test_signup_url_resolves_to_signup_view(self):
+        self.c.force_login(self.user)
+        found = resolve(reverse('generate_key'))
+        self.assertEqual(found.func, views.generate_key)
+
 
