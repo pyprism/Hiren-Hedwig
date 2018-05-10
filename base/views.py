@@ -182,7 +182,7 @@ def delete_domain(request, pk):
     """
     mailgun_obj = get_object_or_404(MailGun, user=request.user, pk=pk)
     mailgun_obj.delete()
-    messages.success(request, 'Domain Deleted!')
+    messages.success(request, 'Domain has been deleted!')
     return redirect('settings')
 
 
@@ -233,7 +233,7 @@ def contact(request):
     :param request:
     :return:
     """
-    contacts = Contact.objects.filter(m_type='T').order_by("updated_at")
+    contacts = Contact.objects.filter(m_type='T').order_by("-updated_at")
     paginator = Paginator(contacts, 20)
     page = request.GET.get('page')
     try:
@@ -270,6 +270,12 @@ def contact_add(request):
 
 @login_required
 def contact_edit(request, pk):
+    """
+    Contact edit form
+    :param request:
+    :param pk:
+    :return:
+    """
     contact = get_object_or_404(Contact, user=request.user, pk=pk)
     if request.method == 'POST':
         contact_form = ContactForm(request.POST, instance=contact)
@@ -281,6 +287,20 @@ def contact_edit(request, pk):
             messages.error(request, contact_form.errors)
             return redirect('contact_edit', pk=contact.pk)
     return render(request, 'base/contact_edit.html', {'contact': contact})
+
+
+@login_required
+def contact_delete(request, pk):
+    """
+    Nuke contact  :D
+    :param request:
+    :param pk: db primary key
+    :return:
+    """
+    contact = get_object_or_404(Contact, user=request.user, pk=pk)
+    contact.delete()
+    messages.success(request, 'Domain has been deleted!')
+    return redirect('contact')
 
 
 def cron_send_mail(request):
