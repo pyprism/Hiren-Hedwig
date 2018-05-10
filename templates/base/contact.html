@@ -33,8 +33,8 @@
                                         <tbody>
                                         {% for i in bunny %}
                                             <tr>
-                                                <th><a href="{% url 'mail_by_id' pk=i.pk %}">{{ i.name }}</a></th>
-                                                <th><a href="{% url 'mail_by_id' pk=i.pk %}">{{ i.email }}</a></th>
+                                                <th><a href="{% url 'contact_edit' pk=i.pk %}">{{ i.name }}</a></th>
+                                                <th><a href="{% url 'contact_edit' pk=i.pk %}">{{ i.email }}</a></th>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
