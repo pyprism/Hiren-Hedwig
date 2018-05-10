@@ -165,7 +165,7 @@ def update_domain(request, pk):
             mailgun = mailgun_form.save(commit=False)
             mailgun.user = request.user
             mailgun.save()
-            messages.success(request, "Information Updated", extra_tags='mailgun')
+            messages.success(request, "Information has been updated", extra_tags='mailgun')
         else:
             messages.error(request, mailgun_form.errors, extra_tags='mailgun')
         return redirect('update_domain', pk=pk)
@@ -269,10 +269,18 @@ def contact_add(request):
 
 
 @login_required
-def contact_edit(request):
+def contact_edit(request, pk):
+    contact = get_object_or_404(Contact, user=request.user, pk=pk)
     if request.method == 'POST':
-        pass
-    return render(request)
+        contact_form = ContactForm(request.POST, instance=contact)
+        if contact_form.is_valid():
+            contact_form.save()
+            messages.success(request, "Information has been updated")
+            return redirect('contact')
+        else:
+            messages.error(request, contact_form.errors)
+            return redirect('contact_edit', pk=contact.pk)
+    return render(request, 'base/contact_edit.html', {'contact': contact})
 
 
 def cron_send_mail(request):
