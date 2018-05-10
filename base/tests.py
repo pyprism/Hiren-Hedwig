@@ -123,5 +123,9 @@ class GenerateKeyViewTest(TestCase):
         response = self.c.get(reverse('generate_key'))
         self.assertRedirects(response, '/?next=' + reverse('generate_key'))
 
+    def test_form_works(self):
+        self.c.post(reverse('generate_key'), {'public_key': 'hiren', 'private_key': 'xyz'})
+
+
 
 
