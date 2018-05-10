@@ -103,4 +103,15 @@ class SignupViewTest(TestCase):
         self.assertRedirects(response, reverse('inbox'))
 
 
+class GenerateKeyViewTest(TestCase):
+
+    def setUp(self):
+        self.c = Client()
+        self.user = Account.objects.create_user(username='hiren', password="xyz")
+
+    def test_view_returns_correct_template(self):
+        self.c.force_login(self.user)
+        response = self.c.get(reverse('generate_key'))
+        self.assertTemplateUsed(response, 'base/generate_key.html')
+
 
