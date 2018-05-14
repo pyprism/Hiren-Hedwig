@@ -14,6 +14,7 @@ class Contact(models.Model):
     mail_type = (
         ('F', 'From'),
         ('T', 'To'),
+        ('B', 'Blocked'),
     )
     m_type = models.CharField(choices=mail_type, max_length=1)
     created_at = models.DateTimeField(auto_now_add=True)
