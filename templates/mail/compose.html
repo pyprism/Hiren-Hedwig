@@ -124,39 +124,7 @@
             </div>
         </div>
     </section>
-    <script>
-        /**
-         * Form body editor
-         */
-        let quill;
-        window.onload = function () {
-            quill = new Quill('#mailBody', {
-                modules: {
-                    toolbar: [
-                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                        [{size: []}],
-                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                        [{'list': 'ordered'}, {'list': 'bullet'},
-                            {'indent': '-1'}, {'indent': '+1'}],
-                        ['link', 'image', 'video'],
-                    ],
-                    clipboard: {
-                        // toggle to add extra line breaks when pasting HTML:
-                        matchVisual: false,
-                    }
-                },
-                theme: 'snow'
-            });
-        };
-        /**
-         * Contact list generator
-         */
-        let form = document.querySelector('form');
-        form.onsubmit = function() {
-            // Populate hidden form on submit
-            let body = document.querySelector('input[name=body]');
-            body.value = quill.root.innerHTML;
-            return true;
-        };
-    </script>
+{% endblock %}
+{% block script %} {% load staticfiles %}
+    <script src="{% static 'js/customs/compose.js' %}"></script>
 {% endblock %}
