@@ -303,6 +303,26 @@ def contact_delete(request, pk):
     return redirect('contact')
 
 
+@login_required
+def contact_ajax(request, to=None):
+    """
+    Ajax view for compose page
+    :param request:
+    :param to: Used for 'to' contact type
+    :return:
+    """
+    if request.is_ajax():
+        if to:
+            contacts = Contact.objects.filter(m_type='T').order_by("-updated_at")
+            data = serializers.serialize('json', list(contacts), fields=("email", "name"))
+        else:
+            contacts = Contact.objects.filter(m_type='F').order_by("-updated_at")
+            data = serializers.serialize('json', list(contacts), fields=("email",))
+        return HttpResponse(data, content_type='application/json')
+    else:
+        return redirect("compose")
+
+
 def cron_send_mail(request):
     """
     Cron endpoint for sending queued mail
