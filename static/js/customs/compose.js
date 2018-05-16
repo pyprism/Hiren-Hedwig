@@ -33,15 +33,34 @@ form.onsubmit = function() {
 /**
  * Contact list generator
  */
-(function contacts() {
+(function contacts_from() {
+    let mails = [];
     $.ajax({
         type: "GET",
         url: "/contact_ajax/",
         success: function (data) {
-            console.log(data);
+            data.forEach(function (yo) {
+                let bunny = {'value': '', 'text': ''};
+                bunny['value'] = yo["fields"]["email"];
+                bunny['text'] = yo["fields"]["email"];
+                mails.push(bunny);
+            })
+
+            $('#from').selectize({
+                delimiter: ';',
+                maxItems: 1,
+                persist: false,
+                options: mails,
+                create: function(input) {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                }
+            })
         },
         error: function (err) {
             console.error(err);
         }
-    })
+    });
 })();
