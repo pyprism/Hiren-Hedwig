@@ -7,10 +7,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import Attachment, Mail, Thread, Contact
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from utils.tasks import send_mail
+from utils.tasks import send_mail, update_contact_list
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-import json
 
 
 def terminator(request, obj, item=25):
@@ -198,7 +197,8 @@ def compose(request):
                 messages.warning(request, "Your mail's domain " + domain + " is not found in settings!")
                 return redirect('compose')
 
-            Contact.objects.get_or_create(user=request.user, email=domain_str, m_type='F')  # save "From" email
+            update_contact_list.delay(request.user.pk, request.POST.get('to'), request.POST.get('from'),
+                                      request.POST.get('cc'), request.POST.get('bcc'))
 
             compose_obj = compose.save(commit=False)
             compose_obj.domain = mailgun
