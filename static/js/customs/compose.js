@@ -90,10 +90,17 @@ form.onsubmit = function() {
         url: "/contact_ajax/to/",
         success: function (data) {
             data.forEach(function (yo) {
-                let bunny = {'value': '', 'text': ''};
-                bunny['value'] = yo["fields"]["email"];
-                bunny['text'] = yo["fields"]["name"];
-                mails.push(bunny);
+                if(yo["fields"]["name"]){
+                    let bunny = {'value': '', 'text': ''};
+                    bunny['value'] = yo["fields"]["email"];
+                    bunny['text'] = yo["fields"]["name"];
+                    mails.push(bunny);
+                } else {
+                    let only_email = {"value": "", "text": ""};
+                    only_email["value"] = yo["fields"]["email"];
+                    only_email["text"] = yo["fields"]["email"];
+                    mails.push(only_email);
+                }
             });
 
             $('#to').selectize({
@@ -102,14 +109,15 @@ form.onsubmit = function() {
                 options: mails,
                 valueField: 'value',
                 labelField: 'text',
+                searchField: ['value', 'text'],
                 create: function(input) {
                     return {
                         value: input,
                         text: input
-                    }
+                    };
                 },
                 createFilter: function(input) {
-                    var match, regex;
+                    let match, regex;
 
                     // email@address.com
                     regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
