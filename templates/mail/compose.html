@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block title %} Compose New Mail {% endblock %}
 {% block content %}
+    <style>
+    .selectize-input {
+        border: none
+    }
+    </style>
     <section class="content">
         <div class="container-fluid">
             <div class="row clearfix">
@@ -41,7 +46,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" required name="mail_to" class="form-control" placeholder="Type recipients email">
+                                                <input type="text" required name="mail_to" id="to" class="form-control" placeholder="Type recipients email">
                                             </div>
                                         </div>
                                     </div>
@@ -53,7 +58,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text"  name="cc" class="form-control" placeholder="Optional CC">
+                                                <input type="text"  name="cc" id="cc" class="form-control" placeholder="Optional CC">
                                             </div>
                                         </div>
                                     </div>
@@ -65,7 +70,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="bcc" class="form-control" placeholder="Optional BCC">
+                                                <input type="text" name="bcc" id="bcc" class="form-control" placeholder="Optional BCC">
                                             </div>
                                         </div>
                                     </div>
