@@ -308,8 +308,8 @@ def contact_ajax(request, to=None):
     """
     Ajax view for compose page
     :param request:
-    :param to: Used for 'to' contact type
-    :return:
+    :param to: Used for 'to' category contact
+    :return: contact list
     """
     if request.is_ajax():
         if to:
