@@ -49,7 +49,6 @@ form.onsubmit = function() {
             })
 
             $('#from').selectize({
-                //delimiter: ';',
                 maxItems: '1',
                 persist: false,
                 options: mails,
@@ -75,6 +74,109 @@ form.onsubmit = function() {
                     return false;
                 },
             })
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+})();
+
+(function contacts_to() {
+    let REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+        '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+    let mails = [];
+    $.ajax({
+        type: "GET",
+        url: "/contact_ajax/to/",
+        success: function (data) {
+            data.forEach(function (yo) {
+                let bunny = {'value': '', 'text': ''};
+                bunny['value'] = yo["fields"]["email"];
+                bunny['text'] = yo["fields"]["name"];
+                mails.push(bunny);
+            });
+
+            $('#to').selectize({
+                delimiter: ',',
+                persist: false,
+                options: mails,
+                valueField: 'value',
+                labelField: 'text',
+                create: function(input) {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                },
+                createFilter: function(input) {
+                    var match, regex;
+
+                    // email@address.com
+                    regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[0]);
+
+                    // name <email@address.com>
+                    regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[2]);
+
+                    return false;
+                },
+            });
+
+            $('#bcc').selectize({
+                delimiter: ',',
+                persist: false,
+                options: mails,
+                create: function(input) {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                },
+                createFilter: function(input) {
+                    var match, regex;
+
+                    // email@address.com
+                    regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[0]);
+
+                    // name <email@address.com>
+                    regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[2]);
+
+                    return false;
+                },
+            });
+            $('#cc').selectize({
+                delimiter: ',',
+                persist: false,
+                options: mails,
+                create: function(input) {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                },
+                createFilter: function(input) {
+                    var match, regex;
+
+                    // email@address.com
+                    regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[0]);
+
+                    // name <email@address.com>
+                    regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[2]);
+
+                    return false;
+                },
+            });
         },
         error: function (err) {
             console.error(err);
