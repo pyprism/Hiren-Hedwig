@@ -18,7 +18,7 @@ urlpatterns = [
     path('contact/<int:pk>/delete/', views.contact_delete, name='contact_delete'),
     path('contact/<int:pk>/', views.contact_edit, name='contact_edit'),
     path('contact/', views.contact, name='contact'),
-    path('contact_ajax/<int:string>/', views.contact_ajax, name='contact_ajax_to'),
+    path('contact_ajax/<str:to>/', views.contact_ajax, name='contact_ajax_to'),
     path('contact_ajax/', views.contact_ajax, name='contact_ajax_from'),
     path('cron/send/', views.cron_send_mail),
     path('cron/receive/', views.cron_check_mail),
