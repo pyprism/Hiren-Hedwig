@@ -34,6 +34,8 @@ form.onsubmit = function() {
  * Contact list generator
  */
 (function contacts_from() {
+    let REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+        '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
     let mails = [];
     $.ajax({
         type: "GET",
@@ -47,8 +49,8 @@ form.onsubmit = function() {
             })
 
             $('#from').selectize({
-                delimiter: ';',
-                maxItems: 1,
+                //delimiter: ';',
+                maxItems: '1',
                 persist: false,
                 options: mails,
                 create: function(input) {
@@ -56,7 +58,22 @@ form.onsubmit = function() {
                         value: input,
                         text: input
                     }
-                }
+                },
+                createFilter: function(input) {
+                    var match, regex;
+
+                    // email@address.com
+                    regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[0]);
+
+                    // name <email@address.com>
+                    regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+                    match = input.match(regex);
+                    if (match) return !this.options.hasOwnProperty(match[2]);
+
+                    return false;
+                },
             })
         },
         error: function (err) {
