@@ -197,7 +197,7 @@ def compose(request):
                 messages.warning(request, "Your mail's domain " + domain + " is not found in settings!")
                 return redirect('compose')
 
-            update_contact_list.delay(request.user.pk, request.POST.get('to'), request.POST.get('from'),
+            update_contact_list.delay(request.user.pk, request.POST.get('mail_to'), request.POST.get('mail_from'),
                                       request.POST.get('cc'), request.POST.get('bcc'))
 
             compose_obj = compose.save(commit=False)
