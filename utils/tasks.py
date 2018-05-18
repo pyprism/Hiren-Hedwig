@@ -11,7 +11,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hiren.settings")
 django.setup()
 
 from base.models import MailGun, Cron, Pgpkey, Account
-from mail.models import Mail, Attachment, Thread
+from mail.models import Mail, Attachment, Thread, Contact
 from django.core import files
 from django.core.exceptions import ObjectDoesNotExist
 from celery import shared_task
@@ -83,3 +83,23 @@ def send_mail():
                 })
 
 
+@shared_task
+def update_contact_list(user_id, to, from_, cc, bcc):
+    user = Account.objects.filter(pk=user_id)
+    print(from_)
+    Contact.objects.get_or_create(user=user, email=from_, m_type='F')
+    if len(to) != 0:
+        for i in to.split(','):
+            print(to)
+            print(i)
+            #Contact.objects.get_or_create(user=user, email=i, m_type='T')
+    if len(cc) != 0:
+        for i in cc.split(','):
+            print(cc)
+            print(i)
+            #Contact.objects.get_or_create(user=user, email=i, m_type='T')
+    if len(bcc) != 0:
+        for i in bcc.split(','):
+            print(bcc)
+            print(i)
+            #Contact.objects.get_or_create(user=user, email=i, m_type='T')
