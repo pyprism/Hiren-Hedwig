@@ -299,7 +299,7 @@ def contact_delete(request, pk):
     """
     contact = get_object_or_404(Contact, user=request.user, pk=pk)
     contact.delete()
-    messages.success(request, 'Domain has been deleted!')
+    messages.success(request, 'Contact has been deleted!')
     return redirect('contact')
 
 
