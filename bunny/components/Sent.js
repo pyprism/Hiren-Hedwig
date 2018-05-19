@@ -39,7 +39,16 @@ class Sent extends React.Component {
     }
 
     componentDidMount() {
-
+        $.ajax({
+            method: "GET",
+            url: window.location.pathname,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.error(err);
+            }
+        });
     }
 
     render() {
