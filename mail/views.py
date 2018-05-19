@@ -29,9 +29,10 @@ def terminator(request, obj, item=25):
         bunny = paginator.page(1)
     except EmptyPage:
         bunny = paginator.page(paginator.num_pages)
-    hiren = {"obj": bunny, "totalSize": paginator.count, "sizePerPage": 25,
-             "pageStartIndex": bunny.start_index(), "page": page}  # fix page variable
-    return bunny
+    data = serializers.serialize('json', bunny.object_list)
+    hiren = {"obj": data, "totalSize": paginator.count, "sizePerPage": 25,
+             "pageStartIndex": bunny.start_index(), "page": bunny.number}  # fix page variable
+    return hiren
 
 
 # @login_required
@@ -240,6 +241,8 @@ def sent(request):
     if request.is_ajax():
         mails = Mail.objects.filter(user=request.user, state='S').order_by('-updated_at')
         bunny = terminator(request, mails)
+        print("hit")
+        print(bunny)
         return HttpResponse(bunny, content_type='application/json')
     return render(request, 'mail/sent.html')
 
