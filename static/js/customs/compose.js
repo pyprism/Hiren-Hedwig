@@ -2,7 +2,7 @@
  * Form body editor
  */
 let quill;
-window.onload = function () {
+function editor() {
     quill = new Quill('#mailBody', {
         modules: {
             toolbar: [
@@ -20,7 +20,7 @@ window.onload = function () {
         },
         theme: 'snow'
     });
-};
+}
 
 let form = document.querySelector('form');
 form.onsubmit = function() {
@@ -33,7 +33,7 @@ form.onsubmit = function() {
 /**
  * Contact list generator
  */
-(function contacts_from() {
+function contacts_from() {
     let REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
         '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
     let mails = [];
@@ -79,9 +79,9 @@ form.onsubmit = function() {
             console.error(err);
         }
     });
-})();
+}
 
-(function contacts_to() {
+function contacts_to() {
     let REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
         '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
     let mails = [];
@@ -137,11 +137,14 @@ form.onsubmit = function() {
                 delimiter: ',',
                 persist: false,
                 options: mails,
+                valueField: 'value',
+                labelField: 'text',
+                searchField: ['value', 'text'],
                 create: function(input) {
                     return {
                         value: input,
                         text: input
-                    }
+                    };
                 },
                 createFilter: function(input) {
                     var match, regex;
@@ -163,14 +166,17 @@ form.onsubmit = function() {
                 delimiter: ',',
                 persist: false,
                 options: mails,
+                valueField: 'value',
+                labelField: 'text',
+                searchField: ['value', 'text'],
                 create: function(input) {
                     return {
                         value: input,
                         text: input
-                    }
+                    };
                 },
                 createFilter: function(input) {
-                    var match, regex;
+                    let match, regex;
 
                     // email@address.com
                     regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
@@ -190,4 +196,10 @@ form.onsubmit = function() {
             console.error(err);
         }
     });
-})();
+}
+
+window.onload = function () {
+    contacts_from();
+    contacts_to();
+    editor();
+};
