@@ -10,29 +10,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.tasks import send_mail, update_contact_list
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
+from utils.paginator import terminator
 
-
-def terminator(request, obj, item=25):
-    """
-    Hasta la vista, baby ....  reusable paginator
-    :param request:
-    :param obj: db object
-    :param item: optional number of item per page
-    :return:
-    """
-    paginator = Paginator(obj, item)
-    page = request.GET.get('page')
-    try:
-        bunny = paginator.page(page)
-    except PageNotAnInteger:
-        # If bunny is not an integer, deliver first page.
-        bunny = paginator.page(1)
-    except EmptyPage:
-        bunny = paginator.page(paginator.num_pages)
-    data = serializers.serialize('json', bunny.object_list)
-    hiren = {"obj": data, "totalSize": paginator.count, "sizePerPage": 25,
-             "pageStartIndex": bunny.start_index(), "page": bunny.number}  # fix page variable
-    return hiren
 
 
 # @login_required
@@ -242,8 +221,8 @@ def sent(request):
         mails = Mail.objects.filter(user=request.user, state='S').order_by('-updated_at')
         bunny = terminator(request, mails)
         print("hit")
-        print(bunny)
-        return HttpResponse(bunny, content_type='application/json')
+        print(len(bunny["obj"]))
+        return JsonResponse(bunny)
     return render(request, 'mail/sent.html')
 
 
