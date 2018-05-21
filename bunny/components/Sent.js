@@ -35,16 +35,45 @@ class Sent extends React.Component {
             bcc: [],
             subject: "",
             body: "",
-            attachment: ""
-        }
+            attachment: "",
+            loading: true,
+            loadingText: "Downloading..",
+            data: ""
+        };
     }
 
     componentDidMount() {
         $.ajax(window.location.pathname, {
-           success: function (data) {
-               console.log(data);
-               console.log(data["obj"].length);
-           },
+            success: function (data) {
+                //console.log(data);
+                //console.log(data["obj"].length);
+                let bunny = [];
+                Promise.all(data["obj"].map(async (hiren, index) => {
+                        let bugs = {};
+                        openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
+                        let data = {};
+                        let privKey = sessionStorage.getItem["private_key"];
+                        let pubKey = sessionStorage.getItem["public_key"];
+                        let privKeyObj = openpgp.key.readArmored(privKey).keys[0];
+                        //await privKeyObj.decrypt("");
+                        let subject_options = {
+                            message: openpgp.message.readArmored(hiren["subject"]),
+                            publicKeys: openpgp.key.readArmored(pubKey).keys,
+                            privateKeys: [privKeyObj]
+                        };
+                        openpgp.decrypt(subject_options).then(function(plaintext) {
+                            console.log(plaintext.data);
+                            return plaintext.data;
+                        });
+                    })
+                ).then(() => {
+                    this.setState({data: bunny});
+                    this.setState({loading: false});
+                }).catch((err) => {
+                    //swal("Oops...", "Secret key is not correct!", "error");
+                    console.error(err);
+                });
+            }.bind(this),
             error: function (err) {
                 console.error(err);
             }
