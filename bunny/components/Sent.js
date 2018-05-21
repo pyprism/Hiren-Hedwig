@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import swal from "sweetalert2";
 import "regenerator-runtime/runtime";
-import BootstrapTable from 'react-bootstrap-table-next';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 
 class Sent extends React.Component {
@@ -39,12 +40,11 @@ class Sent extends React.Component {
     }
 
     componentDidMount() {
-        $.ajax({
-            method: "GET",
-            url: window.location.pathname,
-            success: function (data) {
-                console.log(data);
-            },
+        $.ajax(window.location.pathname, {
+           success: function (data) {
+               console.log(data);
+               console.log(data["obj"].length);
+           },
             error: function (err) {
                 console.error(err);
             }
@@ -53,7 +53,12 @@ class Sent extends React.Component {
 
     render() {
         return(
-            <BootstrapTable keyField='id' data={ this.products } columns={ this.columns } />
+            <BootstrapTable
+                remote
+                keyField='id'
+                data={ this.products }
+                columns={ this.columns }
+            />
         )
     }
 
