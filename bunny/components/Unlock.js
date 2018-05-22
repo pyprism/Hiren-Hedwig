@@ -27,14 +27,20 @@ class Unlock extends React.Component {
         $.ajax(window.location.pathname, {
             contentType: "application/json",
             success: async function (data) {
-                let private_key;
+                let private_key, passphrase;
                 let options = {
                     message: openpgp.message.readArmored(data[0]["fields"]["private_key"]),
                     passwords: this.state.key,
                     format: "utf8"
                 };
+                let passphrase_options = {
+                    message: openpgp.message.readArmored(data[0]["fields"]["passphrase"]),
+                    passwords: this.state.key,
+                    format: "utf8"
+                };
                 try {
                     private_key = await openpgp.decrypt(options);
+                    passphrase = await openpgp.decrypt(passphrase_options);
                 } catch(e) {
                     swal("Oops...", "Key is not valid! Try again", "error");
                     this.setState({key:"", button: "Unlock"});
@@ -42,6 +48,7 @@ class Unlock extends React.Component {
                 }
 
                 sessionStorage.setItem("private_key", private_key["data"]);
+                sessionStorage.setItem("passphrase", passphrase["data"]);
                 sessionStorage.setItem("public_key", data[0]["fields"]["public_key"]);
                 this.setState({key:"", button: "Verified"});
                 window.location.href = "/mail/inbox/";
