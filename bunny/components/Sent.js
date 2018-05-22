@@ -52,19 +52,31 @@ class Sent extends React.Component {
                         let bugs = {};
                         openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
                         let data = {};
-                        let privKey = sessionStorage.getItem["private_key"];
-                        let pubKey = sessionStorage.getItem["public_key"];
+                        let privKey = sessionStorage.getItem("private_key");
+                        let pubKey = sessionStorage.getItem("public_key");
+                        let passphrase = sessionStorage.getItem("passphrase");
+                        //console.log(privKey);
+                        //console.log(pubKey);
                         let privKeyObj = openpgp.key.readArmored(privKey).keys[0];
-                        //await privKeyObj.decrypt("");
+                        await privKeyObj.decrypt(passphrase);
                         let subject_options = {
                             message: openpgp.message.readArmored(hiren["subject"]),
                             publicKeys: openpgp.key.readArmored(pubKey).keys,
                             privateKeys: [privKeyObj]
                         };
-                        openpgp.decrypt(subject_options).then(function(plaintext) {
-                            console.log(plaintext.data);
-                            return plaintext.data;
-                        });
+                        let body_options = {
+                            message: openpgp.message.readArmored(hiren["body"]),
+                            publicKeys: openpgp.key.readArmored(pubKey).keys,
+                            privateKeys: [privKeyObj]
+                        };
+                        // openpgp.decrypt(subject_options).then(function(plaintext) {
+                        //     console.log(plaintext.data);
+                        //     return plaintext.data;
+                        // });
+                        let subject = await openpgp.decrypt(subject_options);
+                        let body = await openpgp.decrypt(body_options);
+                        console.log(subject["data"]);
+                        console.log(DOMPurify.sanitize(body["data"]));
                     })
                 ).then(() => {
                     this.setState({data: bunny});
