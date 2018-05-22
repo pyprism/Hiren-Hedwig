@@ -43,6 +43,7 @@ class GenerateKey extends React.Component {
 
     handleSubmit(event){
         event.preventDefault();
+        let random;
         if((this.state.key).length <=0 || (this.state.repeat_key).length <= 0) {
             return;
         }
@@ -62,11 +63,12 @@ class GenerateKey extends React.Component {
             return cookieValue;
         };
         if(this.state.key === this.state.repeat_key){
+            random = this.randomString(50);
             openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
             let options = {
                 userIds: [{ name:"", email:"" }],
                 numBits: 2048,
-                passphrase: this.randomString(50)
+                passphrase: random
             };
 
             this.setState({"button": "Generating"});
@@ -79,8 +81,14 @@ class GenerateKey extends React.Component {
                     passwords: this.state.key,
                     armor: true,
                 };
+                let random_key_options = {
+                    data: random,
+                    passwords: this.state.key,
+                    armor: true,
+                };
 
                 let private_key = await openpgp.encrypt(privkey_options);
+                let random_key = await openpgp.encrypt(random_key_options);
                 $.ajax({
                     type: "POST",
                     beforeSend: function(request, settings) {
@@ -91,13 +99,15 @@ class GenerateKey extends React.Component {
                     url: window.location.pathname,
                     data: {
                         "public_key": pubkey,
-                        "private_key": private_key["data"]
+                        "private_key": private_key["data"],
+                        "passphrase": random_key["data"]
                     },
                     success: function (data) {
                         if(data === "success"){
                             this.setState({key: "", repeat_key: "", button: "Done"});
                             sessionStorage.setItem("private_key", privkey);
                             sessionStorage.setItem("public_key", pubkey);
+                            sessionStorage.setItem("passphrase", random);
                             swal("Success", "Key generated and saved.", "success").then(() => {
                                 window.location.replace("/mail/inbox/");
                             });
