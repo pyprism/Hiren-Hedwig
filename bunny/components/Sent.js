@@ -10,34 +10,22 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 class Sent extends React.Component {
     constructor(prop) {
         super(prop);
-        this.products = [
-            {"id": 1, "name": "Xxx", "price": "521$", "date": ""},
-            {"id": 2, "name": "444", "price": "421$", "date": "sss"},
-        ];
         this.columns = [{
-            dataField: 'id',
+            dataField: 'mail_from',
             text: 'From'
         }, {
-            dataField: 'name',
+            dataField: 'mail_to',
             text: 'To'
         }, {
-            dataField: 'price',
+            dataField: 'subject',
             text: 'Subject'
-        },
-            {
-                dataField: "date",
-                text: "Date"
-            }];
+        }, {
+            dataField: "date",
+            text: "Date"
+        }];
         this.state = {
-            from: "",
-            to: "",
-            cc: [],
-            bcc: [],
-            subject: "",
-            body: "",
-            attachment: "",
             loading: true,
-            loadingText: "Downloading..",
+            loadingText: "Downloading mails..",
             data: ""
         };
     }
@@ -46,7 +34,7 @@ class Sent extends React.Component {
         $.ajax(window.location.pathname, {
             success: function (data) {
                 //console.log(data);
-                //console.log(data["obj"].length);
+                this.setState({loadingText: "Decrypting mails.."});
                 let bunny = [];
                 Promise.all(data["obj"].map(async (hiren, index) => {
                         let bugs = {};
@@ -55,10 +43,9 @@ class Sent extends React.Component {
                         let privKey = sessionStorage.getItem("private_key");
                         let pubKey = sessionStorage.getItem("public_key");
                         let passphrase = sessionStorage.getItem("passphrase");
-                        //console.log(privKey);
-                        //console.log(pubKey);
                         let privKeyObj = openpgp.key.readArmored(privKey).keys[0];
                         await privKeyObj.decrypt(passphrase);
+
                         let subject_options = {
                             message: openpgp.message.readArmored(hiren["subject"]),
                             publicKeys: openpgp.key.readArmored(pubKey).keys,
@@ -69,14 +56,20 @@ class Sent extends React.Component {
                             publicKeys: openpgp.key.readArmored(pubKey).keys,
                             privateKeys: [privKeyObj]
                         };
-                        // openpgp.decrypt(subject_options).then(function(plaintext) {
-                        //     console.log(plaintext.data);
-                        //     return plaintext.data;
-                        // });
+
                         let subject = await openpgp.decrypt(subject_options);
                         let body = await openpgp.decrypt(body_options);
-                        console.log(subject["data"]);
-                        console.log(DOMPurify.sanitize(body["data"]));
+
+                        bugs["id"] = hiren["id"];
+                        bugs["mail_from"] = hiren["mail_from"];
+                        bugs["mail_to"] = hiren["mail_to"];
+                        bugs["bcc"] = hiren["bcc"];
+                        bugs["cc"] = hiren["cc"];
+                        bugs["subject"] = DOMPurify.sanitize(subject["data"]);
+                        bugs["body"] = DOMPurify.sanitize(body["data"]);
+                        bugs["attachment"] = hiren["emotional_attachment"];
+                        bugs["date"] = hiren["created_at"];
+                        bunny.push(bugs);
                     })
                 ).then(() => {
                     this.setState({data: bunny});
@@ -92,13 +85,28 @@ class Sent extends React.Component {
         });
     }
 
+    rowEvent() {
+        onClick: (e, row, rowIndex) => {
+            console.info(e, row, rowIndex);
+        }
+    }
+
     render() {
+        if (this.state.loading) {
+            return (
+                <div className="text-center">{this.state.loadingText}</div>
+            )
+        }
         return(
             <BootstrapTable
                 remote
+                striped
+                hover
+                condensed
                 keyField='id'
-                data={ this.products }
+                data={ this.state.data }
                 columns={ this.columns }
+                rowEvents={ this.rowEvents }
             />
         )
     }
