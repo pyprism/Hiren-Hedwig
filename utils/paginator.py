@@ -32,7 +32,7 @@ def terminator(request, obj, item=25):
         hiren['state'] = i.state
         hiren['emotional_attachment'] = i.emotional_attachment
         hiren['received_datetime'] = i.received_datetime
-        hiren['created_at'] = i.created_at.strftime("%d %m %Y, %I:%M:%S %p")
+        hiren['created_at'] = i.created_at.strftime("%d/%m/%Y, %I:%M:%S %p")
         bugs.append(hiren)
     hiren = {"obj": bugs, "totalSize": paginator.count, "sizePerPage": 25,
              "pageStartIndex": bunny.start_index(), "page": bunny.number}
