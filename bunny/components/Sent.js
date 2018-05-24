@@ -14,9 +14,6 @@ class Sent extends React.Component {
             dataField: 'mail_from',
             text: 'From'
         }, {
-            dataField: 'mail_to',
-            text: 'To'
-        }, {
             dataField: 'subject',
             text: 'Subject'
         }, {
@@ -26,7 +23,8 @@ class Sent extends React.Component {
         this.state = {
             loading: true,
             loadingText: "Downloading mails..",
-            data: ""
+            data: "",
+            details: false
         };
     }
 
@@ -85,32 +83,41 @@ class Sent extends React.Component {
         });
     }
 
-    rowEvent() {
-        onClick: (e, row, rowIndex) => {
-            console.info(e, row, rowIndex);
-        }
-    }
-
     render() {
         if (this.state.loading) {
             return (
                 <div className="text-center">{this.state.loadingText}</div>
             )
+        } else {
+            if (this.state.details) {
+                return (
+                    <div>details</div>
+                )
+            }
+            return (
+                <BootstrapTable
+                    remote
+                    striped
+                    hover
+                    condensed
+                    bordered={false}
+                    keyField='id'
+                    data={this.state.data}
+                    columns={this.columns}
+                    rowEvents={rowEvent}
+                    noDataIndication="Mailbox is empty"
+                />
+            )
         }
-        return(
-            <BootstrapTable
-                remote
-                striped
-                hover
-                condensed
-                keyField='id'
-                data={ this.state.data }
-                columns={ this.columns }
-                rowEvents={ this.rowEvents }
-            />
-        )
     }
 
+}
+
+const rowEvent =  {
+    onClick: (e, row, rowIndex) => {
+        console.info(e, row, rowIndex);
+        this.setState({details: true});
+    }
 }
 
 ReactDOM.render(<Sent />, document.getElementById("sent"));
