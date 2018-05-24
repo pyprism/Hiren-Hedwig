@@ -234,7 +234,7 @@ def draft(request):
     :return:
     """
     mails = Mail.objects.filter(user=request.user, state='D').order_by('-updated_at')
-    bunny = terminator(request, mails)
+    bunny = terminator(request, mails, ajax=True)
     return render(request, 'mail/mail_list.html', {'mails': bunny, 'title': 'Draft Mail'})
 
 
