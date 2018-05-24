@@ -201,9 +201,9 @@ def compose(request):
                     bunny.save()
             if request.POST.get('send'):
                 messages.success(request, 'Mail queued for sending.')
+                send_mail.delay()
             if request.POST.get('draft'):
                 messages.success(request, 'Mail saved as draft.')
-            send_mail.delay()
         else:
             messages.warning(request, compose.errors)
         redirect('compose')
