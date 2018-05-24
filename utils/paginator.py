@@ -2,12 +2,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 
 
-def terminator(request, obj, item=25):
+def terminator(request, obj, item=25, ajax=False):
     """
     Hasta la vista, baby ....  reusable paginator
     :param request:
     :param obj: db object
     :param item: optional number of item per page
+    :param ajax:
     :return:
     """
     paginator = Paginator(obj, item)
@@ -20,6 +21,8 @@ def terminator(request, obj, item=25):
     except EmptyPage:
         bunny = paginator.page(paginator.num_pages)
     bugs = []
+    if ajax:
+        return bunny
     for i in bunny.object_list:
         hiren = {}
         hiren['id'] = i.id
