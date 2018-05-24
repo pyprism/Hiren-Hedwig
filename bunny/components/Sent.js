@@ -5,6 +5,7 @@ import "regenerator-runtime/runtime";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import DetailsMail from "./DetailsMail";
 
 
 class Sent extends React.Component {
@@ -24,8 +25,20 @@ class Sent extends React.Component {
             loading: true,
             loadingText: "Downloading mails..",
             data: "",
-            details: false
+            details: false,
+            id: 0
         };
+        this.rowEvent = {
+            onClick: (e, row, rowIndex) => {
+                this.setState({details: true, id:rowIndex});
+            }
+        };
+        this.backButton = this.backButton.bind(this);
+    }
+
+    backButton(e) {
+        e.preventDefault();
+        this.setState({details: !this.state.details});
     }
 
     componentDidMount() {
@@ -86,38 +99,50 @@ class Sent extends React.Component {
     render() {
         if (this.state.loading) {
             return (
-                <div className="text-center">{this.state.loadingText}</div>
+                <div className="card">
+                    <div className="header">
+                        <h2>
+                            Sent Mail
+                        </h2>
+                    </div>
+                    <div className="body">
+                        <div className="text-center">{this.state.loadingText}</div>
+                    </div>
+                </div>
+
             )
         } else {
             if (this.state.details) {
                 return (
-                    <div>details</div>
+                    <DetailsMail data={this.state.data[this.state.id]} backButton={this.backButton}/>
                 )
             }
             return (
-                <BootstrapTable
-                    remote
-                    striped
-                    hover
-                    condensed
-                    bordered={false}
-                    keyField='id'
-                    data={this.state.data}
-                    columns={this.columns}
-                    rowEvents={rowEvent}
-                    noDataIndication="Mailbox is empty"
-                />
+                <div className="card">
+                    <div className="header">
+                        <h2>
+                            Sent Mail
+                        </h2>
+                    </div>
+                    <div className="body">
+                        <BootstrapTable
+                            remote
+                            striped
+                            hover
+                            condensed
+                            bordered={false}
+                            keyField='id'
+                            data={this.state.data}
+                            columns={this.columns}
+                            rowEvents={this.rowEvent}
+                            noDataIndication="Mailbox is empty"
+                        />
+                    </div>
+                </div>
             )
         }
     }
 
-}
-
-const rowEvent =  {
-    onClick: (e, row, rowIndex) => {
-        console.info(e, row, rowIndex);
-        this.setState({details: true});
-    }
 }
 
 ReactDOM.render(<Sent />, document.getElementById("sent"));
