@@ -70,7 +70,7 @@ class DetailsMail extends React.Component {
                                                                 <i className="material-icons">forward</i>
                                                             </button>
                                                         </a>
-                                                        <a href="#">
+                                                        <a href={this.props.data["id"] + "/delete/"}>
                                                             <button type="button"
                                                                     className="btn bg-red btn-circle waves-effect waves-circle waves-float waves-light"
                                                                     data-toggle="tooltip" data-placement="top"
