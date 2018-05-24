@@ -220,8 +220,6 @@ def sent(request):
     if request.is_ajax():
         mails = Mail.objects.filter(user=request.user, state='S').order_by('-updated_at')
         bunny = terminator(request, mails)
-        print("hit")
-        print(len(bunny["obj"]))
         return JsonResponse(bunny)
     return render(request, 'mail/sent.html')
 
@@ -357,13 +355,17 @@ def sent_delete(request, pk):
     :param pk:
     :return:
     """
-    if request.method == 'POST':
+    if request.method == 'POST':  # TODO cleanup this block
         if request.POST.get('delete'):
             bunny = get_object_or_404(Mail, pk=pk, user=request.user)
             bunny.state = 'T'
             bunny.save()
             messages.success(request, 'Mail Moved To Trash.')
         return redirect('sent')
+    bunny = get_object_or_404(Mail, pk=pk, user=request.user)
+    bunny.state = 'T'
+    bunny.save()
+    return redirect('sent')
 
 
 
