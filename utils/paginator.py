@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 
 
-def terminator(request, obj, item=25, ajax=False):
+def terminator(request, obj, item=15, ajax=False):
     """
     Hasta la vista, baby ....  reusable paginator
     :param request:
@@ -37,7 +37,7 @@ def terminator(request, obj, item=25, ajax=False):
         hiren['received_datetime'] = i.received_datetime
         hiren['created_at'] = i.created_at.strftime("%d/%m/%Y, %I:%M:%S %p")
         bugs.append(hiren)
-    hiren = {"obj": bugs, "totalSize": paginator.count, "sizePerPage": 25,
+    hiren = {"obj": bugs, "totalSize": paginator.count, "sizePerPage": item,
              "pageStartIndex": bunny.start_index(), "page": bunny.number}
     return hiren
 
