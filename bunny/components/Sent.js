@@ -26,14 +26,33 @@ class Sent extends React.Component {
             loadingText: "Downloading mails..",
             data: "",
             details: false,
-            id: 0
-        };
+            id: 0,
+            page: 1,
+            sizePerPage: 0,
+            totalSize: 0
+        }
+        console.log("size: ", this.state.page);
+        // this.pagination = paginationFactory({
+        //     page: this.state.page,
+        //     sizePerPage: this.state.sizePerPage,
+        //     totalSize: this.state.totalSize,
+        //     hideSizePerPage: true,
+        //     hidePageListOnlyOnePage: true,
+        // });
         this.rowEvent = {
             onClick: (e, row, rowIndex) => {
                 this.setState({details: true, id:rowIndex});
             }
         };
+        this.onTableChange = (type, { page, sizePerPage }) => {
+            console.log(type, page, sizePerPage);
+            this.setState({loading: true});
+            this.setState({loadingText: "Downloading mails.."});
+            this.setState({page: page});
+            this.loadData(page);
+        }
         this.backButton = this.backButton.bind(this);
+        this.paginationFactory = this.paginationFactory.bind(this);
     }
 
     backButton(e) {
@@ -41,15 +60,30 @@ class Sent extends React.Component {
         this.setState({details: !this.state.details});
     }
 
-    componentDidMount() {
-        $.ajax(window.location.pathname, {
+    paginationFactory() {
+        return paginationFactory({
+            page: this.state.page,
+            sizePerPage: this.state.sizePerPage,
+            totalSize: this.state.totalSize,
+            hideSizePerPage: true,
+            hidePageListOnlyOnePage: true,
+        });
+    }
+
+    loadData(page) {
+        let url = window.location.pathname + "?page=" + page;
+        console.log(url);
+        $.ajax(url, {
             success: function (data) {
-                //console.log(data);
+                console.log(data);
+                openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
                 this.setState({loadingText: "Decrypting mails.."});
+                //this.setState({page: data["page"]});
+                this.setState({sizePerPage: data["sizePerPage"]});
+                this.setState({totalSize: data["totalSize"]});
                 let bunny = [];
                 Promise.all(data["obj"].map(async (hiren, index) => {
                         let bugs = {};
-                        openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
                         let data = {};
                         let privKey = sessionStorage.getItem("private_key");
                         let pubKey = sessionStorage.getItem("public_key");
@@ -86,7 +120,7 @@ class Sent extends React.Component {
                     this.setState({data: bunny});
                     this.setState({loading: false});
                 }).catch((err) => {
-                    //swal("Oops...", "Secret key is not correct!", "error");
+                    swal("Oops...", "Something went wrong, check console", "error");
                     console.error(err);
                 });
             }.bind(this),
@@ -94,6 +128,10 @@ class Sent extends React.Component {
                 console.error(err);
             }
         });
+    }
+
+    componentDidMount() {
+        this.loadData(this.state.page);
     }
 
     render() {
@@ -131,11 +169,13 @@ class Sent extends React.Component {
                             hover
                             condensed
                             bordered={false}
+                            pagination={ this.paginationFactory }
                             keyField='id'
                             data={this.state.data}
                             columns={this.columns}
                             rowEvents={this.rowEvent}
                             noDataIndication="Mailbox is empty"
+                            onTableChange={ this.onTableChange }
                         />
                     </div>
                 </div>
