@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 
 
-def terminator(request, obj, item=22, ajax=False):
+def terminator(request, obj, item=18, ajax=False):
     """
     Hasta la vista, baby ....  reusable paginator
     :param request:
