@@ -11,16 +11,16 @@
                                 Contacts
                             </h2>
                         </div>
+                        {% if messages %}
+                            {%for message in messages %}
+                                <div class="alert alert-{{ message.tags }}" role="alert">
+                                    <ul class="messages">
+                                        <li>{{ message }}</li>
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         <div class="body">
-                            {% if messages %}
-                                {%for message in messages %}
-                                    <div class="alert alert-{{ message.tags }}" role="alert">
-                                        <ul class="messages">
-                                            <li>{{ message }}</li>
-                                        </ul>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
                             {% if bunny %}
                                 <div class="body table-responsive">
                                     <table class="table table-bordered table-hover table-striped table-condensed">
@@ -56,7 +56,9 @@
                                     </ul>
                                 </div>
                             {% else %}
-                                <b>When you look at the dark side, careful you must be ... for the dark side looks back. - YODA</b>
+                                <div class="text-center">
+                                    <b>When you look at the dark side, careful you must be ... for the dark side looks back. - YODA</b>
+                                </div>
                                 <br/>
                             {% endif %}
                             <div class="row">
