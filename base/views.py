@@ -203,7 +203,7 @@ def create_user(request):
             except IntegrityError:
                 messages.error(request, "username is not available!")
                 return redirect('create_user')
-            messages.success(request, 'Account created successfully!')
+            messages.success(request, 'New account has been created')
             return redirect('create_user')
         return render(request, 'base/create_user.html')
 
@@ -260,7 +260,7 @@ def contact_add(request):
             contact_obj.user = request.user
             contact_obj.m_type = "T"
             contact_obj.save()
-            messages.success(request, "Contact saved")
+            messages.success(request, "Contact has been saved")
             return redirect('contact')
         else:
             messages.warning(request, contact.errors)
