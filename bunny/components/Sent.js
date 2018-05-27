@@ -41,7 +41,15 @@ class Sent extends React.Component {
             this.setState({loadingText: "Downloading mails.."});
             this.setState({page: page});
             this.loadData(page);
+        };
+        this.selectRow = {
+            mode: 'checkbox',
+            clickToSelect: false,
+            // onSelect: (row, isSelect, rowIndex, e) => {
+            //     console.log(isSelect, rowIndex, e);
+            // }
         }
+
         this.backButton = this.backButton.bind(this);
     }
 
@@ -145,7 +153,7 @@ class Sent extends React.Component {
                             striped
                             hover
                             condensed
-                            bordered={false}
+                            //bordered={false}
                             pagination={ paginationFactory({
                                 page: this.state.page,
                                 sizePerPage: this.state.sizePerPage,
@@ -156,6 +164,7 @@ class Sent extends React.Component {
                             keyField='id'
                             data={this.state.data}
                             columns={this.columns}
+                            selectRow={ this.selectRow }
                             rowEvents={this.rowEvent}
                             noDataIndication="Mailbox is empty"
                             onTableChange={ this.onTableChange }
