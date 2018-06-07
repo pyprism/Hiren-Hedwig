@@ -38,7 +38,7 @@ def terminator(request, obj, item=18, ajax=False):
         hiren['created_at'] = i.created_at.strftime("%d/%m/%Y, %I:%M:%S %p")
         bugs.append(hiren)
     hiren = {"obj": bugs, "totalSize": paginator.count, "sizePerPage": item,
-             "pageStartIndex": bunny.start_index(), "page": bunny.number}
+             "pageStartIndex": bunny.start_index(), "page": bunny.number, "totalPage": paginator.num_pages}
     return hiren
 
 
