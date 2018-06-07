@@ -6,20 +6,23 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import DetailsMail from "./DetailsMail";
+import ReactTable from "react-table";
+
+import "react-table/react-table.css";
 
 
 class Sent extends React.Component {
     constructor(prop) {
         super(prop);
         this.columns = [{
-            dataField: 'mail_from',
-            text: 'From'
+            Header: 'From',
+            accessor: 'mail_from'
         }, {
-            dataField: 'subject',
-            text: 'Subject'
+            accessor: 'subject',
+            Header: 'Subject'
         }, {
-            dataField: "date",
-            text: "Date"
+            accessor: "date",
+            Header: "Date"
         }];
         this.state = {
             loading: true,
@@ -29,7 +32,8 @@ class Sent extends React.Component {
             id: 0,
             page: 1,
             sizePerPage: 0,
-            totalSize: 0
+            totalSize: 0,
+            totalPage: 0
         }
         this.rowEvent = {
             onClick: (e, row, rowIndex) => {
@@ -66,6 +70,7 @@ class Sent extends React.Component {
                 this.setState({loadingText: "Decrypting mails.."});
                 this.setState({sizePerPage: data["sizePerPage"]});
                 this.setState({totalSize: data["totalSize"]});
+                this.setState({totalPage: data["totalPage"]});
                 let bunny = [];
                 Promise.all(data["obj"].map(async (hiren, index) => {
                         let bugs = {};
@@ -148,26 +153,22 @@ class Sent extends React.Component {
                         </h2>
                     </div>
                     <div className="body">
-                        <BootstrapTable
-                            remote
-                            striped
-                            hover
-                            condensed
-                            //bordered={false}
-                            pagination={ paginationFactory({
-                                page: this.state.page,
-                                sizePerPage: this.state.sizePerPage,
-                                totalSize: this.state.totalSize,
-                                hideSizePerPage: true,
-                                hidePageListOnlyOnePage: true,
-                            }) }
-                            keyField='id'
+                        <ReactTable
                             data={this.state.data}
                             columns={this.columns}
-                            selectRow={ this.selectRow }
-                            rowEvents={this.rowEvent}
-                            noDataIndication="Mailbox is empty"
-                            onTableChange={ this.onTableChange }
+                            showPageSizeOptions={false}
+                            defaultPageSize={18}
+                            showPageJump={false}
+                            sortable={true}
+                            multiSort={true}
+                            resizable={true}
+                            filterable={false}
+                            pages={this.state.totalPage}
+                            onFetchData={(state, instance) => {
+                                console.log(state);
+                                console.log(instance);
+                            }}
+                            manual
                         />
                     </div>
                 </div>
