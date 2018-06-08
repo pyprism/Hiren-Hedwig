@@ -32,8 +32,9 @@ class Sent extends React.Component {
             id: 0,
             page: 1,
             sizePerPage: 0,
-            totalSize: 0,
-            totalPage: 0
+            totalPage: 0,
+            selection: [],
+            selectAll: false
         }
         this.rowEvent = {
             onClick: (e, row, rowIndex) => {
@@ -63,7 +64,6 @@ class Sent extends React.Component {
                 openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
                 this.setState({loadingText: "Decrypting mails.."});
                 this.setState({sizePerPage: data["sizePerPage"]});
-                this.setState({totalSize: data["totalSize"]});
                 this.setState({totalPage: data["totalPage"]});
                 let bunny = [];
                 Promise.all(data["obj"].map(async (hiren, index) => {
@@ -139,7 +139,7 @@ class Sent extends React.Component {
                         loading={this.state.loading}
                         loadingText={this.state.loadingText}
                         showPageSizeOptions={false}
-                        defaultPageSize={18}
+                        defaultPageSize={this.state.sizePerPage}
                         showPageJump={false}
                         sortable={false}
                         multiSort={false}
@@ -148,6 +148,7 @@ class Sent extends React.Component {
                         pages={this.state.totalPage}
                         onFetchData={this.fetchData}
                         minRows={0}
+                        className={"-highlight -striped"}
                     />
                 </div>
             </div>
