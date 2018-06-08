@@ -27,7 +27,7 @@ class Sent extends React.Component {
         this.state = {
             loading: true,
             loadingText: "Downloading mails..",
-            data: "",
+            data: [],
             details: false,
             id: 0,
             page: 1,
@@ -40,21 +40,15 @@ class Sent extends React.Component {
                 this.setState({details: true, id:rowIndex});
             }
         };
-        this.onTableChange = (type, { page, sizePerPage }) => {
-            this.setState({loading: true});
-            this.setState({loadingText: "Downloading mails.."});
-            this.setState({page: page});
-            this.loadData(page);
-        };
-        this.selectRow = {
-            mode: 'checkbox',
-            clickToSelect: false,
-            // onSelect: (row, isSelect, rowIndex, e) => {
-            //     console.log(isSelect, rowIndex, e);
-            // }
-        }
 
         this.backButton = this.backButton.bind(this);
+        this.fetchData = this.fetchData.bind(this);
+    }
+
+    fetchData(state, instance) {
+        this.setState({loading: true});
+        this.setState({loadingText: "Downloading mails.."});
+        this.loadData(state.page + 1);
     }
 
     backButton(e) {
@@ -125,55 +119,39 @@ class Sent extends React.Component {
     }
 
     render() {
-        if (this.state.loading) {
+        if (this.state.details) {
             return (
-                <div className="card">
-                    <div className="header">
-                        <h2>
-                            Sent Mail
-                        </h2>
-                    </div>
-                    <div className="body">
-                        <div className="text-center">{this.state.loadingText}</div>
-                    </div>
-                </div>
-
-            )
-        } else {
-            if (this.state.details) {
-                return (
-                    <DetailsMail data={this.state.data[this.state.id]} backButton={this.backButton}/>
-                )
-            }
-            return (
-                <div className="card">
-                    <div className="header">
-                        <h2>
-                            Sent Mail
-                        </h2>
-                    </div>
-                    <div className="body">
-                        <ReactTable
-                            data={this.state.data}
-                            columns={this.columns}
-                            showPageSizeOptions={false}
-                            defaultPageSize={18}
-                            showPageJump={false}
-                            sortable={true}
-                            multiSort={true}
-                            resizable={true}
-                            filterable={false}
-                            pages={this.state.totalPage}
-                            onFetchData={(state, instance) => {
-                                console.log(state);
-                                console.log(instance);
-                            }}
-                            manual
-                        />
-                    </div>
-                </div>
+                <DetailsMail data={this.state.data[this.state.id]} backButton={this.backButton}/>
             )
         }
+        return (
+            <div className="card">
+                <div className="header">
+                    <h2>
+                        Sent Mail
+                    </h2>
+                </div>
+                <div className="body">
+                    <ReactTable
+                        manual
+                        data={this.state.data}
+                        columns={this.columns}
+                        loading={this.state.loading}
+                        loadingText={this.state.loadingText}
+                        showPageSizeOptions={false}
+                        defaultPageSize={18}
+                        showPageJump={false}
+                        sortable={false}
+                        multiSort={false}
+                        resizable={true}
+                        filterable={false}
+                        pages={this.state.totalPage}
+                        onFetchData={this.fetchData}
+                        minRows={0}
+                    />
+                </div>
+            </div>
+        )
     }
 
 }
