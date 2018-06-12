@@ -61,7 +61,6 @@ class Sent extends React.Component {
         let url = window.location.pathname + "?page=" + page;
         $.ajax(url, {
             success: function (data) {
-                openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
                 this.setState({loadingText: "Decrypting mails.."});
                 this.setState({sizePerPage: data["sizePerPage"]});
                 this.setState({totalPage: data["totalPage"]});
@@ -87,7 +86,7 @@ class Sent extends React.Component {
                         };
 
                         let subject = await openpgp.decrypt(subject_options);
-                        let body = await openpgp.decrypt(body_options);
+                        //let body = await openpgp.decrypt(body_options);
 
                         bugs["id"] = hiren["id"];
                         bugs["mail_from"] = hiren["mail_from"];
@@ -95,7 +94,7 @@ class Sent extends React.Component {
                         bugs["bcc"] = hiren["bcc"];
                         bugs["cc"] = hiren["cc"];
                         bugs["subject"] = DOMPurify.sanitize(subject["data"]);
-                        bugs["body"] = DOMPurify.sanitize(body["data"]);
+                        //bugs["body"] = DOMPurify.sanitize(body["data"]);
                         bugs["attachment"] = hiren["emotional_attachment"];
                         bugs["date"] = hiren["created_at"];
                         bunny.push(bugs);
@@ -115,6 +114,7 @@ class Sent extends React.Component {
     }
 
     componentDidMount() {
+        openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
         this.loadData(this.state.page);
     }
 
