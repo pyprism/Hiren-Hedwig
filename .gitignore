@@ -72,3 +72,7 @@ logs/*.log*
 static/js/bundles/*.js
 static/js/bundles/*.js.map
 keys/*
+static/debug_toolbar/*
+static/silk/*
+static/tz_detect/*
+static/collect/*
