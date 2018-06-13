@@ -16,7 +16,7 @@ django-tz-detect==0.2.9
 freezegun==0.3.10
 funcy==1.10.2
 gnupg==2.3.1
-gprof2dot==2016.10.13
+gprof2dot==2017.9.19
 html5lib==1.0.1
 idna==2.7
 Jinja2==2.10
