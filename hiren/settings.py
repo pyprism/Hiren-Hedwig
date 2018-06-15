@@ -59,11 +59,6 @@ if DEBUG is False:
         'cacheops',
     ]
 
-if DEBUG:
-    INSTALLED_APPS += [
-        'silk'
-    ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,8 +69,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'tz_detect.middleware.TimezoneMiddleware',
-    'silk.middleware.SilkyMiddleware',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'silk'
+    ]
+
+    MIDDLEWARE += [
+        'silk.middleware.SilkyMiddleware',
+    ]
+
 
 ROOT_URLCONF = 'hiren.urls'
 
