@@ -71,16 +71,6 @@ MIDDLEWARE = [
     'tz_detect.middleware.TimezoneMiddleware',
 ]
 
-if DEBUG:
-    INSTALLED_APPS += [
-        'silk'
-    ]
-
-    MIDDLEWARE += [
-        'silk.middleware.SilkyMiddleware',
-    ]
-
-
 ROOT_URLCONF = 'hiren.urls'
 
 TEMPLATES = [
