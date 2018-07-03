@@ -24,6 +24,7 @@ class Contact(models.Model):
 class Mail(models.Model):
     domain = models.ForeignKey(MailGun, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    encryption = models.BooleanField(default=True)
     mail_from = models.CharField(max_length=500)
     mail_to = models.CharField(max_length=2000)
     cc = models.CharField(max_length=2000, blank=True, null=True)
@@ -70,6 +71,7 @@ class Attachment(models.Model):
     mail = models.ForeignKey(Mail, on_delete=models.CASCADE, null=True)
     file_name = models.CharField(max_length=100)
     file_obj = models.FileField(upload_to=upload_to)
+    encryption = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
