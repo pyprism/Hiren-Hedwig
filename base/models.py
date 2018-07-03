@@ -36,6 +36,7 @@ class MailGun(models.Model):
     user = models.ForeignKey('Account', on_delete=models.CASCADE)
     name = models.CharField(max_length=253)
     key = models.CharField(max_length=500)
+    encryption = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
