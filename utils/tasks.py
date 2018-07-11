@@ -105,3 +105,103 @@ def update_contact_list(user_id, to, from_, cc, bcc):
     if len(bcc) != 0:
         for i in bcc.split(','):
             Contact.objects.get_or_create(user=user, email=i, m_type='T')
+
+
+def items_process(items, mail, encryption):
+    """
+    Process and save incoming mail
+    :param items: API response
+    :param mail: db object
+    :return:
+    """
+    for item in items:
+        message_id = item['message']['headers']['message-id']
+        if not Mail.objects.filter(user=mail.user, message_id=message_id).exists():  # TODO regex domain name
+            hiren = requests.get(item['storage']['url'], auth=('api', mail.key))
+            if hiren.status_code == 200:
+                bunny = hiren.json()
+                to = bunny['To']
+                if str(to).startswith('<'):
+                    cleaned_to = to[1:-1]  # strip <>
+                else:
+                    cleaned_to = str(to)  # example Someone <exam@xoxo.xyz>
+                mail_obj = Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
+                                               mail_to=cleaned_to, subject=bunny['subject'],
+                                               message_id=message_id,
+                                               body=bunny['body-html'], state='R',
+                                               received_datetime=to_datetime(bunny['Date']))
+                if bunny['attachments']:  # handle attachment
+                    for meow in bunny['attachments']:
+                        request = requests.get(meow['url'], stream=True)
+                        if request.status_code == requests.codes.ok:
+                            tmp = tempfile.NamedTemporaryFile()
+                            for block in request.iter_content(1024 * 8):
+                                if not block:
+                                    break
+                                tmp.write(block)
+                            Attachment.objects.create(user=mail.user, mail=mail_obj, file_name=meow['name'],
+                                                      file_obj=tmp)    # file.Files(tmp)
+                            tmp.close()
+                    mail_obj.emotional_attachment = True
+                    if encryption:
+                        mail_obj.encryption = True
+                    else:
+                        mail_obj.encryption = False
+                    mail_obj.save()
+                    if encryption:
+                        encryption(mail_obj.pk)
+
+                try:  # mail thread.
+                    if bunny['In-Reply-To']:  # replied mail
+                        reply_id = bunny['In-Reply-To']
+                        reply_message_id = reply_id[1:-1]  # stripping <>
+                        try:
+                            thread = Thread.objects.get(user=mail.user, mails__message_id=reply_message_id)
+                            thread.mails.add(mail_obj)
+                            thread.read = False
+                            thread.save()
+                        except ObjectDoesNotExist:  # check if their is a sent mail reply
+                            try:
+                                sent_mail = Mail.objects.get(user=mail.user, message_id=reply_message_id)
+                                new_thread = Thread.objects.create(user=mail.user)
+                                new_thread.mails.add(sent_mail, mail_obj)
+                            except ObjectDoesNotExist:
+                                uhlala = Thread.objects.create(user=mail.user)
+                                uhlala.mails.add(mail_obj)
+                    else:  # else create brand new thread
+                        uhlala = Thread.objects.create(user=mail.user)
+                        uhlala.mails.add(mail_obj)
+                except KeyError:
+                    uhlala = Thread.objects.create(user=mail.user)
+                    uhlala.mails.add(mail_obj)
+            else:
+                logger.error('item processor failed', exc_info=True, extra={
+                    'request': hiren.text,
+                })
+
+
+def incoming_mail():
+    with transaction.atomic():
+        mails = MailGun.objects.all().select_related()
+        for mail in mails:
+            bunny = requests.get('https://api.mailgun.net/v3/%s/events' % mail.name,
+                                 auth=("api", mail.key), params={"event": "stored"})
+            if bunny.status_code == 200:
+                bugs = bunny.json()
+                if bugs['items']:
+                    items_process(bugs['items'], mail, mail.encryption)
+                    while True:  # pagination
+                        nisha = requests.get(bugs['paging']['next'], auth=('api', mail.key))
+                        if nisha.status_code == 200:
+                            hiren = nisha.json()
+                            if hiren['items']:
+                                items_process(hiren['items'], mail, mail.encryption)
+                            else:
+                                break
+            else:
+                logger.error('get mail failed!', exc_info=True, extra={
+                    'request': bunny.text,
+                })
+
+
+
