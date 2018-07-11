@@ -76,3 +76,4 @@ static/debug_toolbar/*
 static/silk/*
 static/tz_detect/*
 static/collect/*
+celerybeat-schedule
