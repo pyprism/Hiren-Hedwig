@@ -7,6 +7,7 @@ module.exports = {
         "Check": "./bunny/utils/Check.js",
         "Sent": "./bunny/components/Sent.js",
         "DetailsMail": "./bunny/components/DetailsMail.js",
+        "Inbox": "./bunny/components/Inbox.js"
     },
     output: {
         path: path.resolve(__dirname, "static"),
