@@ -2,6 +2,7 @@ import requests
 import django
 import os
 import gnupg
+import gnupg._parsers
 import logging
 from datetime import datetime, timedelta
 from email.utils import parsedate_tz
@@ -33,6 +34,7 @@ def encrypt_mail(pk):
     :param pk:
     :return:
     """
+    gnupg._parsers.Verify.TRUST_LEVELS["ENCRYPTION_COMPLIANCE_MODE"] = 23   # fix for https://github.com/isislovecruft/python-gnupg/issues/207
     mail = Mail.objects.select_related('user').get(pk=pk)
     gpg = gnupg.GPG(binary='/usr/bin/gpg', homedir='./keys')
     key = Pgpkey.objects.get(user=mail.user)
