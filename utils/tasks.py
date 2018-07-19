@@ -15,8 +15,9 @@ from mail.models import Mail, Attachment, Thread, Contact
 from django.core import files
 from django.core.exceptions import ObjectDoesNotExist
 from celery import shared_task
-from .bunny import encrypt_mail
+from .bunny import encrypt_mail, to_datetime
 from django.db import transaction
+from celery import task
 
 
 @shared_task
@@ -112,6 +113,7 @@ def items_process(items, mail, encryption):
     Process and save incoming mail
     :param items: API response
     :param mail: db object
+    :param encryption: mail's encryption state
     :return:
     """
     for item in items:
@@ -128,7 +130,7 @@ def items_process(items, mail, encryption):
                 mail_obj = Mail.objects.create(domain=mail, user=mail.user, mail_from=bunny['From'],
                                                mail_to=cleaned_to, subject=bunny['subject'],
                                                message_id=message_id,
-                                               body=bunny['body-html'], state='R',
+                                               body=bunny['body-html'], state='R', encryption=encryption,
                                                received_datetime=to_datetime(bunny['Date']))
                 if bunny['attachments']:  # handle attachment
                     for meow in bunny['attachments']:
@@ -143,13 +145,9 @@ def items_process(items, mail, encryption):
                                                       file_obj=tmp)    # file.Files(tmp)
                             tmp.close()
                     mail_obj.emotional_attachment = True
-                    if encryption:
-                        mail_obj.encryption = True
-                    else:
-                        mail_obj.encryption = False
                     mail_obj.save()
-                    if encryption:
-                        encryption(mail_obj.pk)
+                if encryption:  # encrypt saved mail body
+                    encrypt_mail(mail_obj.pk)
 
                 try:  # mail thread.
                     if bunny['In-Reply-To']:  # replied mail
@@ -180,7 +178,12 @@ def items_process(items, mail, encryption):
                 })
 
 
+@task()
 def incoming_mail():
+    """
+    Check incoming mail
+    :return:
+    """
     with transaction.atomic():
         mails = MailGun.objects.all().select_related()
         for mail in mails:
