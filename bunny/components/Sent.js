@@ -86,7 +86,7 @@ class Sent extends React.Component {
                         };
 
                         let subject = await openpgp.decrypt(subject_options);
-                        //let body = await openpgp.decrypt(body_options);
+                        let body = await openpgp.decrypt(body_options);
 
                         bugs["id"] = hiren["id"];
                         bugs["mail_from"] = hiren["mail_from"];
@@ -94,7 +94,7 @@ class Sent extends React.Component {
                         bugs["bcc"] = hiren["bcc"];
                         bugs["cc"] = hiren["cc"];
                         bugs["subject"] = DOMPurify.sanitize(subject["data"]);
-                        //bugs["body"] = DOMPurify.sanitize(body["data"]);
+                        bugs["body"] = DOMPurify.sanitize(body["data"]);
                         bugs["attachment"] = hiren["emotional_attachment"];
                         bugs["date"] = hiren["created_at"];
                         bunny.push(bugs);
