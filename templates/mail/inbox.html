@@ -1,77 +1,15 @@
 {% extends "base.html" %}
 {% block title %} Inbox {% endblock %}
 {% block content %}
+    table {
+    table-layout: fixed;
+    word-wrap: break-word;
+    }
     <section class="content">
         <div class="container-fluid">
             <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                                Inbox
-                            </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="?new=True">Check New Mail</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        {% if messages %}
-                            {%for message in messages %}
-                                <div class="alert alert-{{ message.tags }}" role="alert">
-                                    <ul class="messages">
-                                        <li>{{ message }}</li>
-                                    </ul>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-{#                        {% if mails %}#}
-{#                            <div class="body table-responsive">#}
-{#                                <table class="table table-bordered table-hover table-striped table-condensed">#}
-{#                                    <thead>#}
-{#                                    <tr>#}
-{#                                        <th>From</th>#}
-{#                                        <th>Subject</th>#}
-{#                                        <th>Date</th>#}
-{#                                    </tr>#}
-{#                                    </thead>#}
-{#                                    <tbody>#}
-{#                                    {% for i in mails %}#}
-{#                                        <tr {% if i.read %} class="active" {% else %} class="bg-amber" {% endif %}>#}
-{#                                            <th><a href="{% url 'thread' pk=i.pk %}">{{ i.mails.first.mail_from }}</a></th>#}
-{#                                            <th><a href="{% url 'thread' pk=i.pk %}">{{ i.mails.first.subject }}</a></th>#}
-{#                                            <th>{{ i.updated_at }}</th>#}
-{#                                        </tr>#}
-{#                                    {% endfor %}#}
-{#                                    </tbody>#}
-{#                                </table>#}
-{#                                <ul class="pagination">#}
-{#                                    {% if mails.has_previous %}#}
-{#                                        <li><a href="?page={{ mails.previous_page_number }}">previous</a></li>#}
-{#                                    {% endif %}#}
-{##}
-{#                                    <span class="current">#}
-{##}
-{#                                </span>#}
-{##}
-{#                                    {% if mails.has_next %}#}
-{#                                        <li><a href="?page={{ mails.next_page_number }}">next</a></li>#}
-{#                                    {% endif %}#}
-{#                                    <br>#}
-{#                                    Page {{ mails.number }} of {{ mails.paginator.num_pages }}.#}
-{#                                </ul>#}
-{#                            </div>#}
-{#                        {% else %}#}
-{#                            <div class="body">#}
-{#                                <b>When you look at the dark side, careful you must be ... for the dark side looks back. - YODA</b></div>#}
-{#                        {% endif %}#}
-                    <div id="inbox"></div>
-                    </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="inbox">
+
                 </div>
             </div>
         </div>
