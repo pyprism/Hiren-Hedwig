@@ -39,6 +39,42 @@ class Inbox extends React.Component {
         this.backButton = this.backButton.bind(this);
         this.fetchData = this.fetchData.bind(this);
     }
+
+    loadData(page) {
+        let url = window.location.pathname + "?page=" + page;
+        $.ajax(url, {
+            success: function (data) {
+                console.log(data);
+            }.bind(this),
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    componentDidMount() {
+        openpgp.initWorker({ path:"/static/js/openpgp.worker.min.js" });
+        this.loadData(this.state.page);
+    }
+
+    render() {
+        if (this.state.details) {
+            return (
+                <div>details todo</div>
+            )
+        }
+        return (
+            <div className="card">
+                <div className="header">
+                    <h2>
+                        Sent Mail
+                    </h2>
+                </div>
+                <div className="body">
+                </div>
+            </div>
+        )
+    }
 }
 
 ReactDOM.render(<Inbox />, document.getElementById("inbox"));
