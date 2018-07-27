@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.tasks import send_mail, update_contact_list
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from utils.paginator import terminator
+from utils.paginator import terminator, terminator_inbox
 
 
 
@@ -31,14 +31,19 @@ from utils.paginator import terminator
 @login_required
 def inbox(request):
     if request.is_ajax():
-        total = 10
-        offset = request.GET.get('get', 0)
-        end = offset + total
-        threads = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')[offset:end]
-        print(threads)
-        # data = json.dumps(threads)
-        data = serializers.serialize('json', threads)
-        return HttpResponse(data, content_type='application/json')
+        # total = 10
+        # offset = request.GET.get('get', 0)
+        # end = offset + total
+        # threads = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')[offset:end]
+        threads = Thread.objects.filter(user=request.user).prefetch_related('mails').order_by('read', '-updated_at')
+        # for i in threads:
+        #     x = i.mails.values()
+        #     print(x.id)
+        # # data = json.dumps(threads)
+        # data = serializers.serialize('json', threads)
+        # return HttpResponse(data, content_type='application/json')
+        bunny = terminator_inbox(request, threads)
+        return JsonResponse(bunny)
     return render(request, 'mail/inbox.html', {'title': 'Inbox'})
 
 
