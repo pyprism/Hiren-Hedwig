@@ -36,15 +36,15 @@ class Inbox extends React.Component {
             }
         };
 
-        this.backButton = this.backButton.bind(this);
-        this.fetchData = this.fetchData.bind(this);
+       // this.backButton = this.backButton.bind(this);
+        //this.fetchData = this.fetchData.bind(this);
     }
 
     loadData(page) {
         let url = window.location.pathname + "?page=" + page;
         $.ajax(url, {
             success: function (data) {
-                console.log(data);
+                console.table(data);
             }.bind(this),
             error: function (error) {
                 console.error(error);
@@ -71,6 +71,7 @@ class Inbox extends React.Component {
                     </h2>
                 </div>
                 <div className="body">
+                    sas
                 </div>
             </div>
         )
