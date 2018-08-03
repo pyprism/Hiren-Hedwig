@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.tasks import gen_fingerprint
+from django.contrib.auth import logout as fuckoff
 
 
 def login(request):
@@ -321,6 +322,16 @@ def contact_ajax(request, to=None):
         return HttpResponse(data, content_type='application/json')
     else:
         return redirect("compose")
+
+
+def logout(request):
+    """
+    fuck off and logout
+    :param request:
+    :return:
+    """
+    fuckoff(request)
+    return redirect("login")
 
 
 def cron_send_mail(request):
