@@ -1,5 +1,4 @@
 from django.urls import path, re_path, include
-from django.contrib.auth.views import logout
 from base import views
 
 urlpatterns = [
@@ -23,5 +22,5 @@ urlpatterns = [
     path('cron/send/', views.cron_send_mail),
     path('cron/receive/', views.cron_check_mail),
     path('cron/trash/', views.cron_delete_trash),
-    path('logout/', logout, {'next_page': '/'}, name='logout'),
+    path('logout/', views.logout, name='logout'),
 ]
