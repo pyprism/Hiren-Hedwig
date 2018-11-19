@@ -12,7 +12,7 @@ django-debug-toolbar==1.10.1
 django-redis-sessions==0.6.1
 django-sortedm2m==1.5.0
 django-tz-detect==0.2.9
-freezegun==0.3.10
+freezegun==0.3.11
 funcy==1.10.3
 gnupg==2.3.1
 gprof2dot==2016.10.13
