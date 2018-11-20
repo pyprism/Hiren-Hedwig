@@ -34,7 +34,7 @@ requests==2.20.1
 rjsmin==1.0.12
 six==1.11.0
 sqlparse==0.2.4
-urllib3==1.24
+urllib3==1.24.1
 uWSGI==2.0.17.1
 vine==1.1.4
 webencodings==0.5.1
