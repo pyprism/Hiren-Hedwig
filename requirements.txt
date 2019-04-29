@@ -21,7 +21,7 @@ idna==2.8
 Jinja2==2.10.1
 kombu==4.3.0
 MarkupSafe==1.1.1
-psutil==5.6.1
+psutil==5.6.2
 psycopg2==2.8.2
 pycodestyle==2.5.0
 Pygments==2.3.1
