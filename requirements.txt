@@ -11,4 +11,4 @@ djangorestframework-stubs==1.0.0
 psycopg2-binary==2.8.4
 uWSGI==2.0.18
 requests==2.22.0
-redis==3.2.1
+redis==3.3.11
