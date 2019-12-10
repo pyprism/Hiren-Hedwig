@@ -77,3 +77,4 @@ static/silk/*
 static/tz_detect/*
 static/collect/*
 celerybeat-schedule
+.vscode/
