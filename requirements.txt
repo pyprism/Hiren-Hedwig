@@ -11,6 +11,6 @@ djangorestframework-stubs==1.1.0
 psycopg2-binary==2.8.4
 uWSGI==2.0.18
 requests==2.22.0
-redis==3.3.11
+redis==3.5.0
 sentry-sdk==0.13.5
 django-debug-toolbar==2.1
