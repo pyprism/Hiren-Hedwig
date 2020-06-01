@@ -1,5 +1,5 @@
 Django==3.0.2
-celery==4.4.0
+celery==4.4.3
 django-sortedm2m==3.0.0
 freezegun==0.3.12
 django-cors-headers==3.2.0
