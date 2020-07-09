@@ -5,7 +5,7 @@ freezegun==0.3.12
 django-cors-headers==3.4.0
 django-silk==3.0.4
 django-stubs==1.4.0
-django-webpack-loader==0.6.0
+django-webpack-loader==0.7.0
 djangorestframework==3.11.0
 djangorestframework-stubs==1.1.0
 psycopg2-binary==2.8.4
