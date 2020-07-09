@@ -1,4 +1,4 @@
-Django==3.0.2
+Django==3.0.7
 celery==4.4.6
 django-sortedm2m==3.0.0
 freezegun==0.3.15
