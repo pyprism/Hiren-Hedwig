@@ -1,0 +1,41 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "07:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: amqp
+    versions:
+    - "> 2.4.0, < 2.5"
+  - dependency-name: gprof2dot
+    versions:
+    - "< 2017.10, >= 2017.9.a"
+  - dependency-name: kombu
+    versions:
+    - ">= 4.4.a, < 4.5"
+  - dependency-name: rjsmin
+    versions:
+    - "> 1.0.12, < 2"
+  - dependency-name: rjsmin
+    versions:
+    - ">= 1.1.a, < 1.2"
+  - dependency-name: sentry-sdk
+    versions:
+    - 0.19.5
+    - 0.20.0
+    - 0.20.1
+    - 0.20.2
+    - 0.20.3
+  - dependency-name: django
+    versions:
+    - 3.1.5
+    - 3.1.6
+  - dependency-name: djangorestframework-stubs
+    versions:
+    - 1.3.0
+  - dependency-name: django-stubs
+    versions:
+    - 1.7.0
